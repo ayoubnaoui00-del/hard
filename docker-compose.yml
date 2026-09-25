@@ -1,0 +1,26 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: hard_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: hard_development
+    ports:
+      - "5432:5432"
+    volumes:
+      - hard_postgres_data:/var/lib/postgresql/data
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: hard_ollama
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - hard_ollama_data:/root/.ollama
+
+volumes:
+  hard_postgres_data:
+  hard_ollama_data:

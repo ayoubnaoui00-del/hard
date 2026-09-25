@@ -1,0 +1,265 @@
+{
+  "info": {
+    "_postman_id": "hard-sprint3-collection",
+    "name": "Hard API - Sprint 3 (Gamification & Social)",
+    "description": "Collection for Sprint 3: XP Logging & Leveling, Denormalized Leaderboards, Social Friend Graph, and 1v1 Exercise Challenges.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "XP & Leveling",
+      "item": [
+        {
+          "name": "Get Current User XP Summary (GET /users/me/xp)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/me/xp",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "me", "xp"]
+            }
+          }
+        },
+        {
+          "name": "Get User XP Summary By ID (GET /users/:id/xp)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/{{userId}}/xp",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "{{userId}}", "xp"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Leaderboards",
+      "item": [
+        {
+          "name": "Global Leaderboard (GET /leaderboard/global)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/leaderboard/global?limit=50",
+              "host": ["{{baseUrl}}"],
+              "path": ["leaderboard", "global"],
+              "query": [{ "key": "limit", "value": "50" }]
+            }
+          }
+        },
+        {
+          "name": "Weekly Leaderboard (GET /leaderboard/weekly)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/leaderboard/weekly?limit=50",
+              "host": ["{{baseUrl}}"],
+              "path": ["leaderboard", "weekly"],
+              "query": [{ "key": "limit", "value": "50" }]
+            }
+          }
+        },
+        {
+          "name": "Friends Leaderboard (GET /leaderboard/friends)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/leaderboard/friends",
+              "host": ["{{baseUrl}}"],
+              "path": ["leaderboard", "friends"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Friends",
+      "item": [
+        {
+          "name": "Send Friend Request (POST /friends)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"friendId\": \"{{friendUserId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/friends",
+              "host": ["{{baseUrl}}"],
+              "path": ["friends"]
+            }
+          }
+        },
+        {
+          "name": "List Accepted Friends (GET /friends)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/friends?status=ACCEPTED",
+              "host": ["{{baseUrl}}"],
+              "path": ["friends"],
+              "query": [{ "key": "status", "value": "ACCEPTED" }]
+            }
+          }
+        },
+        {
+          "name": "List Pending Friend Requests (GET /friends?status=PENDING)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/friends?status=PENDING",
+              "host": ["{{baseUrl}}"],
+              "path": ["friends"],
+              "query": [{ "key": "status", "value": "PENDING" }]
+            }
+          }
+        },
+        {
+          "name": "Accept Friend Request (PUT /friends/:friendId)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"accept\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/friends/{{friendUserId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["friends", "{{friendUserId}}"]
+            }
+          }
+        },
+        {
+          "name": "Remove Friend (DELETE /friends/:friendId)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/friends/{{friendUserId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["friends", "{{friendUserId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Challenges",
+      "item": [
+        {
+          "name": "Create 1v1 Challenge (POST /challenges)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"challengedId\": \"{{challengedUserId}}\",\n  \"exerciseId\": \"{{exerciseId}}\",\n  \"rewardXp\": 150\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/challenges",
+              "host": ["{{baseUrl}}"],
+              "path": ["challenges"]
+            }
+          }
+        },
+        {
+          "name": "List User Challenges (GET /challenges)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/challenges",
+              "host": ["{{baseUrl}}"],
+              "path": ["challenges"]
+            }
+          }
+        },
+        {
+          "name": "Get Challenge By ID (GET /challenges/:id)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/challenges/{{challengeId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["challenges", "{{challengeId}}"]
+            }
+          }
+        },
+        {
+          "name": "Accept Challenge (PUT /challenges/:id)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"accept\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/challenges/{{challengeId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["challenges", "{{challengeId}}"]
+            }
+          }
+        },
+        {
+          "name": "Complete Challenge & Payout XP (PUT /challenges/:id)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"complete\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/challenges/{{challengeId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["challenges", "{{challengeId}}"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

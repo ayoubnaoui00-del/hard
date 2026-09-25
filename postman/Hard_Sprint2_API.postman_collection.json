@@ -1,0 +1,183 @@
+{
+  "info": {
+    "_postman_id": "hard-sprint2-collection",
+    "name": "Hard API - Sprint 2 (Exercises, Workouts & Achievements)",
+    "description": "Collection for Sprint 2 core features: Exercise database browsing, Workout CRUD with WorkoutExercise sets tracking, and Achievement unlocking.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Exercises",
+      "item": [
+        {
+          "name": "List Exercises (Paginated)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/exercises?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["exercises"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Filter Exercises by Muscle",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/exercises?muscle=Chest&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["exercises"],
+              "query": [
+                { "key": "muscle", "value": "Chest" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Search Exercises",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/exercises?search=bench&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["exercises"],
+              "query": [
+                { "key": "search", "value": "bench" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Exercise By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/exercises/{{exerciseId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["exercises", "{{exerciseId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Workouts",
+      "item": [
+        {
+          "name": "Log Workout (POST /workouts)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Chest & Triceps Hypertrophy\",\n  \"date\": \"2026-09-23T10:00:00Z\",\n  \"duration\": 50,\n  \"notes\": \"Solid session, hit 80kg bench\",\n  \"exercises\": [\n    {\n      \"exerciseId\": \"{{exerciseId}}\",\n      \"sets\": 4,\n      \"reps\": 10,\n      \"weight\": 80,\n      \"order\": 1\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/workouts",
+              "host": ["{{baseUrl}}"],
+              "path": ["workouts"]
+            }
+          }
+        },
+        {
+          "name": "List User Workouts (GET /workouts)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/workouts?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["workouts"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Workout Details (GET /workouts/:id)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/workouts/{{workoutId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["workouts", "{{workoutId}}"]
+            }
+          }
+        },
+        {
+          "name": "Update Workout (PUT /workouts/:id)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Chest & Triceps (Heavy)\",\n  \"duration\": 60,\n  \"notes\": \"Increased bench to 85kg\",\n  \"exercises\": [\n    {\n      \"exerciseId\": \"{{exerciseId}}\",\n      \"sets\": 5,\n      \"reps\": 10,\n      \"weight\": 85,\n      \"order\": 1\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/workouts/{{workoutId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["workouts", "{{workoutId}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Workout (DELETE /workouts/:id)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/workouts/{{workoutId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["workouts", "{{workoutId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Achievements",
+      "item": [
+        {
+          "name": "Get User Achievements (GET /achievements)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/achievements",
+              "host": ["{{baseUrl}}"],
+              "path": ["achievements"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
