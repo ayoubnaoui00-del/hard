@@ -12,6 +12,7 @@
     "test:sprint2": "node --test tests/sprint2.test.js",
     "test:sprint3": "node --test tests/sprint3.test.js",
     "test:sprint4": "node --test tests/sprint4.test.js",
+    "test:agent": "node --test tests/agent.test.js",
     "seed:exercises": "node seeders/seed-exercises.js",
     "seed:achievements": "node seeders/seed-achievements.js",
     "seed:embeddings": "node seeders/seed-embeddings.js"

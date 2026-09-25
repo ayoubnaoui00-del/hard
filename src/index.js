@@ -10,6 +10,7 @@ import leaderboardRouter from './routes/leaderboard.js';
 import friendRouter from './routes/friends.js';
 import challengeRouter from './routes/challenges.js';
 import conversationRouter from './routes/conversations.js';
+import agentRouter from './routes/agent.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -29,6 +30,7 @@ app.use('/leaderboard', leaderboardRouter);
 app.use('/friends', friendRouter);
 app.use('/challenges', challengeRouter);
 app.use('/conversations', conversationRouter);
+app.use('/agent', agentRouter);
 
 // Root & Health Check Endpoints
 app.get('/', (_req, res) => {
