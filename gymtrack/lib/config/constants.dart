@@ -18,6 +18,7 @@ class AppConstants {
 
   // Storage Keys
   static const String tokenKey = 'gymtrack_auth_token';
+  static const String refreshTokenKey = 'gymtrack_refresh_token';
   static const String userKey = 'gymtrack_user_data';
 
   // App Metadata
