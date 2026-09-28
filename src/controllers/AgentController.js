@@ -57,7 +57,7 @@ class AgentController {
       });
       headersSent = true;
 
-      // Stream chunks to the client via SSE
+      // Stream chunks and tool execution events to the client via SSE
       await agentService.streamChat({
         conversation,
         userId,
@@ -66,6 +66,11 @@ class AgentController {
         onChunk: (chunk) => {
           if (!res.writableEnded) {
             res.write(`data: ${JSON.stringify({ chunk })}\n\n`);
+          }
+        },
+        onToolCall: (toolCall) => {
+          if (!res.writableEnded) {
+            res.write(`data: ${JSON.stringify({ event: 'tool_call', ...toolCall })}\n\n`);
           }
         },
       });

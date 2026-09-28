@@ -8,7 +8,9 @@ import {
   Message,
 } from '../models/index.js';
 import { formatSystemPrompt } from '../constants/agentPrompts.js';
+import { AGENT_TOOLS } from '../constants/agentTools.js';
 import ragService from './ragService.js';
+import agentToolService from './agentToolService.js';
 
 dotenv.config();
 
@@ -61,9 +63,101 @@ class AgentService {
   }
 
   /**
-   * Execute chat stream with Ollama LLM and persist conversation messages
+   * Directly execute a backend tool on behalf of the user (HRD-24)
    */
-  async streamChat({ conversation, conversationId, userId, messageText, onChunk, signal }) {
+  async executeTool(userId, toolName, args = {}) {
+    return await agentToolService.executeTool(userId, toolName, args);
+  }
+
+  /**
+   * Internal helper to consume an Ollama NDJSON stream
+   */
+  async _readStream(stream, { onChunk, signal } = {}) {
+    const reader = stream.getReader();
+    const decoder = new TextDecoder();
+    let accumulatedText = '';
+    const accumulatedToolCalls = [];
+    let buffer = '';
+
+    try {
+      while (true) {
+        if (signal?.aborted) {
+          reader.cancel();
+          break;
+        }
+
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop() || '';
+
+        for (const line of lines) {
+          const trimmed = line.trim();
+          if (!trimmed) continue;
+
+          try {
+            const parsed = JSON.parse(trimmed);
+            const chunkContent = parsed.message?.content || '';
+
+            if (chunkContent) {
+              accumulatedText += chunkContent;
+              if (onChunk) {
+                onChunk(chunkContent);
+              }
+            }
+
+            // Collect any tool calls streamed by Ollama
+            if (Array.isArray(parsed.message?.tool_calls) && parsed.message.tool_calls.length > 0) {
+              accumulatedToolCalls.push(...parsed.message.tool_calls);
+            }
+
+            if (parsed.done) {
+              break;
+            }
+          } catch (jsonErr) {
+            console.warn('[AgentService] Failed to parse Ollama NDJSON chunk:', trimmed, jsonErr.message);
+          }
+        }
+      }
+
+      // Check remaining buffer
+      if (buffer.trim()) {
+        try {
+          const parsed = JSON.parse(buffer.trim());
+          const chunkContent = parsed.message?.content || '';
+          if (chunkContent) {
+            accumulatedText += chunkContent;
+            if (onChunk) onChunk(chunkContent);
+          }
+          if (Array.isArray(parsed.message?.tool_calls)) {
+            accumulatedToolCalls.push(...parsed.message.tool_calls);
+          }
+        } catch (_) {}
+      }
+    } finally {
+      reader.releaseLock();
+    }
+
+    return {
+      text: accumulatedText,
+      toolCalls: accumulatedToolCalls,
+    };
+  }
+
+  /**
+   * Execute chat stream with Ollama LLM, RAG retrieval & Function Calling (HRD-22, HRD-23, HRD-24)
+   */
+  async streamChat({
+    conversation,
+    conversationId,
+    userId,
+    messageText,
+    onChunk,
+    onToolCall,
+    signal,
+  }) {
     // 1. Verify conversation ownership if not already passed
     const activeConversation =
       conversation ||
@@ -107,17 +201,23 @@ class AgentService {
       })),
     ];
 
-    // 5. Connect to Ollama chat stream
-    const ollamaResponse = await fetch(`${OLLAMA_BASE_URL}/api/chat`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: OLLAMA_CHAT_MODEL,
-        messages,
-        stream: true,
-      }),
-      signal,
-    });
+    // 5. Connect to Ollama chat with tools enabled (HRD-24)
+    let ollamaResponse;
+    try {
+      ollamaResponse = await fetch(`${OLLAMA_BASE_URL}/api/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: OLLAMA_CHAT_MODEL,
+          messages,
+          tools: AGENT_TOOLS,
+          stream: true,
+        }),
+        signal,
+      });
+    } catch (fetchErr) {
+      throw new Error(`Failed to connect to Ollama service: ${fetchErr.message}`);
+    }
 
     if (!ollamaResponse.ok) {
       const errorText = await ollamaResponse.text();
@@ -128,72 +228,93 @@ class AgentService {
       throw new Error('No readable stream returned from Ollama');
     }
 
-    const reader = ollamaResponse.body.getReader();
-    const decoder = new TextDecoder();
-    let accumulatedResponse = '';
-    let buffer = '';
+    // Read initial stream
+    const firstPass = await this._readStream(ollamaResponse.body, { onChunk, signal });
+    let finalResponseText = firstPass.text;
+    const executedTools = [];
 
-    try {
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
+    // 6. Handle Function Calling if tools were invoked by Ollama (HRD-24)
+    if (firstPass.toolCalls && firstPass.toolCalls.length > 0) {
+      for (const call of firstPass.toolCalls) {
+        const toolName = call.function?.name;
+        let args = call.function?.arguments || {};
 
-        buffer += decoder.decode(value, { stream: true });
-        const lines = buffer.split('\n');
-        // Keep the last partial segment in the buffer
-        buffer = lines.pop() || '';
-
-        for (const line of lines) {
-          const trimmed = line.trim();
-          if (!trimmed) continue;
-
+        if (typeof args === 'string') {
           try {
-            const parsed = JSON.parse(trimmed);
-            const chunkContent = parsed.message?.content || '';
+            args = JSON.parse(args);
+          } catch (_) {
+            args = {};
+          }
+        }
 
-            if (chunkContent) {
-              accumulatedResponse += chunkContent;
-              if (onChunk) {
-                onChunk(chunkContent);
-              }
-            }
+        if (toolName) {
+          const toolResult = await agentToolService.executeTool(userId, toolName, args);
+          executedTools.push({
+            tool: toolName,
+            arguments: args,
+            result: toolResult,
+          });
 
-            if (parsed.done) {
-              break;
-            }
-          } catch (jsonErr) {
-            console.warn('[AgentService] Failed to parse Ollama NDJSON chunk:', trimmed, jsonErr.message);
+          if (onToolCall) {
+            onToolCall({
+              tool: toolName,
+              arguments: args,
+              result: toolResult,
+            });
           }
         }
       }
 
-      // Process any remaining bytes in buffer
-      if (buffer.trim()) {
-        try {
-          const parsed = JSON.parse(buffer.trim());
-          const chunkContent = parsed.message?.content || '';
-          if (chunkContent) {
-            accumulatedResponse += chunkContent;
-            if (onChunk) {
-              onChunk(chunkContent);
-            }
-          }
-        } catch (_) {}
+      // Append assistant tool_calls and tool results to messages for follow-up stream
+      const followUpMessages = [
+        ...messages,
+        {
+          role: 'assistant',
+          content: firstPass.text || '',
+          tool_calls: firstPass.toolCalls,
+        },
+        ...executedTools.map((et) => ({
+          role: 'tool',
+          name: et.tool,
+          content: JSON.stringify(et.result),
+        })),
+      ];
+
+      // Request second-pass response explaining the tool results to athlete
+      try {
+        const followUpResponse = await fetch(`${OLLAMA_BASE_URL}/api/chat`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            model: OLLAMA_CHAT_MODEL,
+            messages: followUpMessages,
+            stream: true,
+          }),
+          signal,
+        });
+
+        if (followUpResponse.ok && followUpResponse.body) {
+          const secondPass = await this._readStream(followUpResponse.body, { onChunk, signal });
+          finalResponseText = (finalResponseText ? finalResponseText + '\n\n' : '') + secondPass.text;
+        }
+      } catch (followUpErr) {
+        console.warn('[AgentService] Follow-up stream failed after tool execution:', followUpErr.message);
+        // Fall back to summarizing tool execution results directly
+        if (!finalResponseText) {
+          const summary = executedTools.map((et) => et.result?.message || 'Action performed.').join(' ');
+          finalResponseText = summary;
+          if (onChunk) onChunk(summary);
+        }
       }
-    } catch (streamError) {
-      // If client aborted or stream error, propagate
-      throw streamError;
-    } finally {
-      reader.releaseLock();
     }
 
-    // 6. Save assistant response to Messages table
+    // 7. Save assistant response to Messages table
     let assistantMessage = null;
-    if (accumulatedResponse.trim()) {
+    if (finalResponseText.trim()) {
       assistantMessage = await Message.create({
         conversationId: convId,
         role: 'assistant',
-        content: accumulatedResponse.trim(),
+        content: finalResponseText.trim(),
       });
 
       // Update conversation updatedAt
@@ -205,8 +326,25 @@ class AgentService {
       userMessage,
       assistantMessage,
       relevantExercises,
-      fullResponse: accumulatedResponse,
+      executedTools,
+      fullResponse: finalResponseText,
     };
+  }
+
+  /**
+   * Non-streaming conversational interface (useful for tests and sync requests)
+   */
+  async chat({ conversation, conversationId, userId, messageText }) {
+    let accumulated = '';
+    return await this.streamChat({
+      conversation,
+      conversationId,
+      userId,
+      messageText,
+      onChunk: (chunk) => {
+        accumulated += chunk;
+      },
+    });
   }
 }
 

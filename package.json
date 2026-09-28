@@ -14,6 +14,7 @@
     "test:sprint4": "node --test tests/sprint4.test.js",
     "test:agent": "node --test tests/agent.test.js",
     "test:rag": "node --test tests/rag.test.js",
+    "test:functions": "node --test tests/function-calling.test.js",
     "seed:exercises": "node seeders/seed-exercises.js",
     "seed:achievements": "node seeders/seed-achievements.js",
     "seed:embeddings": "node seeders/seed-embeddings.js"
