@@ -8,6 +8,7 @@ import {
   Message,
 } from '../models/index.js';
 import { formatSystemPrompt } from '../constants/agentPrompts.js';
+import ragService from './ragService.js';
 
 dotenv.config();
 
@@ -85,12 +86,18 @@ class AgentService {
       content: messageText.trim(),
     });
 
-    // 3. Fetch context & conversation history
+    // 3. Fetch context, conversation history & RAG relevant exercises (HRD-23)
     const { user, recentWorkouts } = await this.getUserContext(userId);
     const history = await this.getConversationHistory(convId, 10);
+    let relevantExercises = [];
+    try {
+      relevantExercises = await ragService.retrieveRelevantExercises(messageText, 5);
+    } catch (ragErr) {
+      console.warn('[AgentService] RAG retrieval error (non-fatal):', ragErr.message);
+    }
 
-    // 4. Build prompt messages
-    const systemPrompt = formatSystemPrompt({ user, recentWorkouts });
+    // 4. Build prompt messages with RAG context
+    const systemPrompt = formatSystemPrompt({ user, recentWorkouts, relevantExercises });
 
     const messages = [
       { role: 'system', content: systemPrompt },
@@ -197,6 +204,7 @@ class AgentService {
     return {
       userMessage,
       assistantMessage,
+      relevantExercises,
       fullResponse: accumulatedResponse,
     };
   }

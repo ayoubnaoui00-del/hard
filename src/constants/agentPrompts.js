@@ -21,7 +21,7 @@ RESTRICTIONS:
 /**
  * Format user profile and recent workout context into system prompt
  */
-export const formatSystemPrompt = ({ user, recentWorkouts = [] }) => {
+export const formatSystemPrompt = ({ user, recentWorkouts = [], relevantExercises = [] }) => {
   const profileSection = user
     ? `\nATHLETE PROFILE:
 - Username: ${user.username}
@@ -47,9 +47,27 @@ export const formatSystemPrompt = ({ user, recentWorkouts = [] }) => {
     }
   }
 
+  let ragSection = '';
+  if (Array.isArray(relevantExercises) && relevantExercises.length > 0) {
+    ragSection = '\nRELEVANT EXERCISES (EXERCISE DATABASE / RAG CONTEXT):';
+    for (const ex of relevantExercises) {
+      ragSection += `\n- ${ex.name} (Muscle Group: ${ex.muscleGroup})`;
+      if (ex.instructions) {
+        ragSection += `\n  Instructions: ${ex.instructions}`;
+      }
+      if (ex.formTips) {
+        ragSection += `\n  Form Tips: ${ex.formTips}`;
+      }
+      if (Array.isArray(ex.alternatives) && ex.alternatives.length > 0) {
+        ragSection += `\n  Alternatives: ${ex.alternatives.join(', ')}`;
+      }
+    }
+  }
+
   return `${AI_COACH_BASE_PROMPT}
 ${profileSection}
 ${workoutSection}
+${ragSection}
 
 Always keep answers actionable, encouraging, and scientifically sound.`;
 };
