@@ -26,8 +26,8 @@ class ApiException implements Exception {
 }
 
 class ApiService {
-  final StorageService _storageService;
-  final void Function()? _onUnauthorized;
+  final StorageService storageService;
+  final void Function()? onUnauthorized;
   late final Dio _dio;
   late final Dio _tokenDio;
 
@@ -35,11 +35,10 @@ class ApiService {
   Completer<String?>? _refreshCompleter;
 
   ApiService({
-    required StorageService storageService,
-    void Function()? onUnauthorized,
+    required this.storageService,
+    this.onUnauthorized,
     String? baseUrl,
-  })  : _storageService = storageService,
-        _onUnauthorized = onUnauthorized {
+  }) {
     final defaultBaseUrl = baseUrl ?? AppConstants.apiBaseUrl;
 
     final baseOptions = BaseOptions(
@@ -67,7 +66,7 @@ class ApiService {
           options.headers['X-Request-ID'] = _uuid.v4();
 
           // 2. Attach Authorization header if access token exists
-          final token = await _storageService.getToken();
+          final token = await storageService.getToken();
           if (token != null && token.isNotEmpty) {
             options.headers['Authorization'] = 'Bearer $token';
           }
@@ -110,7 +109,7 @@ class ApiService {
                 return handler.reject(retryErr);
               }
             } else {
-              _onUnauthorized?.call();
+              onUnauthorized?.call();
             }
           }
 
@@ -138,9 +137,9 @@ class ApiService {
     _refreshCompleter = Completer<String?>();
 
     try {
-      final currentRefreshToken = await _storageService.getRefreshToken();
+      final currentRefreshToken = await storageService.getRefreshToken();
       if (currentRefreshToken == null || currentRefreshToken.isEmpty) {
-        await _storageService.clearAll();
+        await storageService.clearAll();
         _refreshCompleter!.complete(null);
         return null;
       }
@@ -155,7 +154,7 @@ class ApiService {
         final newAccessToken = data['accessToken'] as String;
         final newRefreshToken = data['refreshToken'] as String;
 
-        await _storageService.saveTokens(
+        await storageService.saveTokens(
           accessToken: newAccessToken,
           refreshToken: newRefreshToken,
         );
@@ -163,13 +162,13 @@ class ApiService {
         _refreshCompleter!.complete(newAccessToken);
         return newAccessToken;
       } else {
-        await _storageService.clearAll();
+        await storageService.clearAll();
         _refreshCompleter!.complete(null);
         return null;
       }
     } catch (e) {
       debugPrint('[ApiService] Token refresh failed: $e');
-      await _storageService.clearAll();
+      await storageService.clearAll();
       _refreshCompleter!.complete(null);
       return null;
     } finally {

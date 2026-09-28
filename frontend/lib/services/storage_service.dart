@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../config/constants.dart';
 
@@ -48,3 +49,7 @@ class StorageService {
     await _storage.deleteAll();
   }
 }
+
+final storageServiceProvider = Provider<StorageService>((ref) {
+  return StorageService();
+});

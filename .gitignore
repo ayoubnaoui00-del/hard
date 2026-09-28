@@ -1,8 +1,36 @@
+# Dependencies
 node_modules/
+.pnp
+.pnp.js
+
+# Environment variables
 .env
-dist/
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+logs
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# OS Files
 .DS_Store
+Thumbs.db
+
+# Build outputs
+dist/
+build/
+
+# Flutter / Dart
+frontend/.dart_tool/
+frontend/.flutter-plugins
+frontend/.flutter-plugins-dependencies
+frontend/.pub-cache/
+frontend/.pub/
+frontend/build/

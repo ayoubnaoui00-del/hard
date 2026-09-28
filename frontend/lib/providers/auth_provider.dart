@@ -2,9 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/user_model.dart';
 import '../services/storage_service.dart';
 
-final storageServiceProvider = Provider<StorageService>((ref) {
-  return StorageService();
-});
 
 class AuthState {
   final UserModel? user;
