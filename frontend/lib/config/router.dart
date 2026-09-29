@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../screens/auth/login_screen.dart';
-import '../screens/auth/register_screen.dart';
-import '../screens/main_shell_screen.dart';
-import '../screens/home/home_screen.dart';
-import '../screens/workout/workout_screen.dart';
-import '../screens/exercise/exercise_screen.dart';
-import '../screens/coach/coach_screen.dart';
-import '../screens/social/social_screen.dart';
+import '../views/auth/login_view.dart';
+import '../views/auth/register_view.dart';
+import '../views/main_shell_view.dart';
+import '../views/home/home_view.dart';
+import '../views/workout/workout_view.dart';
+import '../views/exercise/exercise_view.dart';
+import '../views/coach/coach_view.dart';
+import '../views/social/social_view.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -19,24 +19,24 @@ final appRouter = GoRouter(
     // Auth Routes
     GoRoute(
       path: '/login',
-      builder: (context, state) => const LoginScreen(),
+      builder: (context, state) => const LoginView(),
     ),
     GoRoute(
       path: '/register',
-      builder: (context, state) => const RegisterScreen(),
+      builder: (context, state) => const RegisterView(),
     ),
 
     // App Shell with Bottom Navigation
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {
-        return MainShellScreen(navigationShell: navigationShell);
+        return MainShellView(navigationShell: navigationShell);
       },
       branches: [
         StatefulShellBranch(
           routes: [
             GoRoute(
               path: '/home',
-              builder: (context, state) => const HomeScreen(),
+              builder: (context, state) => const HomeView(),
             ),
           ],
         ),
@@ -44,7 +44,7 @@ final appRouter = GoRouter(
           routes: [
             GoRoute(
               path: '/workouts',
-              builder: (context, state) => const WorkoutScreen(),
+              builder: (context, state) => const WorkoutView(),
             ),
           ],
         ),
@@ -52,7 +52,7 @@ final appRouter = GoRouter(
           routes: [
             GoRoute(
               path: '/exercises',
-              builder: (context, state) => const ExerciseScreen(),
+              builder: (context, state) => const ExerciseView(),
             ),
           ],
         ),
@@ -60,7 +60,7 @@ final appRouter = GoRouter(
           routes: [
             GoRoute(
               path: '/coach',
-              builder: (context, state) => const CoachScreen(),
+              builder: (context, state) => const CoachView(),
             ),
           ],
         ),
@@ -68,7 +68,7 @@ final appRouter = GoRouter(
           routes: [
             GoRoute(
               path: '/social',
-              builder: (context, state) => const SocialScreen(),
+              builder: (context, state) => const SocialView(),
             ),
           ],
         ),
