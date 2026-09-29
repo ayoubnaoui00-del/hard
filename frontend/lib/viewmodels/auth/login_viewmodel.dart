@@ -22,7 +22,10 @@ class LoginState {
     this.loggedInUser,
   });
 
-  bool get isValid => email.trim().isNotEmpty && password.trim().isNotEmpty;
+  bool get isValid =>
+      email.trim().isNotEmpty &&
+      email.contains('@') &&
+      password.trim().isNotEmpty;
 
   LoginState copyWith({
     String? email,
@@ -76,6 +79,13 @@ class LoginViewModel extends Notifier<LoginState> {
       return false;
     }
 
+    if (!email.contains('@') || !email.contains('.')) {
+      state = state.copyWith(
+        errorMessage: 'Please enter a valid email address.',
+      );
+      return false;
+    }
+
     state = state.copyWith(isLoading: true, clearError: true, isSuccess: false);
 
     try {
@@ -83,6 +93,8 @@ class LoginViewModel extends Notifier<LoginState> {
         email: email,
         password: password,
       );
+
+      if (!ref.mounted) return true;
 
       // Update global auth session
       ref.read(authSessionViewModelProvider.notifier).setAuthenticatedUser(user);
@@ -94,12 +106,14 @@ class LoginViewModel extends Notifier<LoginState> {
       );
       return true;
     } on ApiException catch (e) {
+      if (!ref.mounted) return false;
       state = state.copyWith(
         isLoading: false,
         errorMessage: e.message,
       );
       return false;
     } catch (e) {
+      if (!ref.mounted) return false;
       state = state.copyWith(
         isLoading: false,
         errorMessage: 'Login failed: ${e.toString()}',

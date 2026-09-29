@@ -9,6 +9,8 @@ class RegisterState {
   final String username;
   final String email;
   final String password;
+  final String confirmPassword;
+  final bool acceptTerms;
   final bool isLoading;
   final String? errorMessage;
   final bool isSuccess;
@@ -18,6 +20,8 @@ class RegisterState {
     this.username = '',
     this.email = '',
     this.password = '',
+    this.confirmPassword = '',
+    this.acceptTerms = false,
     this.isLoading = false,
     this.errorMessage,
     this.isSuccess = false,
@@ -27,12 +31,17 @@ class RegisterState {
   bool get isValid =>
       username.trim().length >= 3 &&
       email.trim().contains('@') &&
-      password.length >= 6;
+      email.trim().contains('.') &&
+      password.length >= 6 &&
+      password == confirmPassword &&
+      acceptTerms;
 
   RegisterState copyWith({
     String? username,
     String? email,
     String? password,
+    String? confirmPassword,
+    bool? acceptTerms,
     bool? isLoading,
     String? errorMessage,
     bool? isSuccess,
@@ -43,6 +52,8 @@ class RegisterState {
       username: username ?? this.username,
       email: email ?? this.email,
       password: password ?? this.password,
+      confirmPassword: confirmPassword ?? this.confirmPassword,
+      acceptTerms: acceptTerms ?? this.acceptTerms,
       isLoading: isLoading ?? this.isLoading,
       errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
       isSuccess: isSuccess ?? this.isSuccess,
@@ -72,6 +83,14 @@ class RegisterViewModel extends Notifier<RegisterState> {
     state = state.copyWith(password: password, clearError: true);
   }
 
+  void setConfirmPassword(String confirmPassword) {
+    state = state.copyWith(confirmPassword: confirmPassword, clearError: true);
+  }
+
+  void setAcceptTerms(bool? accept) {
+    state = state.copyWith(acceptTerms: accept ?? false, clearError: true);
+  }
+
   void clearError() {
     state = state.copyWith(clearError: true);
   }
@@ -80,6 +99,8 @@ class RegisterViewModel extends Notifier<RegisterState> {
     final username = state.username.trim();
     final email = state.email.trim();
     final password = state.password;
+    final confirmPassword = state.confirmPassword;
+    final acceptTerms = state.acceptTerms;
 
     if (username.length < 3) {
       state = state.copyWith(
@@ -102,6 +123,20 @@ class RegisterViewModel extends Notifier<RegisterState> {
       return false;
     }
 
+    if (password != confirmPassword) {
+      state = state.copyWith(
+        errorMessage: 'Passwords do not match.',
+      );
+      return false;
+    }
+
+    if (!acceptTerms) {
+      state = state.copyWith(
+        errorMessage: 'You must accept the Terms & Conditions.',
+      );
+      return false;
+    }
+
     state = state.copyWith(isLoading: true, clearError: true, isSuccess: false);
 
     try {
@@ -110,6 +145,8 @@ class RegisterViewModel extends Notifier<RegisterState> {
         email: email,
         password: password,
       );
+
+      if (!ref.mounted) return true;
 
       // Update global auth session
       ref.read(authSessionViewModelProvider.notifier).setAuthenticatedUser(user);
@@ -121,12 +158,14 @@ class RegisterViewModel extends Notifier<RegisterState> {
       );
       return true;
     } on ApiException catch (e) {
+      if (!ref.mounted) return false;
       state = state.copyWith(
         isLoading: false,
         errorMessage: e.message,
       );
       return false;
     } catch (e) {
+      if (!ref.mounted) return false;
       state = state.copyWith(
         isLoading: false,
         errorMessage: 'Registration failed: ${e.toString()}',
