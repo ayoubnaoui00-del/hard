@@ -51,7 +51,7 @@ class FakeWorkoutRepository implements IWorkoutRepository {
       List.from(mockWorkouts);
 
   @override
-  Future<WorkoutModel> getWorkoutById(int id) async => mockWorkouts.first;
+  Future<WorkoutModel> getWorkoutById(dynamic id) async => mockWorkouts.first;
 
   @override
   Future<WorkoutModel> createWorkout({
@@ -65,7 +65,7 @@ class FakeWorkoutRepository implements IWorkoutRepository {
 
   @override
   Future<WorkoutModel> updateWorkout(
-    int id, {
+    dynamic id, {
     String? name,
     DateTime? date,
     int? duration,
@@ -75,7 +75,7 @@ class FakeWorkoutRepository implements IWorkoutRepository {
       mockWorkouts.first;
 
   @override
-  Future<void> deleteWorkout(int id) async {}
+  Future<void> deleteWorkout(dynamic id) async {}
 
   @override
   double calculateVolume(List<WorkoutExerciseModel> exercises) =>

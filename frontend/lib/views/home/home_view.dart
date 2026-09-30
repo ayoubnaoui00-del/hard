@@ -276,7 +276,7 @@ class HomeView extends ConsumerWidget {
             subtitle: 'Start session',
             icon: Icons.fitness_center_rounded,
             color: const Color(0xFFFF5252),
-            onTap: () => context.go('/workouts'),
+            onTap: () => context.go('/workouts/log'),
           ),
         ),
         const SizedBox(width: 10),

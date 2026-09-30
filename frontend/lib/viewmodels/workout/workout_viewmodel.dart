@@ -63,7 +63,7 @@ class WorkoutViewModel extends Notifier<WorkoutState> {
     }
   }
 
-  Future<void> selectWorkout(int id) async {
+  Future<void> selectWorkout(dynamic id) async {
     state = state.copyWith(isLoading: true, clearError: true);
     try {
       final workout = await _workoutRepository.getWorkoutById(id);
@@ -113,7 +113,7 @@ class WorkoutViewModel extends Notifier<WorkoutState> {
   }
 
   Future<bool> updateWorkout(
-    int id, {
+    dynamic id, {
     String? name,
     DateTime? date,
     int? duration,
@@ -154,7 +154,7 @@ class WorkoutViewModel extends Notifier<WorkoutState> {
     }
   }
 
-  Future<bool> deleteWorkout(int id) async {
+  Future<bool> deleteWorkout(dynamic id) async {
     state = state.copyWith(isSubmitting: true, clearError: true);
     try {
       await _workoutRepository.deleteWorkout(id);

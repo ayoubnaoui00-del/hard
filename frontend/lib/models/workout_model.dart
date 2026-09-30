@@ -1,7 +1,7 @@
 class WorkoutExerciseModel {
-  final int? id;
-  final int? workoutId;
-  final int exerciseId;
+  final dynamic id;
+  final dynamic workoutId;
+  final dynamic exerciseId;
   final int sets;
   final int reps;
   final double weight;
@@ -32,9 +32,9 @@ class WorkoutExerciseModel {
     }
 
     return WorkoutExerciseModel(
-      id: json['id'] as int?,
-      workoutId: json['workoutId'] as int?,
-      exerciseId: json['exerciseId'] as int? ?? 0,
+      id: json['id'],
+      workoutId: json['workoutId'],
+      exerciseId: json['exerciseId'] ?? 0,
       sets: json['sets'] as int? ?? 1,
       reps: json['reps'] as int? ?? 1,
       weight: (json['weight'] as num?)?.toDouble() ?? 0.0,
@@ -59,9 +59,9 @@ class WorkoutExerciseModel {
   }
 
   WorkoutExerciseModel copyWith({
-    int? id,
-    int? workoutId,
-    int? exerciseId,
+    dynamic id,
+    dynamic workoutId,
+    dynamic exerciseId,
     int? sets,
     int? reps,
     double? weight,
@@ -107,8 +107,8 @@ class WorkoutExerciseModel {
 }
 
 class WorkoutModel {
-  final int id;
-  final int userId;
+  final dynamic id;
+  final dynamic userId;
   final String name;
   final DateTime date;
   final int duration; // in minutes or seconds
@@ -147,8 +147,8 @@ class WorkoutModel {
         .toList();
 
     return WorkoutModel(
-      id: json['id'] as int? ?? 0,
-      userId: json['userId'] as int? ?? 0,
+      id: json['id'] ?? 0,
+      userId: json['userId'] ?? 0,
       name: json['name'] as String? ?? 'Workout',
       date: json['date'] != null
           ? DateTime.tryParse(json['date'].toString()) ?? DateTime.now()
@@ -179,8 +179,8 @@ class WorkoutModel {
   }
 
   WorkoutModel copyWith({
-    int? id,
-    int? userId,
+    dynamic id,
+    dynamic userId,
     String? name,
     DateTime? date,
     int? duration,

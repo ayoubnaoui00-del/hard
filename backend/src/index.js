@@ -48,7 +48,7 @@ mountRoutes();
 mountRoutes('/api');
 
 // Root & Health Check Endpoints
-app.get('/', (_req, res) => {
+app.get(['/', '/api'], (_req, res) => {
   res.json({
     app: 'Hard API',
     status: 'ok', 
@@ -57,7 +57,7 @@ app.get('/', (_req, res) => {
   });
 });
 
-app.get('/health', async (_req, res) => {
+app.get(['/health', '/api/health'], async (_req, res) => {
   try {
     await sequelize.authenticate();
     res.json({

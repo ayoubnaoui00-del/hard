@@ -5,7 +5,7 @@ import '../services/api_service.dart';
 
 abstract class IWorkoutRepository {
   Future<List<WorkoutModel>> getWorkouts({int page = 1, int limit = 20});
-  Future<WorkoutModel> getWorkoutById(int id);
+  Future<WorkoutModel> getWorkoutById(dynamic id);
   Future<WorkoutModel> createWorkout({
     required String name,
     DateTime? date,
@@ -14,14 +14,14 @@ abstract class IWorkoutRepository {
     required List<WorkoutExerciseModel> exercises,
   });
   Future<WorkoutModel> updateWorkout(
-    int id, {
+    dynamic id, {
     String? name,
     DateTime? date,
     int? duration,
     String? notes,
     List<WorkoutExerciseModel>? exercises,
   });
-  Future<void> deleteWorkout(int id);
+  Future<void> deleteWorkout(dynamic id);
   double calculateVolume(List<WorkoutExerciseModel> exercises);
 }
 
@@ -50,7 +50,7 @@ class WorkoutRepository implements IWorkoutRepository {
   }
 
   @override
-  Future<WorkoutModel> getWorkoutById(int id) async {
+  Future<WorkoutModel> getWorkoutById(dynamic id) async {
     final response = await apiService.get('/workouts/$id');
     final responseData = response.data as Map<String, dynamic>;
     final data = responseData['data'] as Map<String, dynamic>? ?? responseData;
@@ -89,7 +89,7 @@ class WorkoutRepository implements IWorkoutRepository {
 
   @override
   Future<WorkoutModel> updateWorkout(
-    int id, {
+    dynamic id, {
     String? name,
     DateTime? date,
     int? duration,
@@ -118,7 +118,7 @@ class WorkoutRepository implements IWorkoutRepository {
   }
 
   @override
-  Future<void> deleteWorkout(int id) async {
+  Future<void> deleteWorkout(dynamic id) async {
     await apiService.delete('/workouts/$id');
   }
 

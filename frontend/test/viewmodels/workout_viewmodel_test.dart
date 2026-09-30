@@ -13,7 +13,7 @@ class FakeWorkoutRepository implements IWorkoutRepository {
   }
 
   @override
-  Future<WorkoutModel> getWorkoutById(int id) async {
+  Future<WorkoutModel> getWorkoutById(dynamic id) async {
     return mockWorkouts.firstWhere(
       (w) => w.id == id,
       orElse: () => WorkoutModel(
@@ -49,7 +49,7 @@ class FakeWorkoutRepository implements IWorkoutRepository {
 
   @override
   Future<WorkoutModel> updateWorkout(
-    int id, {
+    dynamic id, {
     String? name,
     DateTime? date,
     int? duration,
@@ -70,7 +70,7 @@ class FakeWorkoutRepository implements IWorkoutRepository {
   }
 
   @override
-  Future<void> deleteWorkout(int id) async {
+  Future<void> deleteWorkout(dynamic id) async {
     mockWorkouts.removeWhere((w) => w.id == id);
   }
 
