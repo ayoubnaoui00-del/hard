@@ -155,11 +155,12 @@ void main() {
       expect(find.text('Total Sets'), findsOneWidget);
       expect(find.text('Total Volume'), findsOneWidget);
 
-      // Add Exercise button
+      // Add Exercise and Body Map buttons
       expect(find.text('Add Exercise'), findsOneWidget);
+      expect(find.text('Body Map'), findsOneWidget);
 
       // Submit button
-      expect(find.byType(ElevatedButton), findsOneWidget);
+      expect(find.widgetWithText(ElevatedButton, 'Log Workout'), findsOneWidget);
     });
 
     testWidgets('Tapping duration chip updates selected duration', (tester) async {
@@ -227,7 +228,7 @@ void main() {
       expect(find.text('No exercises added yet'), findsOneWidget);
 
       // Tap Submit button
-      await tester.tap(find.byType(ElevatedButton));
+      await tester.tap(find.widgetWithText(ElevatedButton, 'Log Workout'));
       await tester.pumpAndSettle();
 
       // Error message is displayed in error banner
@@ -247,7 +248,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Tap Submit button
-      final saveBtn = find.byType(ElevatedButton);
+      final saveBtn = find.widgetWithText(ElevatedButton, 'Log Workout');
       expect(saveBtn, findsOneWidget);
       await tester.tap(saveBtn);
       await tester.pumpAndSettle();

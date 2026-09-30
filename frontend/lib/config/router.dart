@@ -9,6 +9,7 @@ import '../views/main_shell_view.dart';
 import '../views/home/home_view.dart';
 import '../views/workout/workout_view.dart';
 import '../views/workout/log_workout_view.dart';
+import '../views/workout/muscle_picker_view.dart';
 import '../views/leaderboard/leaderboard_view.dart';
 import '../views/profile/profile_view.dart';
 import '../views/exercise/exercise_view.dart';
@@ -115,6 +116,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/workouts/log',
         builder: (context, state) => const LogWorkoutView(),
+      ),
+      GoRoute(
+        path: '/workouts/muscle-picker',
+        builder: (context, state) => const MusclePickerView(),
       ),
       GoRoute(
         path: '/coach',

@@ -8,6 +8,7 @@ import '../../models/workout_model.dart';
 import '../../repositories/exercise_repository.dart';
 import '../../viewmodels/home/home_viewmodel.dart';
 import '../../viewmodels/workout/workout_viewmodel.dart';
+import 'muscle_picker_view.dart';
 
 class LogWorkoutView extends ConsumerStatefulWidget {
   const LogWorkoutView({super.key});
@@ -227,12 +228,42 @@ class _LogWorkoutViewState extends ConsumerState<LogWorkoutView> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       builder: (context) {
-        return _ExercisePickerSheet(onSelected: (exercise) {
-          Navigator.pop(context);
-          _addExercise(exercise);
-        });
+        return _ExercisePickerSheet(
+          onSelected: (exercise) {
+            Navigator.pop(context);
+            _addExercise(exercise);
+          },
+          onOpenBodyMap: () {
+            Navigator.pop(context);
+            _openBodyMapPicker();
+          },
+        );
       },
     );
+  }
+
+  Future<void> _openBodyMapPicker() async {
+    final selected = await Navigator.of(context).push<ExerciseModel>(
+      MaterialPageRoute(
+        builder: (context) => const MusclePickerView(),
+      ),
+    );
+    if (selected != null && mounted) {
+      _addExercise(selected);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Row(
+            children: [
+              const Icon(Icons.check_circle_rounded, color: Color(0xFF00E676)),
+              const SizedBox(width: 8),
+              Text('Added ${selected.name} from Body Map! 💪'),
+            ],
+          ),
+          backgroundColor: const Color(0xFF1E1E24),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    }
   }
 
   @override
@@ -378,22 +409,50 @@ class _LogWorkoutViewState extends ConsumerState<LogWorkoutView> {
 
             const SizedBox(height: 12),
 
-            // 4. "Add Exercise" Button
-            OutlinedButton.icon(
-              onPressed: _openExercisePicker,
-              style: OutlinedButton.styleFrom(
-                foregroundColor: const Color(0xFFFF5252),
-                side: const BorderSide(color: Color(0xFFFF5252), width: 1.5),
-                minimumSize: const Size.fromHeight(48),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+            // 4. "Add Exercise" & "Body Map" Action Row
+            Row(
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: OutlinedButton.icon(
+                    onPressed: _openExercisePicker,
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: const Color(0xFFFF5252),
+                      side: const BorderSide(color: Color(0xFFFF5252), width: 1.5),
+                      minimumSize: const Size.fromHeight(48),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    icon: const Icon(Icons.add_rounded),
+                    label: const Text(
+                      'Add Exercise',
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                    ),
+                  ),
                 ),
-              ),
-              icon: const Icon(Icons.add_rounded),
-              label: const Text(
-                'Add Exercise',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-              ),
+                const SizedBox(width: 8),
+                Expanded(
+                  flex: 2,
+                  child: ElevatedButton.icon(
+                    onPressed: _openBodyMapPicker,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF282832),
+                      foregroundColor: const Color(0xFF00E5FF),
+                      side: const BorderSide(color: Color(0xFF00E5FF), width: 1.2),
+                      minimumSize: const Size.fromHeight(48),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    icon: const Icon(Icons.accessibility_new_rounded, size: 18),
+                    label: const Text(
+                      'Body Map',
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                    ),
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 20),
 
@@ -905,8 +964,12 @@ class _LogWorkoutViewState extends ConsumerState<LogWorkoutView> {
 // -----------------------------------------------------------------------------
 class _ExercisePickerSheet extends ConsumerStatefulWidget {
   final ValueChanged<ExerciseModel> onSelected;
+  final VoidCallback? onOpenBodyMap;
 
-  const _ExercisePickerSheet({required this.onSelected});
+  const _ExercisePickerSheet({
+    required this.onSelected,
+    this.onOpenBodyMap,
+  });
 
   @override
   ConsumerState<_ExercisePickerSheet> createState() =>
@@ -968,7 +1031,61 @@ class _ExercisePickerSheetState extends ConsumerState<_ExercisePickerSheet> {
                 'Choose Exercise',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 8),
+
+              // Interactive Body Map Banner
+              if (widget.onOpenBodyMap != null)
+                InkWell(
+                  onTap: widget.onOpenBodyMap,
+                  borderRadius: BorderRadius.circular(12),
+                  child: Container(
+                    margin: const EdgeInsets.only(bottom: 12),
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          const Color(0xFF00E5FF).withValues(alpha: 0.15),
+                          const Color(0xFF2979FF).withValues(alpha: 0.15),
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: const Color(0xFF00E5FF).withValues(alpha: 0.4),
+                      ),
+                    ),
+                    child: const Row(
+                      children: [
+                        Icon(
+                          Icons.accessibility_new_rounded,
+                          color: Color(0xFF00E5FF),
+                          size: 20,
+                        ),
+                        SizedBox(width: 10),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Interactive Body Map',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
+                                  color: Color(0xFF00E5FF),
+                                ),
+                              ),
+                              Text(
+                                'Tap muscles to filter & preview form tips',
+                                style: TextStyle(fontSize: 11, color: Colors.grey),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Icon(Icons.chevron_right_rounded, color: Color(0xFF00E5FF)),
+                      ],
+                    ),
+                  ),
+                ),
+              if (widget.onOpenBodyMap == null) const SizedBox(height: 4),
 
               // Search Bar
               TextField(
