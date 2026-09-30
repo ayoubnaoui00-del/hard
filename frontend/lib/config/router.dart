@@ -8,6 +8,8 @@ import '../views/auth/register_view.dart';
 import '../views/main_shell_view.dart';
 import '../views/home/home_view.dart';
 import '../views/workout/workout_view.dart';
+import '../views/leaderboard/leaderboard_view.dart';
+import '../views/profile/profile_view.dart';
 import '../views/exercise/exercise_view.dart';
 import '../views/coach/coach_view.dart';
 import '../views/social/social_view.dart';
@@ -67,7 +69,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const RegisterView(),
       ),
 
-      // App Shell with Bottom Navigation
+      // App Shell with 4 Bottom Navigation Tabs (HRD-30)
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
           return MainShellView(navigationShell: navigationShell);
@@ -92,28 +94,34 @@ final routerProvider = Provider<GoRouter>((ref) {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: '/exercises',
-                builder: (context, state) => const ExerciseView(),
+                path: '/leaderboard',
+                builder: (context, state) => const LeaderboardView(),
               ),
             ],
           ),
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: '/coach',
-                builder: (context, state) => const CoachView(),
-              ),
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: '/social',
-                builder: (context, state) => const SocialView(),
+                path: '/profile',
+                builder: (context, state) => const ProfileView(),
               ),
             ],
           ),
         ],
+      ),
+
+      // Dedicated routes accessible from actions and deep links
+      GoRoute(
+        path: '/coach',
+        builder: (context, state) => const CoachView(),
+      ),
+      GoRoute(
+        path: '/exercises',
+        builder: (context, state) => const ExerciseView(),
+      ),
+      GoRoute(
+        path: '/social',
+        builder: (context, state) => const SocialView(),
       ),
     ],
   );

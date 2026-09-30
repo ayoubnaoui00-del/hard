@@ -31,16 +31,12 @@ class MainShellView extends StatelessWidget {
             label: 'Workouts',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.menu_book_rounded),
-            label: 'Exercises',
+            icon: Icon(Icons.leaderboard_rounded),
+            label: 'Leaderboard',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.smart_toy_rounded),
-            label: 'AI Coach',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.people_alt_rounded),
-            label: 'Social',
+            icon: Icon(Icons.person_rounded),
+            label: 'Profile',
           ),
         ],
       ),
