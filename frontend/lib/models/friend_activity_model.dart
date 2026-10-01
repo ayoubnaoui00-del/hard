@@ -1,5 +1,5 @@
 class FriendActivityModel {
-  final int id;
+  final dynamic id;
   final String username;
   final String? avatarUrl;
   final String activityType; // e.g., 'WORKOUT', 'PR', 'ACHIEVEMENT'
@@ -22,15 +22,23 @@ class FriendActivityModel {
   });
 
   factory FriendActivityModel.fromJson(Map<String, dynamic> json) {
+    int parseInt(dynamic val, int defaultVal) {
+      if (val == null) return defaultVal;
+      if (val is int) return val;
+      if (val is num) return val.toInt();
+      if (val is String) return int.tryParse(val) ?? defaultVal;
+      return defaultVal;
+    }
+
     return FriendActivityModel(
-      id: json['id'] as int? ?? 0,
+      id: json['id'] ?? 0,
       username: json['username'] as String? ?? 'Athlete',
       avatarUrl: json['avatarUrl'] as String?,
       activityType: json['activityType'] as String? ?? 'WORKOUT',
       title: json['title'] as String? ?? 'Completed Workout',
       description: json['description'] as String? ?? '',
       timeAgo: json['timeAgo'] as String? ?? 'Recently',
-      likesCount: json['likesCount'] as int? ?? 0,
+      likesCount: parseInt(json['likesCount'], 0),
       isLiked: json['isLiked'] as bool? ?? false,
     );
   }
@@ -50,7 +58,7 @@ class FriendActivityModel {
   }
 
   FriendActivityModel copyWith({
-    int? id,
+    dynamic id,
     String? username,
     String? avatarUrl,
     String? activityType,
@@ -125,4 +133,31 @@ class FriendActivityModel {
           isLiked: false,
         ),
       ];
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is FriendActivityModel &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          username == other.username &&
+          avatarUrl == other.avatarUrl &&
+          activityType == other.activityType &&
+          title == other.title &&
+          description == other.description &&
+          timeAgo == other.timeAgo &&
+          likesCount == other.likesCount &&
+          isLiked == other.isLiked;
+
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      username.hashCode ^
+      avatarUrl.hashCode ^
+      activityType.hashCode ^
+      title.hashCode ^
+      description.hashCode ^
+      timeAgo.hashCode ^
+      likesCount.hashCode ^
+      isLiked.hashCode;
 }

@@ -1,5 +1,5 @@
 class AchievementModel {
-  final int? id;
+  final dynamic id;
   final String code;
   final String name;
   final String description;
@@ -19,7 +19,7 @@ class AchievementModel {
 
   factory AchievementModel.fromJson(Map<String, dynamic> json) {
     return AchievementModel(
-      id: json['id'] as int?,
+      id: json['id'],
       code: json['code'] as String? ?? '',
       name: json['name'] as String? ?? 'Achievement',
       description: json['description'] as String? ?? '',
@@ -44,7 +44,7 @@ class AchievementModel {
   }
 
   AchievementModel copyWith({
-    int? id,
+    dynamic id,
     String? code,
     String? name,
     String? description,
@@ -90,4 +90,27 @@ class AchievementModel {
           unlockedAt: DateTime.now(),
         ),
       ];
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AchievementModel &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          code == other.code &&
+          name == other.name &&
+          description == other.description &&
+          badgeIcon == other.badgeIcon &&
+          isUnlocked == other.isUnlocked &&
+          unlockedAt == other.unlockedAt;
+
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      code.hashCode ^
+      name.hashCode ^
+      description.hashCode ^
+      badgeIcon.hashCode ^
+      isUnlocked.hashCode ^
+      unlockedAt.hashCode;
 }

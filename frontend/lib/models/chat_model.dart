@@ -1,6 +1,6 @@
 class ChatMessageModel {
-  final int? id;
-  final int? conversationId;
+  final dynamic id;
+  final dynamic conversationId;
   final String role; // 'user', 'assistant', 'system'
   final String content;
   final DateTime createdAt;
@@ -18,8 +18,8 @@ class ChatMessageModel {
 
   factory ChatMessageModel.fromJson(Map<String, dynamic> json) {
     return ChatMessageModel(
-      id: json['id'] as int?,
-      conversationId: json['conversationId'] as int?,
+      id: json['id'],
+      conversationId: json['conversationId'],
       role: json['role'] as String? ?? 'user',
       content: json['content'] as String? ?? '',
       createdAt: json['createdAt'] != null
@@ -39,8 +39,8 @@ class ChatMessageModel {
   }
 
   ChatMessageModel copyWith({
-    int? id,
-    int? conversationId,
+    dynamic id,
+    dynamic conversationId,
     String? role,
     String? content,
     DateTime? createdAt,
@@ -70,8 +70,8 @@ class ChatMessageModel {
 }
 
 class ConversationModel {
-  final int id;
-  final int userId;
+  final dynamic id;
+  final dynamic userId;
   final String title;
   final String? topic;
   final List<ChatMessageModel> messages;
@@ -95,8 +95,8 @@ class ConversationModel {
         .toList();
 
     return ConversationModel(
-      id: json['id'] as int? ?? 0,
-      userId: json['userId'] as int? ?? 0,
+      id: json['id'] ?? 0,
+      userId: json['userId'] ?? 0,
       title: json['title'] as String? ?? json['topic'] as String? ?? 'New Chat',
       topic: json['topic'] as String?,
       messages: messages,
@@ -122,8 +122,8 @@ class ConversationModel {
   }
 
   ConversationModel copyWith({
-    int? id,
-    int? userId,
+    dynamic id,
+    dynamic userId,
     String? title,
     String? topic,
     List<ChatMessageModel>? messages,
