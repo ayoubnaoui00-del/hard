@@ -126,6 +126,10 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const CoachView(),
       ),
       GoRoute(
+        path: '/chat',
+        builder: (context, state) => const CoachView(),
+      ),
+      GoRoute(
         path: '/exercises',
         builder: (context, state) => const ExerciseView(),
       ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gymtrack/models/leaderboard_model.dart';
 import 'package:gymtrack/models/user_model.dart';
 import 'package:gymtrack/providers/auth_provider.dart';
 import 'package:gymtrack/providers/leaderboard_provider.dart';

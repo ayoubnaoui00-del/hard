@@ -32,10 +32,13 @@ class ChatState {
     String? errorMessage,
     String? currentStreamingResponse,
     bool clearError = false,
+    bool clearCurrentConversation = false,
   }) {
     return ChatState(
       conversations: conversations ?? this.conversations,
-      currentConversation: currentConversation ?? this.currentConversation,
+      currentConversation: clearCurrentConversation
+          ? null
+          : (currentConversation ?? this.currentConversation),
       messages: messages ?? this.messages,
       isLoading: isLoading ?? this.isLoading,
       isStreaming: isStreaming ?? this.isStreaming,
@@ -61,6 +64,9 @@ class ChatViewModel extends Notifier<ChatState> {
       final convs = await _chatRepository.getConversations(page: page, limit: limit);
       if (!ref.mounted) return;
       state = state.copyWith(conversations: convs, isLoading: false);
+      if (state.currentConversation == null && convs.isNotEmpty) {
+        selectConversation(convs.first);
+      }
     } catch (e) {
       if (!ref.mounted) return;
       state = state.copyWith(
@@ -68,6 +74,23 @@ class ChatViewModel extends Notifier<ChatState> {
         errorMessage: 'Failed to fetch conversations: ${e.toString()}',
       );
     }
+  }
+
+  void selectConversation(ConversationModel conv) {
+    state = state.copyWith(
+      currentConversation: conv,
+      messages: conv.messages,
+      clearError: true,
+    );
+  }
+
+  void resetToNewChat() {
+    state = state.copyWith(
+      clearCurrentConversation: true,
+      messages: [],
+      currentStreamingResponse: '',
+      clearError: true,
+    );
   }
 
   Future<ConversationModel?> createConversation({String? title, String? topic}) async {
@@ -95,10 +118,13 @@ class ChatViewModel extends Notifier<ChatState> {
     }
   }
 
-  Future<void> fetchChatHistory(int conversationId) async {
+  Future<void> fetchChatHistory(dynamic conversationId) async {
     state = state.copyWith(isLoading: true, clearError: true);
     try {
-      final conv = await _chatRepository.getConversation(conversationId);
+      final id = conversationId is int
+          ? conversationId
+          : int.tryParse(conversationId.toString()) ?? 0;
+      final conv = await _chatRepository.getConversation(id);
       if (!ref.mounted) return;
       state = state.copyWith(
         currentConversation: conv,
@@ -114,13 +140,50 @@ class ChatViewModel extends Notifier<ChatState> {
     }
   }
 
+  Future<void> deleteConversation(dynamic conversationId) async {
+    try {
+      final id = conversationId is int
+          ? conversationId
+          : int.tryParse(conversationId.toString()) ?? 0;
+      await _chatRepository.deleteConversation(id);
+      if (!ref.mounted) return;
+      final updatedConvs =
+          state.conversations.where((c) => c.id != conversationId).toList();
+      final isCurrent = state.currentConversation?.id == conversationId;
+      state = state.copyWith(
+        conversations: updatedConvs,
+        clearCurrentConversation: isCurrent,
+        messages: isCurrent ? [] : state.messages,
+      );
+      if (isCurrent && updatedConvs.isNotEmpty) {
+        selectConversation(updatedConvs.first);
+      }
+    } catch (e) {
+      if (!ref.mounted) return;
+      state = state.copyWith(errorMessage: 'Failed to delete conversation: $e');
+    }
+  }
+
   Future<void> streamChatMessage(String message) async {
     if (message.trim().isEmpty) return;
 
+    final trimmed = message.trim();
+
+    // Auto-create conversation if none active
+    if (state.currentConversation == null) {
+      final title = trimmed.length > 30 ? '${trimmed.substring(0, 30)}...' : trimmed;
+      await createConversation(title: title, topic: 'General Coaching');
+    }
+
+    final convId = state.currentConversation?.id;
+    final int? parsedConvId = convId is int
+        ? convId
+        : int.tryParse(convId?.toString() ?? '');
+
     final userMessage = ChatMessageModel(
-      conversationId: state.currentConversation?.id,
+      conversationId: convId,
       role: 'user',
-      content: message.trim(),
+      content: trimmed,
       createdAt: DateTime.now(),
     );
 
@@ -134,8 +197,8 @@ class ChatViewModel extends Notifier<ChatState> {
 
     try {
       final stream = _chatRepository.streamChatMessage(
-        message,
-        conversationId: state.currentConversation?.id,
+        trimmed,
+        conversationId: parsedConvId,
       );
 
       String accumulatedResponse = '';
@@ -152,7 +215,7 @@ class ChatViewModel extends Notifier<ChatState> {
 
       // Finalize assistant message into history
       final assistantMessage = ChatMessageModel(
-        conversationId: state.currentConversation?.id,
+        conversationId: convId,
         role: 'assistant',
         content: accumulatedResponse,
         createdAt: DateTime.now(),
