@@ -134,6 +134,8 @@ class WorkoutModel {
     return exercises.fold(0.0, (sum, ex) => sum + ex.volume);
   }
 
+  List<WorkoutExerciseModel> get exercises => workoutExercises;
+
   int get totalSets =>
       workoutExercises.fold(0, (sum, ex) => sum + ex.sets);
 
