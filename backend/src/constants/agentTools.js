@@ -7,7 +7,7 @@ export const AGENT_TOOLS = [
     type: 'function',
     function: {
       name: 'addXp',
-      description: 'Award XP (experience points) to the athlete for logging a workout, hitting a PR, or completing a challenge.',
+      description: 'Award XP (experience points) to the athlete for logging a workout, hitting a PR, or achieving a milestone.',
       parameters: {
         type: 'object',
         properties: {
@@ -21,17 +21,6 @@ export const AGENT_TOOLS = [
           },
         },
         required: ['amount', 'reason'],
-      },
-    },
-  },
-  {
-    type: 'function',
-    function: {
-      name: 'updateLeaderboard',
-      description: 'Recalculate the athlete\'s total lifetime volume, weekly volume, and current global rank on the leaderboard.',
-      parameters: {
-        type: 'object',
-        properties: {},
       },
     },
   },

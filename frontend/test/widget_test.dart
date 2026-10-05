@@ -11,8 +11,8 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    // Verify that the login screen renders GYMTRACK title
-    expect(find.text('GYMTRACK'), findsOneWidget);
+    // Verify that the login screen renders VELOCITY title
+    expect(find.text('VELOCITY'), findsOneWidget);
     expect(find.text('Log In'), findsOneWidget);
   });
 }

@@ -29,7 +29,6 @@ class AchievementService {
       const lastWorkoutVolume = Number(context.workout?.totalVolume) || 0;
       const userStreak = user?.streak || 0;
       const userLevel = user?.level || 1;
-      const challengeWins = Number(context.challengeWins) || 0;
 
       const stats = {
         totalWorkouts,
@@ -37,7 +36,6 @@ class AchievementService {
         maxWorkoutVolume: lastWorkoutVolume,
         userStreak,
         userLevel,
-        challengeWins,
       };
 
       const newlyUnlocked = [];

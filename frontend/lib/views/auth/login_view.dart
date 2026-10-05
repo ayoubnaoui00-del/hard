@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../config/theme.dart';
 import '../../viewmodels/auth/auth_session_viewmodel.dart';
 import '../../viewmodels/auth/login_viewmodel.dart';
+import '../../widgets/velocity_logo.dart';
 
 class LoginView extends ConsumerStatefulWidget {
   const LoginView({super.key});
@@ -48,7 +50,6 @@ class _LoginViewState extends ConsumerState<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final loginState = ref.watch(loginViewModelProvider);
     final viewModel = ref.read(loginViewModelProvider.notifier);
 
@@ -90,40 +91,22 @@ class _LoginViewState extends ConsumerState<LoginView> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // App Branding Logo
-                  Center(
-                    child: Container(
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFF5252).withValues(alpha: 0.12),
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: const Color(0xFFFF5252).withValues(alpha: 0.3),
-                          width: 2,
-                        ),
-                      ),
-                      child: const Icon(
-                        Icons.fitness_center_rounded,
-                        size: 54,
-                        color: Color(0xFFFF5252),
-                      ),
+                  // Velocity Branding Logo
+                  const Center(
+                    child: VelocityLogo(
+                      size: 48,
+                      showText: true,
+                      title: 'VELOCITY',
                     ),
                   ),
-                  const SizedBox(height: 24),
-                  Text(
-                    'GYMTRACK',
+                  const SizedBox(height: 12),
+                  const Text(
+                    'High Performance Training & Workout Tracking',
                     textAlign: TextAlign.center,
-                    style: theme.textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 3.0,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Track workouts, challenge friends, push your limits.',
-                    textAlign: TextAlign.center,
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: Colors.grey.shade400,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: AppTheme.velocityTextSecondary,
                     ),
                   ),
                   const SizedBox(height: 36),
@@ -237,10 +220,10 @@ class _LoginViewState extends ConsumerState<LoginView> {
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(24),
                       ),
-                      backgroundColor: const Color(0xFFFF5252),
-                      foregroundColor: Colors.white,
+                      backgroundColor: AppTheme.velocityLimeBright,
+                      foregroundColor: AppTheme.velocityDark,
                     ),
                     child: loginState.isLoading
                         ? const SizedBox(
@@ -248,15 +231,16 @@ class _LoginViewState extends ConsumerState<LoginView> {
                             width: 22,
                             child: CircularProgressIndicator(
                               strokeWidth: 2.5,
-                              color: Colors.white,
+                              color: AppTheme.velocityDark,
                             ),
                           )
                         : const Text(
                             'Log In',
                             style: TextStyle(
                               fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w800,
                               letterSpacing: 0.5,
+                              color: AppTheme.velocityDark,
                             ),
                           ),
                   ),
@@ -268,7 +252,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                     children: [
                       Text(
                         "Don't have an account?",
-                        style: TextStyle(color: Colors.grey.shade400),
+                        style: TextStyle(color: Colors.grey.shade600),
                       ),
                       TextButton(
                         onPressed: loginState.isLoading
@@ -277,7 +261,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                         child: const Text(
                           'Sign Up',
                           style: TextStyle(
-                            color: Color(0xFFFF5252),
+                            color: AppTheme.velocityDark,
                             fontWeight: FontWeight.bold,
                           ),
                         ),

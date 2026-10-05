@@ -1,12 +1,40 @@
 import dotenv from 'dotenv';
+import { Pinecone } from '@pinecone-database/pinecone';
 import { sequelize, Exercise, Embedding } from '../models/index.js';
 
 dotenv.config();
 
-const OLLAMA_BASE_URL = process.env.OLLAMA_BASE_URL || 'http://localhost:11434';
-const EMBED_MODEL = process.env.OLLAMA_EMBED_MODEL || 'all-minilm';
+const PINECONE_API_KEY = process.env.PINECONE_API_KEY;
+const PINECONE_INDEX = process.env.PINECONE_INDEX || 'hard';
+const PINECONE_EMBED_MODEL = process.env.PINECONE_EMBED_MODEL || 'llama-text-embed-v2';
 
 class RagService {
+  constructor() {
+    this.indexName = PINECONE_INDEX;
+    this.embedModel = PINECONE_EMBED_MODEL;
+    this.pinecone = null;
+    this.index = null;
+
+    this.initPinecone();
+  }
+
+  /**
+   * Initialize Pinecone Client and Index
+   */
+  initPinecone() {
+    const apiKey = process.env.PINECONE_API_KEY || PINECONE_API_KEY;
+    if (apiKey) {
+      try {
+        this.pinecone = new Pinecone({ apiKey });
+        this.index = this.pinecone.index(this.indexName);
+      } catch (err) {
+        console.warn('[RagService] Could not initialize Pinecone client:', err.message);
+      }
+    } else {
+      console.warn('[RagService] PINECONE_API_KEY is not set in environment.');
+    }
+  }
+
   /**
    * Calculate cosine similarity between two numeric vectors
    * dot(A, B) / (norm(A) * norm(B))
@@ -44,37 +72,84 @@ class RagService {
   }
 
   /**
-   * Fetch embedding vector from Ollama API
+   * Fetch embedding vector from Pinecone Inference API (llama-text-embed-v2)
+   * Dimension: 1024
    */
-  async getEmbedding(text) {
+  async getEmbedding(text, inputType = 'passage') {
     if (!text || typeof text !== 'string' || !text.trim()) {
       throw new Error('Text input is required to generate an embedding');
     }
 
-    const response = await fetch(`${OLLAMA_BASE_URL}/api/embeddings`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: EMBED_MODEL,
-        prompt: text.trim(),
-      }),
+    if (!this.pinecone) {
+      this.initPinecone();
+    }
+
+    if (!this.pinecone) {
+      throw new Error('Pinecone client is not initialized. Please configure PINECONE_API_KEY.');
+    }
+
+    const response = await this.pinecone.inference.embed({
+      model: this.embedModel,
+      inputs: [text.trim()],
+      parameters: {
+        inputType: inputType === 'query' ? 'query' : 'passage',
+        truncate: 'END',
+      },
     });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`Ollama embedding error (${response.status}): ${errorText}`);
+    const values = response.data?.[0]?.values;
+    if (!values || !Array.isArray(values)) {
+      throw new Error('Invalid embedding vector returned from Pinecone inference');
     }
 
-    const data = await response.json();
-    if (!data.embedding || !Array.isArray(data.embedding)) {
-      throw new Error('Invalid embedding vector returned from Ollama');
+    return values;
+  }
+
+  /**
+   * Format exercise data into structured Pinecone record for Integrated Inference
+   */
+  formatExerciseRecord(ex) {
+    const summaryText = [
+      `Exercise: ${ex.name}`,
+      `Target Muscle: ${ex.muscleGroup}`,
+      ex.instructions ? `Instructions: ${ex.instructions}` : '',
+      ex.formTips ? `Form Tips: ${ex.formTips}` : '',
+    ]
+      .filter(Boolean)
+      .join(' - ');
+
+    return {
+      _id: `ex-${ex.id}`,
+      text: summaryText,
+      exerciseId: String(ex.id),
+      name: ex.name,
+      muscleGroup: ex.muscleGroup,
+      instructions: (ex.instructions || '').substring(0, 1500),
+      formTips: (ex.formTips || '').substring(0, 1500),
+      alternatives: Array.isArray(ex.alternatives) ? ex.alternatives : [],
+    };
+  }
+
+  /**
+   * Upsert a batch of exercises into Pinecone index
+   */
+  async upsertExercises(exercises) {
+    if (!this.index) {
+      this.initPinecone();
+    }
+    if (!this.index) {
+      throw new Error('Pinecone index is not initialized');
     }
 
-    return data.embedding;
+    const records = exercises.map((ex) => this.formatExerciseRecord(ex));
+    await this.index.upsertRecords({ records });
+    return records.length;
   }
 
   /**
    * Retrieve the most relevant exercises based on user query using vector similarity (HRD-23)
+   * Queries Pinecone index with native integrated inference (llama-text-embed-v2)
+   *
    * @param {string} userMessage - Athlete prompt or question
    * @param {number} limit - Maximum number of exercises to retrieve (default 5)
    * @returns {Promise<Array<Object>>} List of exercises with similarity metrics
@@ -85,107 +160,120 @@ class RagService {
     }
 
     const queryLimit = Math.max(1, Math.min(20, parseInt(limit, 10) || 5));
-    let queryVector = null;
 
-    // 1. Generate embedding for user query
-    try {
-      queryVector = await this.getEmbedding(userMessage);
-    } catch (embedError) {
-      console.warn('[RagService] Failed to generate query embedding via Ollama:', embedError.message);
-      // Graceful fallback: return empty list or keyword fallback so chat never crashes
-      return [];
-    }
+    // 1. Primary: Query Pinecone index using searchRecords (Integrated Inference)
+    if (this.index || process.env.PINECONE_API_KEY) {
+      if (!this.index) this.initPinecone();
 
-    // 2. Try native pgvector query if extension and vector casting are supported
-    try {
-      const vectorLiteral = `[${queryVector.join(',')}]`;
-      const [pgvectorResults] = await sequelize.query(
-        `
-        SELECT e.id, e.name, e."muscleGroup", e.instructions, e."formTips", e.alternatives,
-               (e1.vector::text::vector <=> :vectorParam::vector) AS distance
-        FROM "Exercises" e
-        JOIN "Embeddings" e1 ON e.id = e1."exerciseId"
-        ORDER BY distance ASC
-        LIMIT :limit
-        `,
-        {
-          replacements: {
-            vectorParam: vectorLiteral,
-            limit: queryLimit,
-          },
+      if (this.index) {
+        try {
+          const searchRes = await this.index.searchRecords({
+            query: {
+              inputs: { text: userMessage.trim() },
+              topK: queryLimit,
+            },
+          });
+
+          const hits = searchRes.result?.hits;
+          if (Array.isArray(hits) && hits.length > 0) {
+            return hits.map((hit) => {
+              const fields = hit.fields || {};
+              const similarity = typeof hit._score === 'number' ? hit._score : 0;
+              const distance = 1 - similarity;
+
+              return {
+                id: fields.exerciseId || hit._id.replace(/^ex-/, ''),
+                name: fields.name || '',
+                muscleGroup: fields.muscleGroup || '',
+                instructions: fields.instructions || '',
+                formTips: fields.formTips || '',
+                alternatives: Array.isArray(fields.alternatives) ? fields.alternatives : [],
+                similarity,
+                distance,
+              };
+            });
+          }
+        } catch (pineconeErr) {
+          console.warn('[RagService] Pinecone searchRecords failed, falling back to local database:', pineconeErr.message);
         }
-      );
-
-      if (Array.isArray(pgvectorResults) && pgvectorResults.length > 0) {
-        return pgvectorResults.map((row) => ({
-          id: row.id,
-          name: row.name,
-          muscleGroup: row.muscleGroup,
-          instructions: row.instructions,
-          formTips: row.formTips,
-          alternatives: Array.isArray(row.alternatives) ? row.alternatives : [],
-          distance: parseFloat(row.distance) || 0,
-          similarity: 1 - (parseFloat(row.distance) || 0),
-        }));
       }
-    } catch (pgvectorError) {
-      // pgvector operator not supported on JSON column or extension not installed;
-      // fall through to high-performance application-level cosine similarity
     }
 
-    // 3. Fallback: Application-level cosine similarity over stored embeddings
+    // 2. Fallback: PostgreSQL database (application-level cosine similarity or pgvector)
     try {
-      const records = await Embedding.findAll({
-        attributes: ['id', 'exerciseId', 'vector'],
-        include: [
-          {
-            model: Exercise,
-            as: 'exercise',
-            attributes: ['id', 'name', 'muscleGroup', 'instructions', 'formTips', 'alternatives'],
-          },
-        ],
+      let queryVector = null;
+      try {
+        queryVector = await this.getEmbedding(userMessage, 'query');
+      } catch (_) {
+        // If inference is unavailable, query text fallback
+      }
+
+      if (queryVector) {
+        const records = await Embedding.findAll({
+          attributes: ['id', 'exerciseId', 'vector'],
+          include: [
+            {
+              model: Exercise,
+              as: 'exercise',
+              attributes: ['id', 'name', 'muscleGroup', 'instructions', 'formTips', 'alternatives'],
+            },
+          ],
+        });
+
+        if (records && records.length > 0) {
+          const scored = [];
+          for (const record of records) {
+            if (!record.exercise) continue;
+
+            let itemVector = record.vector;
+            if (typeof itemVector === 'string') {
+              try {
+                itemVector = JSON.parse(itemVector);
+              } catch (_) {
+                continue;
+              }
+            }
+
+            if (!Array.isArray(itemVector) || itemVector.length === 0) {
+              continue;
+            }
+
+            const similarity = this.cosineSimilarity(queryVector, itemVector);
+            const distance = 1 - similarity;
+
+            scored.push({
+              id: record.exercise.id,
+              name: record.exercise.name,
+              muscleGroup: record.exercise.muscleGroup,
+              instructions: record.exercise.instructions,
+              formTips: record.exercise.formTips,
+              alternatives: record.exercise.alternatives || [],
+              distance,
+              similarity,
+            });
+          }
+
+          scored.sort((a, b) => a.distance - b.distance);
+          return scored.slice(0, queryLimit);
+        }
+      }
+
+      // Keyword fallback from Exercise table if vectors unavailable
+      const fallbackExercises = await Exercise.findAll({
+        limit: queryLimit,
+        order: [['name', 'ASC']],
       });
 
-      if (!records || records.length === 0) {
-        return [];
-      }
-
-      const scored = [];
-      for (const record of records) {
-        if (!record.exercise) continue;
-
-        let itemVector = record.vector;
-        if (typeof itemVector === 'string') {
-          try {
-            itemVector = JSON.parse(itemVector);
-          } catch (_) {
-            continue;
-          }
-        }
-
-        if (!Array.isArray(itemVector) || itemVector.length === 0) {
-          continue;
-        }
-
-        const similarity = this.cosineSimilarity(queryVector, itemVector);
-        const distance = 1 - similarity;
-
-        scored.push({
-          id: record.exercise.id,
-          name: record.exercise.name,
-          muscleGroup: record.exercise.muscleGroup,
-          instructions: record.exercise.instructions,
-          formTips: record.exercise.formTips,
-          alternatives: record.exercise.alternatives || [],
-          distance,
-          similarity,
-        });
-      }
-
-      // Sort by distance ascending (highest similarity first)
-      scored.sort((a, b) => a.distance - b.distance);
-
-      return scored.slice(0, queryLimit);
+      return fallbackExercises.map((ex) => ({
+        id: ex.id,
+        name: ex.name,
+        muscleGroup: ex.muscleGroup,
+        instructions: ex.instructions,
+        formTips: ex.formTips,
+        alternatives: ex.alternatives || [],
+        similarity: 0.5,
+        distance: 0.5,
+      }));
     } catch (dbError) {
       console.error('[RagService] Error during fallback exercise retrieval:', dbError.message);
       return [];

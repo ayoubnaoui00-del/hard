@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../config/theme.dart';
 import '../../viewmodels/auth/register_viewmodel.dart';
 
 class RegisterView extends ConsumerStatefulWidget {
@@ -127,16 +128,17 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    'Join GymTrack 🏋️',
+                    'Join VELOCITY ⚡',
                     style: theme.textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.w900,
                       letterSpacing: 0.5,
+                      color: AppTheme.velocityTextPrimary,
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Text(
+                  const Text(
                     'Start your smart fitness journey and unlock AI-powered coaching.',
-                    style: TextStyle(color: Colors.grey.shade400),
+                    style: TextStyle(color: AppTheme.velocityTextSecondary),
                   ),
                   const SizedBox(height: 28),
 
@@ -329,7 +331,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                             'Terms & Conditions',
                             style: TextStyle(
                               fontSize: 13,
-                              color: Color(0xFFFF5252),
+                              color: AppTheme.velocityDark,
                               fontWeight: FontWeight.bold,
                               decoration: TextDecoration.underline,
                             ),
@@ -346,10 +348,10 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(24),
                       ),
-                      backgroundColor: const Color(0xFFFF5252),
-                      foregroundColor: Colors.white,
+                      backgroundColor: AppTheme.velocityLimeBright,
+                      foregroundColor: AppTheme.velocityDark,
                     ),
                     child: registerState.isLoading
                         ? const SizedBox(
@@ -357,15 +359,16 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                             width: 22,
                             child: CircularProgressIndicator(
                               strokeWidth: 2.5,
-                              color: Colors.white,
+                              color: AppTheme.velocityDark,
                             ),
                           )
                         : const Text(
                             'Create Account',
                             style: TextStyle(
                               fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w800,
                               letterSpacing: 0.5,
+                              color: AppTheme.velocityDark,
                             ),
                           ),
                   ),

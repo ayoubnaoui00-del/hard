@@ -11,11 +11,8 @@ import initWorkoutExerciseModel from './workoutexercise.js';
 import initEmbeddingModel from './embedding.js';
 import initXpLogModel from './xplog.js';
 import initAchievementModel from './achievement.js';
-import initLeaderboardModel from './leaderboard.js';
-import initFriendModel from './friend.js';
 import initConversationModel from './conversation.js';
 import initMessageModel from './message.js';
-import initChallengeModel from './challenge.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -42,7 +39,7 @@ if (config.use_env_variable && process.env[config.use_env_variable]) {
   );
 }
 
-// Initialize all 12 models
+// Initialize models
 const User = initUserModel(sequelize, DataTypes);
 const Workout = initWorkoutModel(sequelize, DataTypes);
 const Exercise = initExerciseModel(sequelize, DataTypes);
@@ -50,11 +47,8 @@ const WorkoutExercise = initWorkoutExerciseModel(sequelize, DataTypes);
 const Embedding = initEmbeddingModel(sequelize, DataTypes);
 const XpLog = initXpLogModel(sequelize, DataTypes);
 const Achievement = initAchievementModel(sequelize, DataTypes);
-const Leaderboard = initLeaderboardModel(sequelize, DataTypes);
-const Friend = initFriendModel(sequelize, DataTypes);
 const Conversation = initConversationModel(sequelize, DataTypes);
 const Message = initMessageModel(sequelize, DataTypes);
-const Challenge = initChallengeModel(sequelize, DataTypes);
 
 const db = {
   User,
@@ -64,11 +58,8 @@ const db = {
   Embedding,
   XpLog,
   Achievement,
-  Leaderboard,
-  Friend,
   Conversation,
   Message,
-  Challenge,
   sequelize,
   Sequelize,
 };
@@ -92,11 +83,8 @@ export {
   Embedding,
   XpLog,
   Achievement,
-  Leaderboard,
-  Friend,
   Conversation,
   Message,
-  Challenge,
 };
 
 export default db;

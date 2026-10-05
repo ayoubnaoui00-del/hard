@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gymtrack/models/achievement_model.dart';
-import 'package:gymtrack/models/leaderboard_model.dart';
 import 'package:gymtrack/models/user_model.dart';
 import 'package:gymtrack/models/workout_model.dart';
 import 'package:gymtrack/providers/auth_provider.dart';
 import 'package:gymtrack/repositories/achievement_repository.dart';
-import 'package:gymtrack/repositories/leaderboard_repository.dart';
 import 'package:gymtrack/repositories/user_repository.dart';
 import 'package:gymtrack/repositories/workout_repository.dart';
 import 'package:gymtrack/views/profile/profile_view.dart';
@@ -126,27 +124,6 @@ class MockAchievementRepository implements IAchievementRepository {
   }
 }
 
-class MockLeaderboardRepository implements ILeaderboardRepository {
-  @override
-  Future<List<LeaderboardEntryModel>> getGlobalLeaderboard({int limit = 50}) async {
-    return [
-      LeaderboardEntryModel(
-        userId: 1,
-        username: 'MarcusTitan',
-        rank: 3,
-        level: 12,
-        totalVolume: 58000,
-      ),
-    ];
-  }
-
-  @override
-  Future<List<LeaderboardEntryModel>> getWeeklyLeaderboard({int limit = 50}) async => [];
-
-  @override
-  Future<List<LeaderboardEntryModel>> getFriendsLeaderboard({int limit = 50}) async => [];
-}
-
 void main() {
   const testUser = UserModel(
     id: 1,
@@ -164,7 +141,6 @@ void main() {
         userRepositoryProvider.overrideWithValue(MockUserRepository()),
         workoutRepositoryProvider.overrideWithValue(MockWorkoutRepository()),
         achievementRepositoryProvider.overrideWithValue(MockAchievementRepository()),
-        leaderboardRepositoryProvider.overrideWithValue(MockLeaderboardRepository()),
       ],
       child: const MaterialApp(
         home: ProfileView(),
@@ -196,8 +172,7 @@ void main() {
       expect(find.text('Workouts'), findsOneWidget);
       expect(find.text('Current Streak'), findsOneWidget);
       expect(find.text('18 Days'), findsOneWidget);
-      expect(find.text('Rank'), findsOneWidget);
-      expect(find.text('#3'), findsOneWidget);
+      expect(find.text('Longest Streak'), findsOneWidget);
 
       // 4. Achievements Section
       expect(find.text('ACHIEVEMENTS & BADGES'), findsOneWidget);

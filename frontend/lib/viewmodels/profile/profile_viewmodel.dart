@@ -6,7 +6,6 @@ import '../../models/user_model.dart';
 import '../../models/workout_model.dart';
 import '../../providers/auth_provider.dart';
 import '../../repositories/achievement_repository.dart';
-import '../../repositories/leaderboard_repository.dart';
 import '../../repositories/user_repository.dart';
 import '../../repositories/workout_repository.dart';
 
@@ -16,7 +15,6 @@ class ProfileState {
   final double totalVolumeKg;
   final int currentStreak;
   final int longestStreak;
-  final int rank;
   final int level;
   final int currentXp;
   final int nextLevelXp;
@@ -33,7 +31,6 @@ class ProfileState {
     this.totalVolumeKg = 0.0,
     this.currentStreak = 0,
     this.longestStreak = 0,
-    this.rank = 1,
     this.level = 1,
     this.currentXp = 0,
     this.nextLevelXp = 500,
@@ -59,7 +56,6 @@ class ProfileState {
     double? totalVolumeKg,
     int? currentStreak,
     int? longestStreak,
-    int? rank,
     int? level,
     int? currentXp,
     int? nextLevelXp,
@@ -77,7 +73,6 @@ class ProfileState {
       totalVolumeKg: totalVolumeKg ?? this.totalVolumeKg,
       currentStreak: currentStreak ?? this.currentStreak,
       longestStreak: longestStreak ?? this.longestStreak,
-      rank: rank ?? this.rank,
       level: level ?? this.level,
       currentXp: currentXp ?? this.currentXp,
       nextLevelXp: nextLevelXp ?? this.nextLevelXp,
@@ -95,14 +90,12 @@ class ProfileViewModel extends Notifier<ProfileState> {
   late final IUserRepository _userRepository;
   late final IWorkoutRepository _workoutRepository;
   late final IAchievementRepository _achievementRepository;
-  late final ILeaderboardRepository _leaderboardRepository;
 
   @override
   ProfileState build() {
     _userRepository = ref.watch(userRepositoryProvider);
     _workoutRepository = ref.watch(workoutRepositoryProvider);
     _achievementRepository = ref.watch(achievementRepositoryProvider);
-    _leaderboardRepository = ref.watch(leaderboardRepositoryProvider);
 
     final currentUser = ref.watch(currentUserProvider);
     final initialLvl = currentUser?.level ?? 1;
@@ -149,24 +142,6 @@ class ProfileViewModel extends Notifier<ProfileState> {
         achievements = AchievementModel.sampleAchievements;
       }
 
-      // Rank from leaderboard
-      int computedRank = 1;
-      try {
-        final lb = await _leaderboardRepository.getGlobalLeaderboard(limit: 50);
-        if (effectiveUser != null) {
-          final myEntry = lb.where(
-            (e) =>
-                e.userId.toString() == effectiveUser.id.toString() ||
-                e.username.toLowerCase() == effectiveUser.username.toLowerCase(),
-          );
-          if (myEntry.isNotEmpty) {
-            computedRank = myEntry.first.rank;
-          }
-        }
-      } catch (_) {
-        computedRank = 1;
-      }
-
       final double totalVol = workouts.fold(0.0, (sum, w) => sum + w.totalVolume);
       final int userLvl = effectiveUser?.level ?? 1;
       final int userXp = effectiveUser?.totalXp ?? (effectiveUser?.xp ?? 0);
@@ -183,7 +158,6 @@ class ProfileViewModel extends Notifier<ProfileState> {
         xpProgress: min(1.0, userXp / (threshold > 0 ? threshold : 500)),
         currentStreak: userStreak,
         longestStreak: max(userStreak, userStreak + 3),
-        rank: computedRank,
         totalWorkouts: workouts.length,
         totalVolumeKg: totalVol > 0 ? totalVol : 12450.0,
         recentWorkouts: workouts.take(5).toList(),

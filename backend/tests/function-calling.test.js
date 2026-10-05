@@ -1,6 +1,6 @@
 import { describe, it, before, after } from 'node:test';
 import assert from 'node:assert/strict';
-import { sequelize, User, Workout, XpLog, Leaderboard, Achievement, Conversation, Message } from '../src/models/index.js';
+import { sequelize, User, Workout, XpLog, Achievement, Conversation, Message } from '../src/models/index.js';
 import agentToolService from '../src/services/agentToolService.js';
 import agentService from '../src/services/agentService.js';
 import { AGENT_TOOLS } from '../src/constants/agentTools.js';
@@ -26,7 +26,6 @@ describe('Sprint 4: Task 4.6 — Implement Function Calling (HRD-24)', () => {
     const existing = await User.findOne({ where: { email: testUser.email } });
     if (existing) {
       await XpLog.destroy({ where: { userId: existing.id } });
-      await Leaderboard.destroy({ where: { userId: existing.id } });
       await Achievement.destroy({ where: { userId: existing.id } });
       await Conversation.destroy({ where: { userId: existing.id } });
       await Workout.destroy({ where: { userId: existing.id } });
@@ -56,7 +55,6 @@ describe('Sprint 4: Task 4.6 — Implement Function Calling (HRD-24)', () => {
     try {
       if (userId) {
         await XpLog.destroy({ where: { userId } });
-        await Leaderboard.destroy({ where: { userId } });
         await Achievement.destroy({ where: { userId } });
         await Conversation.destroy({ where: { userId } });
         await Workout.destroy({ where: { userId } });
@@ -69,12 +67,11 @@ describe('Sprint 4: Task 4.6 — Implement Function Calling (HRD-24)', () => {
   // 1. Tool Specification Definitions
   // =========================================================================
   describe('AGENT_TOOLS Schema Specifications', () => {
-    it('should define all 6 required tools with parameters conforming to JSON Schema', () => {
-      assert.equal(AGENT_TOOLS.length, 6);
+    it('should define all 5 required tools with parameters conforming to JSON Schema', () => {
+      assert.equal(AGENT_TOOLS.length, 5);
 
       const toolNames = AGENT_TOOLS.map((t) => t.function.name);
       assert.ok(toolNames.includes('addXp'));
-      assert.ok(toolNames.includes('updateLeaderboard'));
       assert.ok(toolNames.includes('checkAchievements'));
       assert.ok(toolNames.includes('suggestNextExercise'));
       assert.ok(toolNames.includes('generateWorkoutPlan'));
@@ -112,17 +109,7 @@ describe('Sprint 4: Task 4.6 — Implement Function Calling (HRD-24)', () => {
       assert.ok(log.description.includes('bench press'));
     });
 
-    it('2. updateLeaderboard should recalculate volume and rank', async () => {
-      const result = await agentToolService.handleUpdateLeaderboard(userId);
 
-      assert.equal(result.success, true);
-      assert.ok(result.rank >= 1);
-      assert.ok(result.totalVolume >= 2500);
-
-      const lb = await Leaderboard.findOne({ where: { userId } });
-      assert.ok(lb);
-      assert.equal(lb.totalVolume, result.totalVolume);
-    });
 
     it('3. checkAchievements should evaluate milestones without throwing', async () => {
       const result = await agentToolService.handleCheckAchievements(userId);

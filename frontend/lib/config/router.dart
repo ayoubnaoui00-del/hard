@@ -10,11 +10,9 @@ import '../views/home/home_view.dart';
 import '../views/workout/workout_view.dart';
 import '../views/workout/log_workout_view.dart';
 import '../views/workout/muscle_picker_view.dart';
-import '../views/leaderboard/leaderboard_view.dart';
 import '../views/profile/profile_view.dart';
 import '../views/exercise/exercise_view.dart';
 import '../views/coach/coach_view.dart';
-import '../views/social/social_view.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -71,12 +69,13 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const RegisterView(),
       ),
 
-      // App Shell with 4 Bottom Navigation Tabs (HRD-30)
+      // Velocity App Shell with 5 Bottom Navigation Branches
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
           return MainShellView(navigationShell: navigationShell);
         },
         branches: [
+          // 0. Home
           StatefulShellBranch(
             routes: [
               GoRoute(
@@ -85,26 +84,54 @@ final routerProvider = Provider<GoRouter>((ref) {
               ),
             ],
           ),
+          // 1. Explore (Exercise Library)
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/explore',
+                builder: (context, state) => const ExerciseView(),
+              ),
+              GoRoute(
+                path: '/exercises',
+                builder: (context, state) => const ExerciseView(),
+              ),
+            ],
+          ),
+          // 2. Activity (Workouts & Sessions)
           StatefulShellBranch(
             routes: [
               GoRoute(
                 path: '/workouts',
                 builder: (context, state) => const WorkoutView(),
               ),
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
               GoRoute(
-                path: '/leaderboard',
-                builder: (context, state) => const LeaderboardView(),
+                path: '/activity',
+                builder: (context, state) => const WorkoutView(),
               ),
             ],
           ),
+          // 3. Velo-AI (AI Coach)
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/coach',
+                builder: (context, state) => const CoachView(),
+              ),
+              GoRoute(
+                path: '/velo-ai',
+                builder: (context, state) => const CoachView(),
+              ),
+            ],
+          ),
+          // 4. More (Profile & Settings)
           StatefulShellBranch(
             routes: [
               GoRoute(
                 path: '/profile',
+                builder: (context, state) => const ProfileView(),
+              ),
+              GoRoute(
+                path: '/more',
                 builder: (context, state) => const ProfileView(),
               ),
             ],
@@ -122,20 +149,8 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const MusclePickerView(),
       ),
       GoRoute(
-        path: '/coach',
-        builder: (context, state) => const CoachView(),
-      ),
-      GoRoute(
         path: '/chat',
         builder: (context, state) => const CoachView(),
-      ),
-      GoRoute(
-        path: '/exercises',
-        builder: (context, state) => const ExerciseView(),
-      ),
-      GoRoute(
-        path: '/social',
-        builder: (context, state) => const SocialView(),
       ),
     ],
   );

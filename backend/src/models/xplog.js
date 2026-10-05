@@ -28,7 +28,7 @@ export default (sequelize, DataTypes) => {
         allowNull: false,
       },
       type: {
-        type: DataTypes.ENUM('WORKOUT', 'PR', 'STREAK', 'CHALLENGE', 'ACHIEVEMENT', 'BONUS'),
+        type: DataTypes.ENUM('WORKOUT', 'PR', 'STREAK', 'ACHIEVEMENT', 'BONUS'),
         allowNull: false,
       },
       description: {

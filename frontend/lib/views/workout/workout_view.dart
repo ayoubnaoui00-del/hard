@@ -83,7 +83,7 @@ class _WorkoutViewState extends ConsumerState<WorkoutView> {
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
-                                  'Start tracking your sets, reps, and volume to climb the leaderboard!',
+                                  'Start tracking your sets, reps, and volume to level up your strength!',
                                   style: TextStyle(
                                     color: Colors.grey.shade400,
                                     fontSize: 13,

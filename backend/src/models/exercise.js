@@ -11,7 +11,6 @@ export default (sequelize, DataTypes) => {
         as: 'workouts',
       });
       Exercise.hasOne(models.Embedding, { foreignKey: 'exerciseId', as: 'embedding', onDelete: 'CASCADE' });
-      Exercise.hasMany(models.Challenge, { foreignKey: 'exerciseId', as: 'challenges', onDelete: 'CASCADE' });
     }
   }
 

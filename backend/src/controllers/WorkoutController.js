@@ -1,8 +1,6 @@
 import { sequelize, Workout, WorkoutExercise, Exercise } from '../models/index.js';
 import achievementService from '../services/achievementService.js';
 import xpService from '../services/xpService.js';
-import leaderboardService from '../services/leaderboardService.js';
-import ChallengeController from './ChallengeController.js';
 
 class WorkoutController {
   /**
@@ -93,12 +91,6 @@ class WorkoutController {
         earnedXp,
         `Completed workout: ${fullWorkout.name}`
       );
-
-      // Recalculate leaderboard standing
-      await leaderboardService.updateUserLeaderboard(userId);
-
-      // Update in-progress challenge scores if matching exercises were logged
-      await ChallengeController.updateParticipantScores(userId, exerciseList);
 
       return res.status(201).json({
         success: true,
@@ -281,9 +273,6 @@ class WorkoutController {
       await workout.save({ transaction: t });
       await t.commit();
 
-      // Recalculate leaderboard standing
-      await leaderboardService.updateUserLeaderboard(userId);
-
       const updatedWorkout = await Workout.findByPk(workout.id, {
         include: [
           {
@@ -337,9 +326,6 @@ class WorkoutController {
       }
 
       await workout.destroy();
-
-      // Recalculate leaderboard standing
-      await leaderboardService.updateUserLeaderboard(userId);
 
       return res.status(200).json({
         success: true,

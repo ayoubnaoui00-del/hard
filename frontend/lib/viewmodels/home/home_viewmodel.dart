@@ -1,11 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../models/achievement_model.dart';
-import '../../models/friend_activity_model.dart';
 import '../../models/user_model.dart';
 import '../../repositories/achievement_repository.dart';
 import '../../repositories/auth_repository.dart';
-import '../../repositories/leaderboard_repository.dart';
 import '../../repositories/workout_repository.dart';
 import '../auth/auth_session_viewmodel.dart';
 
@@ -16,13 +14,11 @@ class HomeState {
   final int workoutsToday;
   final double todayVolume;
   final double weeklyVolume;
-  final int userRank;
   final int level;
   final int currentXp;
   final int nextLevelThreshold;
   final double xpProgress;
   final List<AchievementModel> recentAchievements;
-  final List<FriendActivityModel> friendsActivities;
   final bool isLoading;
   final String? errorMessage;
 
@@ -33,13 +29,11 @@ class HomeState {
     this.workoutsToday = 0,
     this.todayVolume = 0.0,
     this.weeklyVolume = 0.0,
-    this.userRank = 1,
     this.level = 1,
     this.currentXp = 0,
     this.nextLevelThreshold = 500,
     this.xpProgress = 0.0,
     this.recentAchievements = const [],
-    this.friendsActivities = const [],
     this.isLoading = false,
     this.errorMessage,
   });
@@ -55,13 +49,11 @@ class HomeState {
     int? workoutsToday,
     double? todayVolume,
     double? weeklyVolume,
-    int? userRank,
     int? level,
     int? currentXp,
     int? nextLevelThreshold,
     double? xpProgress,
     List<AchievementModel>? recentAchievements,
-    List<FriendActivityModel>? friendsActivities,
     bool? isLoading,
     String? errorMessage,
     bool clearError = false,
@@ -73,13 +65,11 @@ class HomeState {
       workoutsToday: workoutsToday ?? this.workoutsToday,
       todayVolume: todayVolume ?? this.todayVolume,
       weeklyVolume: weeklyVolume ?? this.weeklyVolume,
-      userRank: userRank ?? this.userRank,
       level: level ?? this.level,
       currentXp: currentXp ?? this.currentXp,
       nextLevelThreshold: nextLevelThreshold ?? this.nextLevelThreshold,
       xpProgress: xpProgress ?? this.xpProgress,
       recentAchievements: recentAchievements ?? this.recentAchievements,
-      friendsActivities: friendsActivities ?? this.friendsActivities,
       isLoading: isLoading ?? this.isLoading,
       errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
     );
@@ -89,14 +79,12 @@ class HomeState {
 class HomeViewModel extends Notifier<HomeState> {
   late final IAuthRepository _authRepository;
   late final IWorkoutRepository _workoutRepository;
-  late final ILeaderboardRepository _leaderboardRepository;
   late final IAchievementRepository _achievementRepository;
 
   @override
   HomeState build() {
     _authRepository = ref.watch(authRepositoryProvider);
     _workoutRepository = ref.watch(workoutRepositoryProvider);
-    _leaderboardRepository = ref.watch(leaderboardRepositoryProvider);
     _achievementRepository = ref.watch(achievementRepositoryProvider);
 
     // Initial state pulls from current auth session if available
@@ -118,7 +106,6 @@ class HomeViewModel extends Notifier<HomeState> {
       nextLevelThreshold: nextThreshold,
       xpProgress: initialProgress.clamp(0.0, 1.0),
       recentAchievements: AchievementModel.sampleAchievements.take(3).toList(),
-      friendsActivities: FriendActivityModel.sampleActivities.take(5).toList(),
     );
 
     // Schedule fetching fresh dashboard data
@@ -190,23 +177,6 @@ class HomeViewModel extends Notifier<HomeState> {
         achievements = AchievementModel.sampleAchievements.take(3).toList();
       }
 
-      // 4. Fetch Rank from Leaderboard
-      int userRank = 4;
-      try {
-        final rankings = await _leaderboardRepository.getGlobalLeaderboard(limit: 50);
-        if (user != null) {
-          final match = rankings.where((r) => r.userId == user.id);
-          if (match.isNotEmpty) {
-            userRank = match.first.rank;
-          }
-        }
-      } catch (_) {
-        userRank = 4;
-      }
-
-      // 5. Friends Activities
-      final activities = FriendActivityModel.sampleActivities.take(5).toList();
-
       if (!ref.mounted) return;
 
       state = state.copyWith(
@@ -220,9 +190,7 @@ class HomeViewModel extends Notifier<HomeState> {
         todayVolume: todayVol,
         weeklyVolume: weeklyVol,
         workoutsThisMonth: workoutsMonth,
-        userRank: userRank,
         recentAchievements: achievements,
-        friendsActivities: activities,
         isLoading: false,
       );
     } catch (e) {
@@ -232,22 +200,6 @@ class HomeViewModel extends Notifier<HomeState> {
         errorMessage: 'Failed to refresh dashboard: ${e.toString()}',
       );
     }
-  }
-
-  void toggleLikeActivity(int activityId) {
-    final updatedList = state.friendsActivities.map((act) {
-      if (act.id == activityId) {
-        final newIsLiked = !act.isLiked;
-        final newCount = newIsLiked ? act.likesCount + 1 : act.likesCount - 1;
-        return act.copyWith(
-          isLiked: newIsLiked,
-          likesCount: newCount < 0 ? 0 : newCount,
-        );
-      }
-      return act;
-    }).toList();
-
-    state = state.copyWith(friendsActivities: updatedList);
   }
 
   Future<void> refresh() => loadDashboard();

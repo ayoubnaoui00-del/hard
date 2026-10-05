@@ -37,7 +37,9 @@ class _GymTrackAppState extends ConsumerState<GymTrackApp> {
     return MaterialApp.router(
       title: 'GymTrack',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.darkTheme,
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.light,
       routerConfig: router,
     );
   }

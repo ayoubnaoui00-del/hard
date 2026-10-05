@@ -1,7 +1,6 @@
 import { Op } from 'sequelize';
 import { User, Workout, WorkoutExercise, Exercise } from '../models/index.js';
 import xpService from './xpService.js';
-import leaderboardService from './leaderboardService.js';
 import achievementService from './achievementService.js';
 
 class AgentToolService {
@@ -30,23 +29,7 @@ class AgentToolService {
   }
 
   /**
-   * 2. updateLeaderboard(userId)
-   * Recalculates user's total volume, weekly volume, and leaderboard rank.
-   */
-  async handleUpdateLeaderboard(userId) {
-    const lb = await leaderboardService.updateUserLeaderboard(userId);
-
-    return {
-      success: true,
-      rank: lb?.rank || 1,
-      totalVolume: lb?.totalVolume || 0,
-      weeklyVolume: lb?.weeklyVolume || 0,
-      message: `Leaderboard updated! Current rank: #${lb?.rank || 1} with ${lb?.totalVolume || 0}kg total volume.`,
-    };
-  }
-
-  /**
-   * 3. checkAchievements(userId)
+   * 2. checkAchievements(userId)
    * Evaluates user stats against achievement definitions and unlocks badges.
    */
   async handleCheckAchievements(userId) {
@@ -228,8 +211,6 @@ class AgentToolService {
       switch (toolName) {
         case 'addXp':
           return await this.handleAddXp(userId, args);
-        case 'updateLeaderboard':
-          return await this.handleUpdateLeaderboard(userId);
         case 'checkAchievements':
           return await this.handleCheckAchievements(userId);
         case 'suggestNextExercise':
@@ -241,7 +222,7 @@ class AgentToolService {
         default:
           return {
             success: false,
-            error: `Unknown tool function "${toolName}". Available tools: addXp, updateLeaderboard, checkAchievements, suggestNextExercise, generateWorkoutPlan, updateStreak.`,
+            error: `Unknown tool function "${toolName}". Available tools: addXp, checkAchievements, suggestNextExercise, generateWorkoutPlan, updateStreak.`,
           };
       }
     } catch (err) {

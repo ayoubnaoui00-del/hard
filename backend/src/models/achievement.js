@@ -24,7 +24,7 @@ export default (sequelize, DataTypes) => {
         },
       },
       type: {
-        type: DataTypes.ENUM('WORKOUT_MILESTONE', 'STREAK_MILESTONE', 'VOLUME_MILESTONE', 'CHALLENGE_WIN', 'LEVEL_UP'),
+        type: DataTypes.ENUM('WORKOUT_MILESTONE', 'STREAK_MILESTONE', 'VOLUME_MILESTONE', 'LEVEL_UP'),
         allowNull: false,
       },
       name: {

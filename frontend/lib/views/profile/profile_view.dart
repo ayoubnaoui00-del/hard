@@ -530,13 +530,6 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                 icon: Icons.bolt_rounded,
                 color: const Color(0xFF34D399),
               ),
-              const SizedBox(width: 10),
-              _buildStatTile(
-                title: 'Rank',
-                value: '#${state.rank}',
-                icon: Icons.emoji_events_rounded,
-                color: const Color(0xFFFBBF24),
-              ),
             ],
           ),
         ],

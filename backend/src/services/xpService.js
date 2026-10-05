@@ -28,7 +28,7 @@ class XpService {
   /**
    * Adds XP to a user, logs immutable audit entry, and handles leveling up.
    * @param {string} userId - User UUID
-   * @param {string} type - 'WORKOUT' | 'PR' | 'STREAK' | 'CHALLENGE' | 'ACHIEVEMENT' | 'BONUS'
+   * @param {string} type - 'WORKOUT' | 'PR' | 'STREAK' | 'ACHIEVEMENT' | 'BONUS'
    * @param {number} amount - Points to add
    * @param {string} description - Human-readable reason
    * @param {object} options - Optional transaction { transaction }

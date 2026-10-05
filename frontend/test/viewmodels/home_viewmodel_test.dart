@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gymtrack/models/achievement_model.dart';
-import 'package:gymtrack/models/leaderboard_model.dart';
 import 'package:gymtrack/models/user_model.dart';
 import 'package:gymtrack/models/workout_model.dart';
 import 'package:gymtrack/repositories/achievement_repository.dart';
 import 'package:gymtrack/repositories/auth_repository.dart';
-import 'package:gymtrack/repositories/leaderboard_repository.dart';
 import 'package:gymtrack/repositories/workout_repository.dart';
 import 'package:gymtrack/viewmodels/home/home_viewmodel.dart';
 import 'package:gymtrack/views/home/home_view.dart';
@@ -82,22 +80,6 @@ class FakeWorkoutRepository implements IWorkoutRepository {
       WorkoutModel.calculateVolume(exercises);
 }
 
-class FakeLeaderboardRepository implements ILeaderboardRepository {
-  List<LeaderboardEntryModel> mockEntries = [];
-
-  @override
-  Future<List<LeaderboardEntryModel>> getGlobalLeaderboard({int limit = 50}) async =>
-      mockEntries;
-
-  @override
-  Future<List<LeaderboardEntryModel>> getWeeklyLeaderboard({int limit = 50}) async =>
-      mockEntries;
-
-  @override
-  Future<List<LeaderboardEntryModel>> getFriendsLeaderboard({int limit = 50}) async =>
-      mockEntries;
-}
-
 class FakeAchievementRepository implements IAchievementRepository {
   List<AchievementModel> mockAchievements = [];
 
@@ -107,10 +89,9 @@ class FakeAchievementRepository implements IAchievementRepository {
 }
 
 void main() {
-  group('HomeViewModel & Dashboard Tests (HRD-30)', () {
+  group('HomeViewModel & Dashboard Tests', () {
     late FakeAuthRepository fakeAuth;
     late FakeWorkoutRepository fakeWorkout;
-    late FakeLeaderboardRepository fakeLeaderboard;
     late FakeAchievementRepository fakeAchievement;
     late ProviderContainer container;
 
@@ -147,17 +128,6 @@ void main() {
           ),
         ];
 
-      fakeLeaderboard = FakeLeaderboardRepository()
-        ..mockEntries = [
-          const LeaderboardEntryModel(
-            userId: 42,
-            username: 'Ayoub',
-            rank: 2,
-            level: 3,
-            totalXp: 1750,
-          ),
-        ];
-
       fakeAchievement = FakeAchievementRepository()
         ..mockAchievements = AchievementModel.sampleAchievements;
 
@@ -165,7 +135,6 @@ void main() {
         overrides: [
           authRepositoryProvider.overrideWithValue(fakeAuth),
           workoutRepositoryProvider.overrideWithValue(fakeWorkout),
-          leaderboardRepositoryProvider.overrideWithValue(fakeLeaderboard),
           achievementRepositoryProvider.overrideWithValue(fakeAchievement),
         ],
       );
@@ -179,10 +148,9 @@ void main() {
       final state = container.read(homeViewModelProvider);
       expect(state.level, greaterThanOrEqualTo(1));
       expect(state.recentAchievements.isNotEmpty, isTrue);
-      expect(state.friendsActivities.isNotEmpty, isTrue);
     });
 
-    test('loadDashboard populates user, workouts, volume, and rank', () async {
+    test('loadDashboard populates user, workouts, and volume', () async {
       final notifier = container.read(homeViewModelProvider.notifier);
       await notifier.loadDashboard();
 
@@ -193,33 +161,11 @@ void main() {
       expect(state.workoutsToday, 1);
       expect(state.todayVolume, 3200.0);
       expect(state.weeklyVolume, 9000.0); // 3200 + 5800
-      expect(state.userRank, 2);
       expect(state.recentAchievements.length, 3);
       expect(state.isLoading, isFalse);
     });
 
-    test('toggleLikeActivity toggles like and updates count', () {
-      final notifier = container.read(homeViewModelProvider.notifier);
-      final initialActivities = container.read(homeViewModelProvider).friendsActivities;
-      final target = initialActivities.first;
-      final initialLikes = target.likesCount;
-      final initialIsLiked = target.isLiked;
-
-      notifier.toggleLikeActivity(target.id);
-
-      final updated = container
-          .read(homeViewModelProvider)
-          .friendsActivities
-          .firstWhere((a) => a.id == target.id);
-
-      expect(updated.isLiked, !initialIsLiked);
-      expect(
-        updated.likesCount,
-        initialIsLiked ? initialLikes - 1 : initialLikes + 1,
-      );
-    });
-
-    testWidgets('HomeView renders all 6 dashboard sections properly', (tester) async {
+    testWidgets('HomeView renders dashboard sections properly', (tester) async {
       tester.view.physicalSize = const Size(800, 1800);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(() {
@@ -239,35 +185,31 @@ void main() {
       // Wait for microtask / initial load
       await tester.pumpAndSettle();
 
-      // Check Header
-      expect(find.text('GymTrack'), findsOneWidget);
-      expect(find.textContaining('Welcome back'), findsOneWidget);
-      expect(find.textContaining('Ayoub'), findsOneWidget);
-      expect(find.text('Lvl 3'), findsOneWidget);
+      // Check Header & Velocity Branding
+      expect(find.text('VELOCITY'), findsOneWidget);
 
-      // Check Quick Actions
-      expect(find.text('Quick Actions'), findsOneWidget);
-      expect(find.text('Log Workout'), findsOneWidget);
-      expect(find.text('Leaderboard'), findsOneWidget);
-      expect(find.text('AI Coach'), findsOneWidget);
+      // Check Program & Check-In Cards
+      expect(find.text('Your Program'), findsOneWidget);
+      expect(find.text('Check-In'), findsOneWidget);
 
-      // Check Today's Summary
-      expect(find.text("Today's Summary"), findsOneWidget);
-      expect(find.text('Workouts Logged'), findsOneWidget);
-      expect(find.text('Total Volume'), findsOneWidget);
+      // Check Line-Up Section
+      expect(find.text("How's Your Workout Line-Up !"), findsOneWidget);
+      expect(find.text('Conditioning: Body Movement'), findsOneWidget);
+      expect(find.text('Sonic Meditation'), findsOneWidget);
 
-      // Check Quick Stats
-      expect(find.text('Performance Snapshot'), findsOneWidget);
+      // Check Workout Cards
+      expect(find.text('Ultimate'), findsOneWidget);
+      expect(find.text('Dumbbell'), findsOneWidget);
+      expect(find.text('Lower'), findsOneWidget);
+
+      // Check Performance Metrics
+      expect(find.text('Performance Metrics'), findsOneWidget);
       expect(find.text('Streak'), findsOneWidget);
       expect(find.text('Weekly Vol'), findsOneWidget);
-      expect(find.text('Global Rank'), findsOneWidget);
+      expect(find.text('This Month'), findsOneWidget);
 
       // Check Recent Achievements
       expect(find.text('Recent Achievements'), findsOneWidget);
-
-      // Check Friends Activity Feed
-      expect(find.text('Friends Activity Feed'), findsOneWidget);
-      expect(find.text('Top 5 Recent'), findsOneWidget);
     });
   });
 }
