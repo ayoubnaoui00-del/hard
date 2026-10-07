@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../models/chat_model.dart';
@@ -203,9 +204,18 @@ class ChatViewModel extends Notifier<ChatState> {
 
       String accumulatedResponse = '';
 
-      await for (final chunk in stream) {
+      await for (final rawChunk in stream) {
         if (!ref.mounted) return;
-        accumulatedResponse += chunk;
+        String textToAppend = rawChunk;
+        if (rawChunk.trimLeft().startsWith('{')) {
+          try {
+            final decoded = jsonDecode(rawChunk);
+            if (decoded is Map<String, dynamic> && decoded.containsKey('chunk')) {
+              textToAppend = decoded['chunk']?.toString() ?? '';
+            }
+          } catch (_) {}
+        }
+        accumulatedResponse += textToAppend;
         state = state.copyWith(
           currentStreamingResponse: accumulatedResponse,
         );

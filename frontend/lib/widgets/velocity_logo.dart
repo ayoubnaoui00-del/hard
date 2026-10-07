@@ -10,7 +10,7 @@ class VelocityLogo extends StatelessWidget {
     super.key,
     this.size = 28,
     this.showText = true,
-    this.title = 'VELOCITY',
+    this.title = 'HARD',
   });
 
   @override

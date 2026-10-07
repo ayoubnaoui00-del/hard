@@ -29,6 +29,7 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
   void _showAchievementDetails(BuildContext context, AchievementModel achievement) {
     showModalBottomSheet(
       context: context,
+      useRootNavigator: true,
       backgroundColor: Colors.transparent,
       builder: (ctx) => _AchievementDetailsSheet(achievement: achievement),
     );

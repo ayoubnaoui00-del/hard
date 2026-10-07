@@ -274,6 +274,8 @@ class RagService {
         similarity: 0.5,
         distance: 0.5,
       }));
+
+
     } catch (dbError) {
       console.error('[RagService] Error during fallback exercise retrieval:', dbError.message);
       return [];

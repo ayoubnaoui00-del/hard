@@ -91,12 +91,12 @@ class _LoginViewState extends ConsumerState<LoginView> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Velocity Branding Logo
+                  // App Branding Logo
                   const Center(
                     child: VelocityLogo(
                       size: 48,
                       showText: true,
-                      title: 'VELOCITY',
+                      title: 'HARD',
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -154,7 +154,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                     onChanged: viewModel.setEmail,
                     decoration: InputDecoration(
                       labelText: 'Email Address',
-                      hintText: 'athlete@gymtrack.com',
+                      hintText: 'athlete@hard.com',
                       prefixIcon: const Icon(Icons.email_outlined),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),

@@ -1,7 +1,51 @@
 import { Op } from 'sequelize';
 import { Exercise } from '../models/index.js';
 
+function formatExercise(exercise) {
+  if (!exercise) return null;
+  const data = typeof exercise.toJSON === 'function' ? exercise.toJSON() : { ...exercise };
+  const alt = data.alternatives && typeof data.alternatives === 'object' ? data.alternatives : {};
+
+  let img = data.imageUrl || alt.imageUrl || null;
+  let vid = data.videoUrl || data.gifUrl || alt.gifUrl || alt.videoUrl || null;
+
+  if (img && typeof img === 'string' && !img.startsWith('http://') && !img.startsWith('https://')) {
+    const clean = img.replace(/^\/+/, '');
+    if (clean.startsWith('media/exercises/')) {
+      img = `/${clean}`;
+    } else if (clean.startsWith('images/')) {
+      img = `/media/exercises/${clean}`;
+    } else {
+      img = `/media/exercises/images/${clean}`;
+    }
+  }
+
+  if (vid && typeof vid === 'string' && !vid.startsWith('http://') && !vid.startsWith('https://')) {
+    const clean = vid.replace(/^\/+/, '');
+    if (clean.startsWith('media/exercises/')) {
+      vid = `/${clean}`;
+    } else if (clean.startsWith('videos/')) {
+      vid = `/media/exercises/${clean}`;
+    } else {
+      vid = `/media/exercises/videos/${clean}`;
+    }
+  }
+
+  return {
+    ...data,
+    imageUrl: img,
+    videoUrl: vid,
+    gifUrl: vid,
+    category: data.category || alt.category || null,
+    equipment: data.equipment || alt.equipment || null,
+    target: data.target || alt.target || null,
+    bodyPart: data.bodyPart || alt.bodyPart || null,
+    secondaryMuscles: data.secondaryMuscles || alt.secondaryMuscles || [],
+  };
+}
+
 class ExerciseController {
+
   /**
    * GET /exercises
    * Lists exercises with pagination, muscle filtering, and keyword search.
@@ -35,6 +79,8 @@ class ExerciseController {
         order: [['name', 'ASC']],
       });
 
+      const formatted = rows.map((item) => formatExercise(item));
+
       return res.status(200).json({
         success: true,
         data: {
@@ -42,7 +88,7 @@ class ExerciseController {
           page,
           limit,
           totalPages: Math.ceil(count / limit),
-          exercises: rows,
+          exercises: formatted,
         },
       });
     } catch (error) {
@@ -82,7 +128,7 @@ class ExerciseController {
 
       return res.status(200).json({
         success: true,
-        data: exercise,
+        data: formatExercise(exercise),
       });
     } catch (error) {
       console.error('[ExerciseController.getExerciseById] Error:', error);

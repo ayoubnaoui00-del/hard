@@ -63,7 +63,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
         title: const Text('Terms & Conditions'),
         content: const SingleChildScrollView(
           child: Text(
-            'By using GymTrack, you agree to track your workouts responsibly and consult with a medical professional before engaging in strenuous physical activities.\n\nYour data is protected with secure encryption and used solely to personalize your fitness and AI coaching experience.',
+            'By using Hard, you agree to track your workouts responsibly and consult with a medical professional before engaging in strenuous physical activities.\n\nYour data is protected with secure encryption and used solely to personalize your fitness and AI coaching experience.',
             style: TextStyle(height: 1.5),
           ),
         ),
@@ -128,7 +128,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    'Join VELOCITY ⚡',
+                    'Join HARD ⚡',
                     style: theme.textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.w900,
                       letterSpacing: 0.5,
@@ -211,7 +211,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                     onChanged: viewModel.setEmail,
                     decoration: InputDecoration(
                       labelText: 'Email Address',
-                      hintText: 'athlete@gymtrack.com',
+                      hintText: 'athlete@hard.com',
                       prefixIcon: const Icon(Icons.email_outlined),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),

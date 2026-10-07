@@ -47,6 +47,35 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.JSON,
         defaultValue: [],
       },
+      imageUrl: {
+        type: DataTypes.VIRTUAL,
+        get() {
+          const alt = this.getDataValue('alternatives');
+          if (alt && typeof alt === 'object' && alt.imageUrl) {
+            const clean = alt.imageUrl.replace(/^\/+/, '');
+            return clean.startsWith('images/') ? `/media/exercises/${clean}` : `/media/exercises/images/${clean}`;
+          }
+          return null;
+        },
+      },
+      videoUrl: {
+        type: DataTypes.VIRTUAL,
+        get() {
+          const alt = this.getDataValue('alternatives');
+          if (alt && typeof alt === 'object' && (alt.gifUrl || alt.videoUrl)) {
+            const vid = alt.gifUrl || alt.videoUrl;
+            const clean = vid.replace(/^\/+/, '');
+            return clean.startsWith('videos/') ? `/media/exercises/${clean}` : `/media/exercises/videos/${clean}`;
+          }
+          return null;
+        },
+      },
+      gifUrl: {
+        type: DataTypes.VIRTUAL,
+        get() {
+          return this.videoUrl;
+        },
+      },
     },
     {
       sequelize,

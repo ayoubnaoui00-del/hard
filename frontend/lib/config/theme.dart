@@ -10,23 +10,26 @@ class AppTheme {
   static const Color velocityAmber = Color(0xFFFFB300); // Warm Gold / Amber Accent
   static const Color velocityAmberSoft = Color(0xFFFFF3D6);
   
-  static const Color velocityDark = Color(0xFF131710); // Deep Obsidian / Slate
-  static const Color velocityDarkSurface = Color(0xFF232B20); // Dark Olive / Chip pill
-  static const Color velocityDarkBorder = Color(0xFF333E2F);
+  // Smooth Titanium Slate & Graphite (Secondary Dark Palette - blends smoothly with Lime & Canvas)
+  static const Color velocityDark = Color(0xFF20252D); // Smooth Titanium Charcoal (Secondary Dark)
+  static const Color velocityDarkSurface = Color(0xFF2B323C); // Smooth Elevated Titanium Slate
+  static const Color velocityDarkBorder = Color(0xFF3C4452); // Refined Slate Border
+  static const Color velocityDarkLight = Color(0xFF38404E); // Soft Slate Pill / Badge
   
-  static const Color velocityBackground = Color(0xFFF7FAF4); // Pale Lime-Tinted Clean Canvas
+  static const Color velocityBackground = Color(0xFFF6F8FA); // Clean Cool-Tinted Canvas
   static const Color velocitySurface = Colors.white;
-  static const Color velocitySurfaceMuted = Color(0xFFEFF4EC);
-  static const Color velocityBorder = Color(0xFFE2EBE0);
+  static const Color velocitySurfaceMuted = Color(0xFFEFF2F5);
+  static const Color velocityBorder = Color(0xFFE2E7ED);
   
-  static const Color velocityTextPrimary = Color(0xFF111710);
-  static const Color velocityTextSecondary = Color(0xFF6D796A);
-  static const Color velocityTextMuted = Color(0xFF98A395);
+  static const Color velocityTextPrimary = Color(0xFF1A1F26); // Deep Titanium Charcoal
+  static const Color velocityTextSecondary = Color(0xFF5F6978); // Smooth Slate Grey
+  static const Color velocityTextMuted = Color(0xFF8B95A4); // Soft Cool Grey
 
   // Backward compatibility aliases
   static const Color primary = velocityLime;
   static const Color primaryVariant = velocityLimeBright;
-  static const Color secondary = velocityAmber;
+  static const Color secondary = velocityDark; // Secondary brand dark color
+  static const Color secondaryAccent = velocityAmber;
   static const Color accent = Color(0xFF2979FF);
   static const Color background = velocityBackground;
   static const Color surface = velocitySurface;
@@ -44,11 +47,11 @@ class AppTheme {
       primaryColor: velocityLime,
       colorScheme: const ColorScheme.light(
         primary: velocityLime,
-        secondary: velocityAmber,
+        secondary: velocityDark,
         surface: velocitySurface,
         surfaceContainerHighest: velocitySurfaceMuted,
         onPrimary: velocityDark,
-        onSecondary: velocityDark,
+        onSecondary: Colors.white,
         onSurface: velocityTextPrimary,
         outline: velocityBorder,
       ),
@@ -111,7 +114,7 @@ class AppTheme {
         backgroundColor: Colors.transparent,
         elevation: 0,
         selectedItemColor: velocityDark,
-        unselectedItemColor: Color(0xFF4C5847),
+        unselectedItemColor: Color(0xFF5F6978),
         type: BottomNavigationBarType.fixed,
       ),
     );
@@ -122,37 +125,37 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
-      scaffoldBackgroundColor: const Color(0xFF10140D),
+      scaffoldBackgroundColor: const Color(0xFF13161C),
       primaryColor: velocityLime,
       colorScheme: const ColorScheme.dark(
         primary: velocityLime,
-        secondary: velocityAmber,
-        surface: Color(0xFF181F15),
-        surfaceContainerHighest: Color(0xFF232B20),
+        secondary: velocityDarkSurface,
+        surface: Color(0xFF1B2028),
+        surfaceContainerHighest: Color(0xFF252C37),
         onPrimary: velocityDark,
-        onSecondary: velocityDark,
-        onSurface: Color(0xFFF3F7F1),
-        outline: Color(0xFF2C3829),
+        onSecondary: Colors.white,
+        onSurface: Color(0xFFF1F5F9),
+        outline: Color(0xFF353E4C),
       ),
       appBarTheme: const AppBarTheme(
-        backgroundColor: Color(0xFF10140D),
+        backgroundColor: Color(0xFF13161C),
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: false,
         titleTextStyle: TextStyle(
-          color: Color(0xFFF3F7F1),
+          color: Color(0xFFF1F5F9),
           fontSize: 20,
           fontWeight: FontWeight.w800,
           letterSpacing: 0.5,
         ),
-        iconTheme: IconThemeData(color: Color(0xFFF3F7F1)),
+        iconTheme: IconThemeData(color: Color(0xFFF1F5F9)),
       ),
       cardTheme: CardThemeData(
-        color: const Color(0xFF181F15),
+        color: const Color(0xFF1B2028),
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(22),
-          side: const BorderSide(color: Color(0xFF2C3829), width: 1.2),
+          side: const BorderSide(color: Color(0xFF353E4C), width: 1.2),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(

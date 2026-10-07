@@ -6,104 +6,54 @@ import 'package:intl/intl.dart';
 import '../../config/theme.dart';
 import '../../viewmodels/auth/auth_session_viewmodel.dart';
 import '../../viewmodels/home/home_viewmodel.dart';
-import '../../widgets/perspective_grid.dart';
-import '../../widgets/segmented_progress_bar.dart';
 import '../../widgets/velocity_logo.dart';
-import '../../widgets/workout_card.dart';
-import '../../widgets/workout_lineup_pill.dart';
 
-class HomeView extends ConsumerStatefulWidget {
+class HomeView extends ConsumerWidget {
   const HomeView({super.key});
 
   @override
-  ConsumerState<HomeView> createState() => _HomeViewState();
-}
-
-class _HomeViewState extends ConsumerState<HomeView> {
-  // Interactive workout line-up state
-  final List<Map<String, dynamic>> _lineupItems = [
-    {
-      'id': '1',
-      'title': 'Conditioning: Body Movement',
-      'playBg': AppTheme.velocityLime,
-      'playIcon': AppTheme.velocityDark,
-      'type': 'movement',
-    },
-    {
-      'id': '2',
-      'title': 'Sonic Meditation',
-      'playBg': AppTheme.velocityDarkSurface,
-      'playIcon': Colors.white,
-      'type': 'meditation',
-    },
-  ];
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final homeState = ref.watch(homeViewModelProvider);
     final homeViewModel = ref.read(homeViewModelProvider.notifier);
     final authSession = ref.read(authSessionViewModelProvider.notifier);
 
+    final todayFormatted = DateFormat('EEEE, MMM d').format(DateTime.now());
+
     return Scaffold(
       backgroundColor: AppTheme.velocityBackground,
-      appBar: _buildVelocityAppBar(context, authSession),
+      appBar: _buildAppBar(context, authSession),
       body: RefreshIndicator(
         color: AppTheme.velocityDark,
         backgroundColor: AppTheme.velocityLime,
         onRefresh: homeViewModel.refresh,
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 12.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 8),
+              // 1. Header Component (Avatar, Level, XP Progress Bar) — Jira Task 5.5 (HRD-30)
+              _buildHeader(context, homeState),
+              const SizedBox(height: 20),
 
-              // 1. Top Program & Check-In Cards (Horizontal Row)
-              _buildProgramAndCheckInRow(context, homeState),
+              // 2. Quick Actions ("Log Workout", "Exercises", "AI Coach") — Jira Task 5.5
+              _buildSectionTitle('Quick Actions'),
+              const SizedBox(height: 12),
+              _buildQuickActions(context),
               const SizedBox(height: 24),
 
-              // 2. Perspective 3D Wireframe Grid with Workout Line-Up & Cards
-              PerspectiveGridBackground(
-                child: Column(
-                  children: [
-                    // Section Title: "How's Your Workout Line-Up !"
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      child: Center(
-                        child: Text(
-                          "How's Your Workout Line-Up !",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: -0.4,
-                            color: AppTheme.velocityTextPrimary,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 14),
-
-                    // Interactive Line-Up Pills
-                    _buildLineUpPills(context),
-                    const SizedBox(height: 26),
-
-                    // Horizontal Workout Cards Carousel
-                    _buildWorkoutCardsCarousel(context),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 32),
-
-              // 3. Performance Snapshot & Activity Metrics (Integrated stats)
-              _buildPerformanceMetricsSection(context, homeState),
-
+              // 3. Today's Summary (Date, Workouts Logged, Total Volume) — Jira Task 5.5
+              _buildTodaysSummary(context, homeState, todayFormatted),
               const SizedBox(height: 24),
 
-              // 4. Badges & Achievements
-              if (homeState.recentAchievements.isNotEmpty)
-                _buildAchievementsSection(context, homeState),
+              // 4. Performance Snapshot / Quick Stats (Streak, Weekly Volume, This Month) — Jira Task 5.5
+              _buildSectionTitle('Performance Snapshot'),
+              const SizedBox(height: 12),
+              _buildPerformanceSnapshot(context, homeState),
+              const SizedBox(height: 24),
+
+              // 5. Recent Achievements (Last 3 Badges) — Jira Task 5.5
+              _buildAchievementsSection(context, homeState),
 
               // Bottom padding for the floating navigation bar
               const SizedBox(height: 110),
@@ -115,9 +65,9 @@ class _HomeViewState extends ConsumerState<HomeView> {
   }
 
   // ---------------------------------------------------------------------------
-  // Top Navigation Bar
+  // Top App Bar
   // ---------------------------------------------------------------------------
-  PreferredSizeWidget _buildVelocityAppBar(
+  PreferredSizeWidget _buildAppBar(
     BuildContext context,
     AuthSessionViewModel authSession,
   ) {
@@ -127,95 +77,41 @@ class _HomeViewState extends ConsumerState<HomeView> {
       scrolledUnderElevation: 0,
       automaticallyImplyLeading: false,
       title: const VelocityLogo(
-        size: 30,
+        size: 28,
         showText: true,
-        title: 'VELOCITY',
+        title: 'HARD',
       ),
       actions: [
-        // Calendar Button
         IconButton(
           icon: const Icon(
-            Icons.calendar_today_outlined,
-            size: 22,
+            Icons.notifications_none_rounded,
             color: AppTheme.velocityTextPrimary,
+            size: 22,
           ),
-          tooltip: 'Schedule & Calendar',
-          onPressed: () => _showCalendarScheduleSheet(context),
-        ),
-        // Notification Bell with Lime Dot
-        Stack(
-          alignment: Alignment.topRight,
-          children: [
-            IconButton(
-              icon: const Icon(
-                Icons.notifications_none_rounded,
-                size: 24,
-                color: AppTheme.velocityTextPrimary,
-              ),
-              tooltip: 'Notifications',
-              onPressed: () => _showNotificationsSheet(context),
-            ),
-            Positioned(
-              top: 10,
-              right: 12,
-              child: Container(
-                width: 8,
-                height: 8,
-                decoration: BoxDecoration(
-                  color: AppTheme.velocityLimeBright,
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: AppTheme.velocityBackground,
-                    width: 1.5,
-                  ),
+          tooltip: 'Notifications',
+          onPressed: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                backgroundColor: AppTheme.velocityDarkSurface,
+                content: Text(
+                  'No new notifications',
+                  style: TextStyle(color: Colors.white),
                 ),
+                duration: Duration(seconds: 2),
               ),
-            ),
-          ],
+            );
+          },
         ),
-        // User Profile Avatar
         Padding(
-          padding: const EdgeInsets.only(right: 16, left: 4),
-          child: GestureDetector(
-            onTap: () => _showUserMenu(context, authSession),
-            child: Container(
-              width: 36,
-              height: 36,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: AppTheme.velocityBorder,
-                  width: 1.5,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
-                    blurRadius: 6,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: ClipOval(
-                child: Image.asset(
-                  'assets/images/user_avatar.jpg',
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Container(
-                      color: AppTheme.velocityLime,
-                      child: const Center(
-                        child: Text(
-                          'A',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: AppTheme.velocityDark,
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
+          padding: const EdgeInsets.only(right: 14),
+          child: IconButton(
+            icon: const Icon(
+              Icons.logout_rounded,
+              color: AppTheme.velocityTextSecondary,
+              size: 22,
             ),
+            tooltip: 'Log Out',
+            onPressed: () => _confirmLogout(context, authSession),
           ),
         ),
       ],
@@ -223,81 +119,340 @@ class _HomeViewState extends ConsumerState<HomeView> {
   }
 
   // ---------------------------------------------------------------------------
-  // 1. Program & Check-In Cards
+  // 1. Header Component (Avatar, Username, Level & XP Progress)
   // ---------------------------------------------------------------------------
-  Widget _buildProgramAndCheckInRow(BuildContext context, HomeState state) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 18),
-      child: Row(
+  Widget _buildHeader(BuildContext context, HomeState state) {
+    final initials = state.displayName.isNotEmpty
+        ? state.displayName[0].toUpperCase()
+        : 'A';
+    final xpPercent = (state.xpProgress * 100).toInt();
+
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: AppTheme.velocityDarkSurface,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: AppTheme.velocityDarkBorder, width: 1.2),
+        boxShadow: [
+          BoxShadow(
+            color: AppTheme.velocityDark.withValues(alpha: 0.12),
+            blurRadius: 16,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Your Program Card
-          Expanded(
-            child: GestureDetector(
-              onTap: () => _showProgramDetailsSheet(context),
-              child: Container(
-                padding: const EdgeInsets.all(16),
+          Row(
+            children: [
+              // User Avatar
+              Container(
+                width: 52,
+                height: 52,
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(22),
-                  border: Border.all(color: AppTheme.velocityBorder, width: 1.2),
+                  shape: BoxShape.circle,
+                  border: Border.all(color: AppTheme.velocityLime, width: 2),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.03),
-                      blurRadius: 12,
-                      offset: const Offset(0, 4),
+                      color: AppTheme.velocityLime.withValues(alpha: 0.25),
+                      blurRadius: 10,
                     ),
                   ],
                 ),
+                child: ClipOval(
+                  child: Image.asset(
+                    'assets/images/user_avatar.jpg',
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) => Container(
+                      color: AppTheme.velocityLime,
+                      child: Center(
+                        child: Text(
+                          initials,
+                          style: const TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w900,
+                            color: AppTheme.velocityDark,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 14),
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      'Your Program',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: -0.2,
-                        color: AppTheme.velocityTextPrimary,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    const SegmentedProgressBar(
-                      totalSegments: 4,
-                      completedSegments: 3,
-                      activeColor: AppTheme.velocityLime,
-                      hasStripedCurrent: true,
-                      height: 14,
-                    ),
-                    const SizedBox(height: 10),
-                    const Text(
-                      '3/4 Required Sessions',
+                      'Welcome back,',
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
-                        color: AppTheme.velocityTextSecondary,
+                        color: Color(0xFF9DA8B9),
                       ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      state.displayName,
+                      style: const TextStyle(
+                        fontSize: 19,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: -0.3,
+                        color: Colors.white,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
                 ),
               ),
+              // Level Pill Badge
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: AppTheme.velocityLime,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppTheme.velocityLime.withValues(alpha: 0.3),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Text(
+                  'Lvl ${state.level}',
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w900,
+                    color: AppTheme.velocityDark,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 18),
+          // XP Progress Details
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Level Progress',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF9DA8B9),
+                ),
+              ),
+              Text(
+                '${state.currentXp} / ${state.nextLevelThreshold} XP ($xpPercent%)',
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w800,
+                  color: AppTheme.velocityLime,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: LinearProgressIndicator(
+              value: state.xpProgress.clamp(0.0, 1.0),
+              minHeight: 10,
+              backgroundColor: AppTheme.velocityDarkBorder,
+              valueColor: const AlwaysStoppedAnimation<Color>(AppTheme.velocityLime),
             ),
           ),
-          const SizedBox(width: 12),
-          // Check-In Card
-          Expanded(
-            child: GestureDetector(
-              onTap: () => _showCheckInAction(context),
+        ],
+      ),
+    );
+  }
+
+  // ---------------------------------------------------------------------------
+  // 2. Quick Actions
+  // ---------------------------------------------------------------------------
+  Widget _buildQuickActions(BuildContext context) {
+    return Row(
+      children: [
+        // Log Workout (Primary Accent)
+        Expanded(
+          child: _buildQuickActionCard(
+            title: 'Log Workout',
+            subtitle: 'Start session',
+            icon: Icons.fitness_center_rounded,
+            iconColor: AppTheme.velocityDark,
+            bgColor: AppTheme.velocityLime,
+            titleColor: AppTheme.velocityDark,
+            subtitleColor: const Color(0xFF384435),
+            onTap: () => context.go('/workouts/log'),
+          ),
+        ),
+        const SizedBox(width: 10),
+        // Exercises (Browse library)
+        Expanded(
+          child: _buildQuickActionCard(
+            title: 'Exercises',
+            subtitle: 'Browse library',
+            icon: Icons.search_rounded,
+            iconColor: AppTheme.velocityDark,
+            bgColor: AppTheme.velocitySurface,
+            titleColor: AppTheme.velocityTextPrimary,
+            subtitleColor: AppTheme.velocityTextSecondary,
+            onTap: () => context.go('/explore'),
+          ),
+        ),
+        const SizedBox(width: 10),
+        // AI Coach
+        Expanded(
+          child: _buildQuickActionCard(
+            title: 'AI Coach',
+            subtitle: 'Ask coach',
+            icon: Icons.auto_awesome,
+            iconColor: AppTheme.velocityDark,
+            bgColor: AppTheme.velocitySurface,
+            titleColor: AppTheme.velocityTextPrimary,
+            subtitleColor: AppTheme.velocityTextSecondary,
+            onTap: () => context.go('/coach'),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildQuickActionCard({
+    required String title,
+    required String subtitle,
+    required IconData icon,
+    required Color iconColor,
+    required Color bgColor,
+    required Color titleColor,
+    required Color subtitleColor,
+    required VoidCallback onTap,
+  }) {
+    final isPrimary = bgColor == AppTheme.velocityLime;
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+        decoration: BoxDecoration(
+          color: bgColor,
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(
+            color: isPrimary ? Colors.transparent : AppTheme.velocityBorder,
+            width: 1.2,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: isPrimary
+                  ? AppTheme.velocityLime.withValues(alpha: 0.25)
+                  : Colors.black.withValues(alpha: 0.04),
+              blurRadius: 8,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                color: isPrimary
+                    ? AppTheme.velocityDark
+                    : AppTheme.velocityLime.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(
+                icon,
+                color: isPrimary
+                    ? AppTheme.velocityLime
+                    : iconColor,
+                size: 20,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w900,
+                color: titleColor,
+                letterSpacing: -0.2,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            const SizedBox(height: 2),
+            Text(
+              subtitle,
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+                color: subtitleColor,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // ---------------------------------------------------------------------------
+  // 3. Today's Summary Component
+  // ---------------------------------------------------------------------------
+  Widget _buildTodaysSummary(
+    BuildContext context,
+    HomeState state,
+    String todayFormatted,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _buildSectionTitle("Today's Summary"),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(
+                color: AppTheme.velocitySurface,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: AppTheme.velocityBorder),
+              ),
+              child: Text(
+                todayFormatted,
+                style: const TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                  color: AppTheme.velocityTextSecondary,
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            // Workouts Logged Today Card
+            Expanded(
               child: Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(22),
+                  color: AppTheme.velocitySurface,
+                  borderRadius: BorderRadius.circular(20),
                   border: Border.all(color: AppTheme.velocityBorder, width: 1.2),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withValues(alpha: 0.03),
-                      blurRadius: 12,
-                      offset: const Offset(0, 4),
+                      blurRadius: 10,
+                      offset: const Offset(0, 3),
                     ),
                   ],
                 ),
@@ -307,39 +462,44 @@ class _HomeViewState extends ConsumerState<HomeView> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
-                          'Check-In',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: -0.2,
-                            color: AppTheme.velocityTextPrimary,
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: AppTheme.velocityLime.withValues(alpha: 0.2),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Icon(
+                            Icons.check_circle_outline_rounded,
+                            color: AppTheme.velocityDark,
+                            size: 20,
                           ),
                         ),
-                        Container(
-                          width: 8,
-                          height: 8,
-                          decoration: const BoxDecoration(
-                            color: AppTheme.velocityAmber,
-                            shape: BoxShape.circle,
+                        Text(
+                          '${state.workoutsToday}',
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w900,
+                            color: AppTheme.velocityTextPrimary,
                           ),
                         ),
                       ],
                     ),
                     const SizedBox(height: 12),
-                    const SegmentedProgressBar(
-                      totalSegments: 3,
-                      completedSegments: 2,
-                      activeColor: AppTheme.velocityAmber,
-                      hasStripedCurrent: false,
-                      height: 14,
-                    ),
-                    const SizedBox(height: 10),
                     const Text(
-                      '2/3 Check-In Done',
+                      'Workouts Logged',
                       style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w800,
+                        color: AppTheme.velocityTextPrimary,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      state.workoutsToday > 0
+                          ? 'Sessions completed'
+                          : 'No workouts yet',
+                      style: const TextStyle(
+                        fontSize: 11,
                         color: AppTheme.velocityTextSecondary,
                       ),
                     ),
@@ -347,260 +507,207 @@ class _HomeViewState extends ConsumerState<HomeView> {
                 ),
               ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ---------------------------------------------------------------------------
-  // 2. Interactive Line-Up Pills
-  // ---------------------------------------------------------------------------
-  Widget _buildLineUpPills(BuildContext context) {
-    if (_lineupItems.isEmpty) {
-      return Center(
-        child: TextButton.icon(
-          onPressed: () {
-            setState(() {
-              _lineupItems.add({
-                'id': DateTime.now().toString(),
-                'title': 'Conditioning: Body Movement',
-                'playBg': AppTheme.velocityLime,
-                'playIcon': AppTheme.velocityDark,
-              });
-            });
-          },
-          icon: const Icon(Icons.add_circle_outline, color: AppTheme.velocityDark),
-          label: const Text(
-            'Add Workout to Line-Up',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: AppTheme.velocityDark,
-            ),
-          ),
-        ),
-      );
-    }
-
-    return Column(
-      children: [
-        for (final item in _lineupItems) ...[
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: WorkoutLineUpPill(
-              title: item['title'] as String,
-              playButtonColor: item['playBg'] as Color,
-              playIconColor: item['playIcon'] as Color,
-              onPlay: () => _handlePlayLineUpItem(context, item['title'] as String),
-              onRemove: () {
-                setState(() {
-                  _lineupItems.removeWhere((i) => i['id'] == item['id']);
-                });
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    backgroundColor: AppTheme.velocityDark,
-                    content: Text(
-                      'Removed "${item['title']}" from line-up',
-                      style: const TextStyle(color: Colors.white),
+            const SizedBox(width: 12),
+            // Total Volume Today Card
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: AppTheme.velocitySurface,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: AppTheme.velocityBorder, width: 1.2),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.03),
+                      blurRadius: 10,
+                      offset: const Offset(0, 3),
                     ),
-                    duration: const Duration(seconds: 2),
-                  ),
-                );
-              },
-            ),
-          ),
-        ],
-      ],
-    );
-  }
-
-  // ---------------------------------------------------------------------------
-  // 3. Horizontal Workout Cards Carousel
-  // ---------------------------------------------------------------------------
-  Widget _buildWorkoutCardsCarousel(BuildContext context) {
-    final workouts = [
-      VelocityWorkoutCardData(
-        id: '1',
-        firstLine: 'Ultimate',
-        highlightedPhrases: ['Dumbbell', 'Burn and'],
-        lastLine: 'Build',
-        highlightColor: AppTheme.velocityLime,
-        imageAsset: 'assets/images/athlete_dumbbell.jpg',
-        bulletPoints: const [
-          'Core Velocity',
-          'Endurance Build',
-        ],
-        onStart: () => context.go('/workouts/log'),
-      ),
-      VelocityWorkoutCardData(
-        id: '2',
-        firstLine: 'Lower',
-        highlightedPhrases: ['Body Power', 'Training'],
-        lastLine: 'Routine',
-        highlightColor: AppTheme.velocityAmber,
-        imageAsset: 'assets/images/lower_body_power.jpg',
-        bulletPoints: const [
-          'Boost- Up',
-          'Flex Focus',
-        ],
-        onStart: () => context.go('/workouts/log'),
-      ),
-      VelocityWorkoutCardData(
-        id: '3',
-        firstLine: 'Explosive',
-        highlightedPhrases: ['Velo-Sprint', 'HIIT Power'],
-        lastLine: 'Circuit',
-        highlightColor: AppTheme.velocityLime,
-        imageAsset: 'assets/images/athlete_dumbbell.jpg',
-        bulletPoints: const [
-          'Metabolic Surge',
-          'VO2 Max Peak',
-        ],
-        onStart: () => context.go('/workouts/log'),
-      ),
-    ];
-
-    return SizedBox(
-      height: 380,
-      child: ListView.separated(
-        padding: const EdgeInsets.symmetric(horizontal: 18),
-        scrollDirection: Axis.horizontal,
-        clipBehavior: Clip.none,
-        itemCount: workouts.length,
-        separatorBuilder: (context, index) => const SizedBox(width: 14),
-        itemBuilder: (context, index) {
-          return VelocityWorkoutCard(
-            data: workouts[index],
-            width: 255,
-          );
-        },
-      ),
-    );
-  }
-
-  // ---------------------------------------------------------------------------
-  // 4. Performance Metrics Section
-  // ---------------------------------------------------------------------------
-  Widget _buildPerformanceMetricsSection(BuildContext context, HomeState state) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 18),
-      child: Container(
-        padding: const EdgeInsets.all(18),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(22),
-          border: Border.all(color: AppTheme.velocityBorder, width: 1.2),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.03),
-              blurRadius: 14,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Performance Metrics',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: -0.2,
-                    color: AppTheme.velocityTextPrimary,
-                  ),
+                  ],
                 ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: AppTheme.velocityLimeSoft,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Text(
-                    'Level ${state.level} Athlete',
-                    style: const TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w800,
-                      color: Color(0xFF2C3E14),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: AppTheme.velocityAmber.withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Icon(
+                            Icons.line_weight_rounded,
+                            color: AppTheme.velocityAmber,
+                            size: 20,
+                          ),
+                        ),
+                        Text(
+                          NumberFormat('#,##0').format(state.todayVolume),
+                          style: const TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w900,
+                            color: AppTheme.velocityTextPrimary,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
+                    const SizedBox(height: 12),
+                    const Text(
+                      'Total Volume',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w800,
+                        color: AppTheme.velocityTextPrimary,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    const Text(
+                      'kg lifted today',
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: AppTheme.velocityTextSecondary,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            // Metrics Row
-            Row(
-              children: [
-                Expanded(
-                  child: _buildMetricTile(
-                    label: 'Streak',
-                    value: '${state.streakDays} Days',
-                    icon: Icons.local_fire_department_rounded,
-                    iconColor: const Color(0xFFFF5722),
-                  ),
-                ),
-                Container(width: 1, height: 38, color: AppTheme.velocityBorder),
-                Expanded(
-                  child: _buildMetricTile(
-                    label: 'Weekly Vol',
-                    value: '${NumberFormat.compact().format(state.weeklyVolume)} kg',
-                    icon: Icons.fitness_center_rounded,
-                    iconColor: AppTheme.velocityDark,
-                  ),
-                ),
-                Container(width: 1, height: 38, color: AppTheme.velocityBorder),
-                Expanded(
-                  child: _buildMetricTile(
-                    label: 'This Month',
-                    value: '${state.workoutsThisMonth} Sessions',
-                    icon: Icons.check_circle_rounded,
-                    iconColor: const Color(0xFF388E3C),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMetricTile({
-    required String label,
-    required String value,
-    required IconData icon,
-    required Color iconColor,
-  }) {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 16, color: iconColor),
-            const SizedBox(width: 4),
-            Text(
-              value,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w900,
-                color: AppTheme.velocityTextPrimary,
               ),
             ),
           ],
         ),
-        const SizedBox(height: 4),
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 11,
-            fontWeight: FontWeight.w600,
-            color: AppTheme.velocityTextSecondary,
-          ),
-        ),
       ],
+    );
+  }
+
+  // ---------------------------------------------------------------------------
+  // 4. Performance Snapshot / Quick Stats
+  // ---------------------------------------------------------------------------
+  Widget _buildPerformanceSnapshot(BuildContext context, HomeState state) {
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: AppTheme.velocitySurface,
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: AppTheme.velocityBorder, width: 1.2),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.03),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          // 1. Streak
+          Expanded(
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.local_fire_department_rounded,
+                      color: Color(0xFFFF5722),
+                      size: 20,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      '${state.streakDays}',
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w900,
+                        color: AppTheme.velocityTextPrimary,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                const Text(
+                  'Streak',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: AppTheme.velocityTextSecondary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(width: 1, height: 36, color: AppTheme.velocityBorder),
+          // 2. Weekly Vol
+          Expanded(
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.trending_up_rounded,
+                      color: Color(0xFF689F38),
+                      size: 20,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      '${NumberFormat.compact().format(state.weeklyVolume)} kg',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w900,
+                        color: AppTheme.velocityTextPrimary,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                const Text(
+                  'Weekly Vol',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: AppTheme.velocityTextSecondary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(width: 1, height: 36, color: AppTheme.velocityBorder),
+          // 3. This Month
+          Expanded(
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.calendar_today_rounded,
+                      color: Color(0xFF0288D1),
+                      size: 18,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      '${state.workoutsThisMonth}',
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w900,
+                        color: AppTheme.velocityTextPrimary,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                const Text(
+                  'This Month',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: AppTheme.velocityTextSecondary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -608,68 +715,102 @@ class _HomeViewState extends ConsumerState<HomeView> {
   // 5. Recent Achievements
   // ---------------------------------------------------------------------------
   Widget _buildAchievementsSection(BuildContext context, HomeState state) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 18),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'Recent Achievements',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: -0.2,
-                  color: AppTheme.velocityTextPrimary,
-                ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _buildSectionTitle('Recent Achievements'),
+            Text(
+              '${state.recentAchievements.length} Unlocked',
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                color: AppTheme.velocityDark,
               ),
-              Text(
-                '${state.recentAchievements.length} Unlocked',
-                style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  color: AppTheme.velocityTextSecondary,
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        if (state.recentAchievements.isEmpty)
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: AppTheme.velocitySurface,
+              borderRadius: BorderRadius.circular(18),
+              border: Border.all(color: AppTheme.velocityBorder),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.03),
+                  blurRadius: 10,
+                  offset: const Offset(0, 3),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
+              ],
+            ),
+            child: const Column(
+              children: [
+                Icon(
+                  Icons.emoji_events_outlined,
+                  color: AppTheme.velocityTextMuted,
+                  size: 32,
+                ),
+                SizedBox(height: 8),
+                Text(
+                  'Complete workouts to unlock achievement badges!',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: AppTheme.velocityTextSecondary,
+                  ),
+                ),
+              ],
+            ),
+          )
+        else
           SizedBox(
-            height: 80,
+            height: 94,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: state.recentAchievements.length,
-              separatorBuilder: (context, index) => const SizedBox(width: 10),
+              separatorBuilder: (context, index) => const SizedBox(width: 12),
               itemBuilder: (context, index) {
                 final badge = state.recentAchievements[index];
                 return Container(
-                  width: 200,
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                  width: 220,
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: AppTheme.velocityBorder, width: 1.2),
+                    color: AppTheme.velocitySurface,
+                    borderRadius: BorderRadius.circular(18),
+                    border: Border.all(
+                      color: AppTheme.velocityBorder,
+                      width: 1.2,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.03),
+                        blurRadius: 8,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
                   ),
                   child: Row(
                     children: [
                       Container(
-                        width: 40,
-                        height: 40,
+                        width: 44,
+                        height: 44,
                         decoration: BoxDecoration(
-                          color: AppTheme.velocityLimeSoft,
+                          color: AppTheme.velocityLime.withValues(alpha: 0.2),
                           shape: BoxShape.circle,
                         ),
-                        child: const Center(
-                          child: Icon(
-                            Icons.emoji_events_rounded,
-                            color: Color(0xFF4C6615),
-                            size: 20,
-                          ),
+                        child: Icon(
+                          _getAchievementIcon(badge.badgeIcon),
+                          color: AppTheme.velocityDark,
+                          size: 22,
                         ),
                       ),
-                      const SizedBox(width: 10),
+                      const SizedBox(width: 12),
                       Expanded(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -685,14 +826,14 @@ class _HomeViewState extends ConsumerState<HomeView> {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
-                            const SizedBox(height: 2),
+                            const SizedBox(height: 3),
                             Text(
                               badge.description,
                               style: const TextStyle(
-                                fontSize: 10,
+                                fontSize: 11,
                                 color: AppTheme.velocityTextSecondary,
                               ),
-                              maxLines: 1,
+                              maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
                           ],
@@ -704,386 +845,92 @@ class _HomeViewState extends ConsumerState<HomeView> {
               },
             ),
           ),
+      ],
+    );
+  }
+
+  // ---------------------------------------------------------------------------
+  // Helpers
+  // ---------------------------------------------------------------------------
+  Widget _buildSectionTitle(String title) {
+    return Text(
+      title,
+      style: const TextStyle(
+        fontSize: 17,
+        fontWeight: FontWeight.w900,
+        letterSpacing: -0.2,
+        color: AppTheme.velocityTextPrimary,
+      ),
+    );
+  }
+
+  IconData _getAchievementIcon(String iconKey) {
+    switch (iconKey.toLowerCase()) {
+      case 'footsteps':
+        return Icons.directions_walk_rounded;
+      case 'calendar-check':
+        return Icons.event_available_rounded;
+      case 'dumbbell':
+        return Icons.fitness_center_rounded;
+      case 'trophy':
+        return Icons.emoji_events_rounded;
+      case 'crown':
+        return Icons.workspace_premium_rounded;
+      case 'weight':
+      case 'anvil':
+        return Icons.line_weight_rounded;
+      case 'fire':
+      case 'flame':
+        return Icons.local_fire_department_rounded;
+      case 'meteor':
+      case 'lightning':
+        return Icons.bolt_rounded;
+      case 'shield':
+        return Icons.shield_rounded;
+      case 'medal':
+        return Icons.military_tech_rounded;
+      default:
+        return Icons.emoji_events_rounded;
+    }
+  }
+
+  void _confirmLogout(BuildContext context, AuthSessionViewModel authSession) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppTheme.velocitySurface,
+        title: const Text(
+          'Log Out',
+          style: TextStyle(
+            color: AppTheme.velocityTextPrimary,
+            fontWeight: FontWeight.w800,
+          ),
+        ),
+        content: const Text(
+          'Are you sure you want to log out of Hard?',
+          style: TextStyle(color: AppTheme.velocityTextSecondary),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.redAccent,
+              foregroundColor: Colors.white,
+            ),
+            onPressed: () async {
+              Navigator.of(ctx).pop();
+              await authSession.logout();
+              if (context.mounted) {
+                context.go('/login');
+              }
+            },
+            child: const Text('Log Out'),
+          ),
         ],
       ),
-    );
-  }
-
-  // ---------------------------------------------------------------------------
-  // Action Handlers & Modals
-  // ---------------------------------------------------------------------------
-  void _handlePlayLineUpItem(BuildContext context, String title) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-      ),
-      builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.fromLTRB(24, 20, 24, 32),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 40,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: AppTheme.velocityBorder,
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Container(
-                width: 64,
-                height: 64,
-                decoration: const BoxDecoration(
-                  color: AppTheme.velocityLime,
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.play_arrow_rounded,
-                  size: 36,
-                  color: AppTheme.velocityDark,
-                ),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                title,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w900,
-                  color: AppTheme.velocityTextPrimary,
-                ),
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                'Starting audio guidance and tempo pacing for this session.',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 13,
-                  color: AppTheme.velocityTextSecondary,
-                ),
-              ),
-              const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  context.go('/workouts/log');
-                },
-                child: const Text('Start Now'),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  void _showCalendarScheduleSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-      ),
-      builder: (context) {
-        final now = DateTime.now();
-        return Padding(
-          padding: const EdgeInsets.fromLTRB(24, 20, 24, 32),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: AppTheme.velocityBorder,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 18),
-              const Text(
-                'Weekly Schedule',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w900,
-                  color: AppTheme.velocityTextPrimary,
-                ),
-              ),
-              const SizedBox(height: 6),
-              Text(
-                'Today is ${DateFormat('EEEE, MMM d').format(now)}',
-                style: const TextStyle(
-                  fontSize: 13,
-                  color: AppTheme.velocityTextSecondary,
-                ),
-              ),
-              const SizedBox(height: 20),
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: AppTheme.velocitySurfaceMuted,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: const BoxDecoration(
-                        color: AppTheme.velocityLime,
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Icons.alarm_on_rounded,
-                        color: AppTheme.velocityDark,
-                        size: 20,
-                      ),
-                    ),
-                    const SizedBox(width: 14),
-                    const Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Session 4 of 4 Scheduled',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: AppTheme.velocityTextPrimary,
-                            ),
-                          ),
-                          SizedBox(height: 2),
-                          Text(
-                            'Legs & Mobility at 6:00 PM',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: AppTheme.velocityTextSecondary,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  void _showNotificationsSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-      ),
-      builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.fromLTRB(24, 20, 24, 32),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: AppTheme.velocityBorder,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 18),
-              const Text(
-                'Velocity Notifications',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w900,
-                  color: AppTheme.velocityTextPrimary,
-                ),
-              ),
-              const SizedBox(height: 14),
-              ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: const BoxDecoration(
-                    color: AppTheme.velocityLime,
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.bolt_rounded,
-                    color: AppTheme.velocityDark,
-                    size: 20,
-                  ),
-                ),
-                title: const Text(
-                  'Streak Saved!',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                ),
-                subtitle: const Text(
-                  'You are on track to complete your weekly program.',
-                  style: TextStyle(fontSize: 12),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  void _showProgramDetailsSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-      ),
-      builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.fromLTRB(24, 20, 24, 32),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: AppTheme.velocityBorder,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 18),
-              const Text(
-                'Current Program: Hypertrophy 4-Day',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w900,
-                  color: AppTheme.velocityTextPrimary,
-                ),
-              ),
-              const SizedBox(height: 12),
-              const SegmentedProgressBar(
-                totalSegments: 4,
-                completedSegments: 3,
-                activeColor: AppTheme.velocityLime,
-                hasStripedCurrent: true,
-                height: 16,
-              ),
-              const SizedBox(height: 16),
-              const Text(
-                '3 of 4 required sessions completed this week. Complete 1 more workout to keep your streak intact and earn +150 bonus XP!',
-                style: TextStyle(
-                  fontSize: 13,
-                  color: AppTheme.velocityTextSecondary,
-                  height: 1.4,
-                ),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  context.go('/workouts/log');
-                },
-                child: const Text('Log Workout 4'),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  void _showCheckInAction(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        backgroundColor: AppTheme.velocityDark,
-        content: Text(
-          'Daily Check-in recorded! Streak maintained 🔥',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-        duration: Duration(seconds: 2),
-      ),
-    );
-  }
-
-  void _showUserMenu(
-    BuildContext context,
-    AuthSessionViewModel authSession,
-  ) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-      ),
-      builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.fromLTRB(24, 20, 24, 32),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Center(
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: AppTheme.velocityBorder,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 18),
-              CircleAvatar(
-                radius: 36,
-                backgroundImage: const AssetImage('assets/images/user_avatar.jpg'),
-              ),
-              const SizedBox(height: 10),
-              const Text(
-                'Athlete Profile',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w900,
-                  color: AppTheme.velocityTextPrimary,
-                ),
-              ),
-              const SizedBox(height: 16),
-              ListTile(
-                leading: const Icon(Icons.person_outline_rounded),
-                title: const Text('View Full Profile'),
-                onTap: () {
-                  Navigator.pop(context);
-                  context.go('/profile');
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.logout_rounded, color: Colors.red),
-                title: const Text('Log Out', style: TextStyle(color: Colors.red)),
-                onTap: () async {
-                  Navigator.pop(context);
-                  await authSession.logout();
-                  if (context.mounted) {
-                    context.go('/login');
-                  }
-                },
-              ),
-            ],
-          ),
-        );
-      },
     );
   }
 }

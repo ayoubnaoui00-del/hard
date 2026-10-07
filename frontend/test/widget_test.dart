@@ -11,8 +11,8 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    // Verify that the login screen renders VELOCITY title
-    expect(find.text('VELOCITY'), findsOneWidget);
+    // Verify that the login screen renders HARD title
+    expect(find.text('HARD'), findsOneWidget);
     expect(find.text('Log In'), findsOneWidget);
   });
 }

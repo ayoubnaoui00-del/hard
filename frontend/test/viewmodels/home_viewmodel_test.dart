@@ -185,25 +185,25 @@ void main() {
       // Wait for microtask / initial load
       await tester.pumpAndSettle();
 
-      // Check Header & Velocity Branding
-      expect(find.text('VELOCITY'), findsOneWidget);
+      // Check Header & App Branding
+      expect(find.text('HARD'), findsOneWidget);
+      expect(find.text('Welcome back,'), findsOneWidget);
+      expect(find.text('Ayoub'), findsOneWidget);
+      expect(find.text('Lvl 3'), findsOneWidget);
 
-      // Check Program & Check-In Cards
-      expect(find.text('Your Program'), findsOneWidget);
-      expect(find.text('Check-In'), findsOneWidget);
+      // Check Quick Actions
+      expect(find.text('Quick Actions'), findsOneWidget);
+      expect(find.text('Log Workout'), findsOneWidget);
+      expect(find.text('Exercises'), findsOneWidget);
+      expect(find.text('AI Coach'), findsOneWidget);
 
-      // Check Line-Up Section
-      expect(find.text("How's Your Workout Line-Up !"), findsOneWidget);
-      expect(find.text('Conditioning: Body Movement'), findsOneWidget);
-      expect(find.text('Sonic Meditation'), findsOneWidget);
+      // Check Today's Summary
+      expect(find.text("Today's Summary"), findsOneWidget);
+      expect(find.text('Workouts Logged'), findsOneWidget);
+      expect(find.text('Total Volume'), findsOneWidget);
 
-      // Check Workout Cards
-      expect(find.text('Ultimate'), findsOneWidget);
-      expect(find.text('Dumbbell'), findsOneWidget);
-      expect(find.text('Lower'), findsOneWidget);
-
-      // Check Performance Metrics
-      expect(find.text('Performance Metrics'), findsOneWidget);
+      // Check Performance Snapshot
+      expect(find.text('Performance Snapshot'), findsOneWidget);
       expect(find.text('Streak'), findsOneWidget);
       expect(find.text('Weekly Vol'), findsOneWidget);
       expect(find.text('This Month'), findsOneWidget);

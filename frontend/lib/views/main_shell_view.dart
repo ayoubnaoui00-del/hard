@@ -55,23 +55,23 @@ class MainShellView extends StatelessWidget {
                 _buildNavItem(
                   index: 1,
                   currentIndex: currentIndex,
-                  label: 'Explore',
-                  icon: Icons.interests_outlined,
-                  activeIcon: Icons.interests_rounded,
+                  label: 'Exercises',
+                  icon: Icons.fitness_center_outlined,
+                  activeIcon: Icons.fitness_center_rounded,
                   onTap: () => _onTap(1),
                 ),
                 _buildNavItem(
                   index: 2,
                   currentIndex: currentIndex,
-                  label: 'Activity',
-                  icon: Icons.sync_rounded,
-                  activeIcon: Icons.sync_rounded,
+                  label: 'Workouts',
+                  icon: Icons.history_rounded,
+                  activeIcon: Icons.history_rounded,
                   onTap: () => _onTap(2),
                 ),
                 _buildNavItem(
                   index: 3,
                   currentIndex: currentIndex,
-                  label: 'Velo-AI',
+                  label: 'AI Coach',
                   icon: Icons.auto_awesome_outlined,
                   activeIcon: Icons.auto_awesome,
                   onTap: () => _onTap(3),
@@ -79,9 +79,9 @@ class MainShellView extends StatelessWidget {
                 _buildNavItem(
                   index: 4,
                   currentIndex: currentIndex,
-                  label: 'More',
-                  icon: Icons.grid_view_rounded,
-                  activeIcon: Icons.grid_view_rounded,
+                  label: 'Profile',
+                  icon: Icons.person_outline_rounded,
+                  activeIcon: Icons.person_rounded,
                   onTap: () => _onTap(4),
                 ),
               ],
@@ -138,7 +138,7 @@ class MainShellView extends StatelessWidget {
                 size: 22,
                 color: isSelected
                     ? AppTheme.velocityLimeBright
-                    : const Color(0xFF2C3925),
+                    : const Color(0xFF384353),
               ),
             ),
             const SizedBox(height: 3),
@@ -149,7 +149,7 @@ class MainShellView extends StatelessWidget {
                 fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
                 color: isSelected
                     ? AppTheme.velocityDark
-                    : const Color(0xFF2C3925),
+                    : const Color(0xFF384353),
                 letterSpacing: 0.1,
               ),
             ),

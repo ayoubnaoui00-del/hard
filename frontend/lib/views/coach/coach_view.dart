@@ -74,6 +74,7 @@ class _CoachViewState extends ConsumerState<CoachView> {
   void _openConversationSelector(BuildContext context) {
     showModalBottomSheet(
       context: context,
+      useRootNavigator: true,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       builder: (ctx) => const _ConversationDrawerSheet(),
@@ -626,12 +627,14 @@ class _ConversationDrawerSheet extends ConsumerWidget {
     final chatState = ref.watch(chatViewModelProvider);
     final viewModel = ref.read(chatViewModelProvider.notifier);
 
-    return Container(
-      decoration: const BoxDecoration(
-        color: Color(0xFF161622),
-        borderRadius: BorderRadius.vertical(top: Radius.circular(22)),
-      ),
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+    return SafeArea(
+      top: false,
+      child: Container(
+        decoration: const BoxDecoration(
+          color: Color(0xFF161622),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(22)),
+        ),
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
       constraints: BoxConstraints(
         maxHeight: MediaQuery.of(context).size.height * 0.75,
       ),
@@ -745,6 +748,7 @@ class _ConversationDrawerSheet extends ConsumerWidget {
                   ),
           ),
         ],
+      ),
       ),
     );
   }
