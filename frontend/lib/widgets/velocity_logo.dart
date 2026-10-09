@@ -49,9 +49,9 @@ class _VelocityIconPainter extends CustomPainter {
     final w = size.width;
     final h = size.height;
 
-    // Dark graphite vertical / angled polygon
-    final darkPaint = Paint()
-      ..color = AppTheme.velocityDark
+    // Titanium white vertical / angled polygon
+    final whitePaint = Paint()
+      ..color = AppTheme.velocityTextPrimary
       ..style = PaintingStyle.fill;
 
     // Electric lime horizontal / angled polygon
@@ -69,7 +69,7 @@ class _VelocityIconPainter extends CustomPainter {
       const Radius.circular(3.5),
     );
 
-    canvas.drawRRect(darkRRect, darkPaint);
+    canvas.drawRRect(darkRRect, whitePaint);
     canvas.drawRRect(limeRRect, limePaint);
   }
 

@@ -187,9 +187,9 @@ void main() {
 
       // Check Header & App Branding
       expect(find.text('HARD'), findsOneWidget);
-      expect(find.text('Welcome back,'), findsOneWidget);
+      expect(find.text('ATHLETE'), findsOneWidget);
       expect(find.text('Ayoub'), findsOneWidget);
-      expect(find.text('Lvl 3'), findsOneWidget);
+      expect(find.text('LVL 3'), findsOneWidget);
 
       // Check Quick Actions
       expect(find.text('Quick Actions'), findsOneWidget);

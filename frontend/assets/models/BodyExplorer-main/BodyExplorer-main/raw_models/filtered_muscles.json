@@ -1,0 +1,2408 @@
+[
+  {
+    "file": "FJ1446M.obj",
+    "fma_id": "FMA45875",
+    "bp_id": "BP7862",
+    "name": "abdominal part of left pectoralis major"
+  },
+  {
+    "file": "FJ1446.obj",
+    "fma_id": "FMA45874",
+    "bp_id": "BP5615",
+    "name": "abdominal part of right pectoralis major"
+  },
+  {
+    "file": "FJ1390M.obj",
+    "fma_id": "FMA37464",
+    "bp_id": "BP9182",
+    "name": "abductor digiti minimi of left foot"
+  },
+  {
+    "file": "FJ1466M.obj",
+    "fma_id": "FMA37397",
+    "bp_id": "BP8737",
+    "name": "abductor digiti minimi of left hand"
+  },
+  {
+    "file": "FJ1390.obj",
+    "fma_id": "FMA37463",
+    "bp_id": "BP5056",
+    "name": "abductor digiti minimi of right foot"
+  },
+  {
+    "file": "FJ1466.obj",
+    "fma_id": "FMA37396",
+    "bp_id": "BP7569",
+    "name": "abductor digiti minimi of right hand"
+  },
+  {
+    "file": "FJ1467M.obj",
+    "fma_id": "FMA34683",
+    "bp_id": "BP9075",
+    "name": "acromial part of left deltoid"
+  },
+  {
+    "file": "FJ1467.obj",
+    "fma_id": "FMA34682",
+    "bp_id": "BP7571",
+    "name": "acromial part of right deltoid"
+  },
+  {
+    "file": "FJ1520M.obj",
+    "fma_id": "FMA33583",
+    "bp_id": "BP8225",
+    "name": "ascending part of left trapezius"
+  },
+  {
+    "file": "FJ1520.obj",
+    "fma_id": "FMA33581",
+    "bp_id": "BP5638",
+    "name": "ascending part of right trapezius"
+  },
+  {
+    "file": "FJ1468M.obj",
+    "fma_id": "FMA34681",
+    "bp_id": "BP8259",
+    "name": "clavicular part of left deltoid"
+  },
+  {
+    "file": "FJ1447M.obj",
+    "fma_id": "FMA34691",
+    "bp_id": "BP9095",
+    "name": "clavicular part of left pectoralis major"
+  },
+  {
+    "file": "FJ1468.obj",
+    "fma_id": "FMA34680",
+    "bp_id": "BP7573",
+    "name": "clavicular part of right deltoid"
+  },
+  {
+    "file": "FJ1447.obj",
+    "fma_id": "FMA34690",
+    "bp_id": "BP5582",
+    "name": "clavicular part of right pectoralis major"
+  },
+  {
+    "file": "FJ1521M.obj",
+    "fma_id": "FMA33587",
+    "bp_id": "BP8267",
+    "name": "descending part of left trapezius"
+  },
+  {
+    "file": "FJ1521.obj",
+    "fma_id": "FMA33586",
+    "bp_id": "BP5636",
+    "name": "descending part of right trapezius"
+  },
+  {
+    "file": "FJ3131.obj",
+    "fma_id": "FMA13295",
+    "bp_id": "BP8798",
+    "name": "diaphragm"
+  },
+  {
+    "file": "FJ1450M.obj",
+    "fma_id": "FMA21930",
+    "bp_id": "BP8934",
+    "name": "external anal sphincter"
+  },
+  {
+    "file": "FJ2543.obj",
+    "fma_id": "FMA21930",
+    "bp_id": "BP8934",
+    "name": "external anal sphincter"
+  },
+  {
+    "file": "FJ2548.obj",
+    "fma_id": "FMA21930",
+    "bp_id": "BP8934",
+    "name": "external anal sphincter"
+  },
+  {
+    "file": "FJ1451M.obj",
+    "fma_id": "FMA9756",
+    "bp_id": "BP8306",
+    "name": "external intercostal muscle"
+  },
+  {
+    "file": "FJ1383M.obj",
+    "fma_id": "FMA37718",
+    "bp_id": "BP9161",
+    "name": "first lumbrical of left foot"
+  },
+  {
+    "file": "FJ1383.obj",
+    "fma_id": "FMA37717",
+    "bp_id": "BP5044",
+    "name": "first lumbrical of right foot"
+  },
+  {
+    "file": "FJ1384M.obj",
+    "fma_id": "FMA37746",
+    "bp_id": "BP9251",
+    "name": "first plantar interosseous of left foot"
+  },
+  {
+    "file": "FJ1384.obj",
+    "fma_id": "FMA37745",
+    "bp_id": "BP5035",
+    "name": "first plantar interosseous of right foot"
+  },
+  {
+    "file": "FJ1391M.obj",
+    "fma_id": "FMA37472",
+    "bp_id": "BP8065",
+    "name": "flexor digiti minimi brevis of left foot"
+  },
+  {
+    "file": "FJ1470M.obj",
+    "fma_id": "FMA37399",
+    "bp_id": "BP8516",
+    "name": "flexor digiti minimi brevis of left hand"
+  },
+  {
+    "file": "FJ1391.obj",
+    "fma_id": "FMA37471",
+    "bp_id": "BP5050",
+    "name": "flexor digiti minimi brevis of right foot"
+  },
+  {
+    "file": "FJ1470.obj",
+    "fma_id": "FMA37398",
+    "bp_id": "BP4858",
+    "name": "flexor digiti minimi brevis of right hand"
+  },
+  {
+    "file": "FJ1471M.obj",
+    "fma_id": "FMA40121",
+    "bp_id": "BP8058",
+    "name": "flexor retinaculum of left wrist"
+  },
+  {
+    "file": "FJ1471.obj",
+    "fma_id": "FMA40120",
+    "bp_id": "BP6527",
+    "name": "flexor retinaculum of right wrist"
+  },
+  {
+    "file": "FJ1389M.obj",
+    "fma_id": "FMA37484",
+    "bp_id": "BP8943",
+    "name": "fourth lumbrical of left foot"
+  },
+  {
+    "file": "FJ1389.obj",
+    "fma_id": "FMA37483",
+    "bp_id": "BP5042",
+    "name": "fourth lumbrical of right foot"
+  },
+  {
+    "file": "FJ1473M.obj",
+    "fma_id": "FMA38618",
+    "bp_id": "BP8144",
+    "name": "humeral head of left flexor carpi ulnaris"
+  },
+  {
+    "file": "FJ1474M.obj",
+    "fma_id": "FMA38561",
+    "bp_id": "BP8015",
+    "name": "humeral head of left pronator teres"
+  },
+  {
+    "file": "FJ1473.obj",
+    "fma_id": "FMA38617",
+    "bp_id": "BP5570",
+    "name": "humeral head of right flexor carpi ulnaris"
+  },
+  {
+    "file": "FJ1474.obj",
+    "fma_id": "FMA38560",
+    "bp_id": "BP5568",
+    "name": "humeral head of right pronator teres"
+  },
+  {
+    "file": "FJ1557.obj",
+    "fma_id": "FMA46288",
+    "bp_id": "BP7685",
+    "name": "inferior oblique part of left longus colli"
+  },
+  {
+    "file": "FJ1454M.obj",
+    "fma_id": "FMA9758",
+    "bp_id": "BP9146",
+    "name": "innermost intercostal muscle"
+  },
+  {
+    "file": "FJ1455M.obj",
+    "fma_id": "FMA9757",
+    "bp_id": "BP8018",
+    "name": "internal intercostal muscle"
+  },
+  {
+    "file": "FJ1476M.obj",
+    "fma_id": "FMA23708",
+    "bp_id": "BP8263",
+    "name": "interosseous membrane of left forearm"
+  },
+  {
+    "file": "FJ1392M.obj",
+    "fma_id": "FMA35193",
+    "bp_id": "BP8481",
+    "name": "interosseous membrane of left leg"
+  },
+  {
+    "file": "FJ1476.obj",
+    "fma_id": "FMA23707",
+    "bp_id": "BP4651",
+    "name": "interosseous membrane of right forearm"
+  },
+  {
+    "file": "FJ1392.obj",
+    "fma_id": "FMA35192",
+    "bp_id": "BP4649",
+    "name": "interosseous membrane of right leg"
+  },
+  {
+    "file": "FJ1393M.obj",
+    "fma_id": "FMA45974",
+    "bp_id": "BP8361",
+    "name": "lateral head of left flexor hallucis brevis"
+  },
+  {
+    "file": "FJ1394M.obj",
+    "fma_id": "FMA45961",
+    "bp_id": "BP7939",
+    "name": "lateral head of left gastrocnemius"
+  },
+  {
+    "file": "FJ1477M.obj",
+    "fma_id": "FMA37698",
+    "bp_id": "BP8525",
+    "name": "lateral head of left triceps brachii"
+  },
+  {
+    "file": "FJ1393.obj",
+    "fma_id": "FMA45973",
+    "bp_id": "BP5548",
+    "name": "lateral head of right flexor hallucis brevis"
+  },
+  {
+    "file": "FJ1394.obj",
+    "fma_id": "FMA45960",
+    "bp_id": "BP5541",
+    "name": "lateral head of right gastrocnemius"
+  },
+  {
+    "file": "FJ1477.obj",
+    "fma_id": "FMA37697",
+    "bp_id": "BP5550",
+    "name": "lateral head of right triceps brachii"
+  },
+  {
+    "file": "FJ1547M.obj",
+    "fma_id": "FMA22850",
+    "bp_id": "BP8895",
+    "name": "lateral lumbar intertransversarius"
+  },
+  {
+    "file": "FJ1400M.obj",
+    "fma_id": "FMA37460",
+    "bp_id": "BP9193",
+    "name": "left abductor hallucis"
+  },
+  {
+    "file": "FJ1483M.obj",
+    "fma_id": "FMA37387",
+    "bp_id": "BP8706",
+    "name": "left abductor pollicis brevis"
+  },
+  {
+    "file": "FJ1484M.obj",
+    "fma_id": "FMA38517",
+    "bp_id": "BP9144",
+    "name": "left abductor pollicis longus"
+  },
+  {
+    "file": "FJ1401M.obj",
+    "fma_id": "FMA22454",
+    "bp_id": "BP9099",
+    "name": "left adductor brevis"
+  },
+  {
+    "file": "FJ1402M.obj",
+    "fma_id": "FMA22457",
+    "bp_id": "BP8604",
+    "name": "left adductor longus"
+  },
+  {
+    "file": "FJ1403M.obj",
+    "fma_id": "FMA22460",
+    "bp_id": "BP8972",
+    "name": "left adductor magnus"
+  },
+  {
+    "file": "FJ1404M.obj",
+    "fma_id": "FMA43887",
+    "bp_id": "BP8832",
+    "name": "left adductor minimus"
+  },
+  {
+    "file": "FJ1485M.obj",
+    "fma_id": "FMA37706",
+    "bp_id": "BP8962",
+    "name": "left anconeus"
+  },
+  {
+    "file": "FJ2775.obj",
+    "fma_id": "FMA55114",
+    "bp_id": "BP8314",
+    "name": "left arytenoid cartilage"
+  },
+  {
+    "file": "FJ1486M.obj",
+    "fma_id": "FMA37669",
+    "bp_id": "BP8684",
+    "name": "left brachialis"
+  },
+  {
+    "file": "FJ1487M.obj",
+    "fma_id": "FMA38487",
+    "bp_id": "BP8244",
+    "name": "left brachioradialis"
+  },
+  {
+    "file": "FJ1405M.obj",
+    "fma_id": "FMA264844",
+    "bp_id": "BP8739",
+    "name": "left calcaneal tendon"
+  },
+  {
+    "file": "FJ1449M.obj",
+    "fma_id": "FMA46444",
+    "bp_id": "BP9157",
+    "name": "left coccygeus"
+  },
+  {
+    "file": "FJ2542.obj",
+    "fma_id": "FMA46444",
+    "bp_id": "BP9157",
+    "name": "left coccygeus"
+  },
+  {
+    "file": "FJ1488M.obj",
+    "fma_id": "FMA37666",
+    "bp_id": "BP9055",
+    "name": "left coracobrachialis"
+  },
+  {
+    "file": "FJ1555.obj",
+    "fma_id": "FMA46293",
+    "bp_id": "BP7579",
+    "name": "left digastric"
+  },
+  {
+    "file": "FJ1560.obj",
+    "fma_id": "FMA46293",
+    "bp_id": "BP7579",
+    "name": "left digastric"
+  },
+  {
+    "file": "FJ1578.obj",
+    "fma_id": "FMA46293",
+    "bp_id": "BP7579",
+    "name": "left digastric"
+  },
+  {
+    "file": "FJ1489M.obj",
+    "fma_id": "FMA38499",
+    "bp_id": "BP9287",
+    "name": "left extensor carpi radialis brevis"
+  },
+  {
+    "file": "FJ1490M.obj",
+    "fma_id": "FMA38496",
+    "bp_id": "BP9280",
+    "name": "left extensor carpi radialis longus"
+  },
+  {
+    "file": "FJ1472M.obj",
+    "fma_id": "FMA38508",
+    "bp_id": "BP7970",
+    "name": "left extensor carpi ulnaris"
+  },
+  {
+    "file": "FJ1517M.obj",
+    "fma_id": "FMA38508",
+    "bp_id": "BP7970",
+    "name": "left extensor carpi ulnaris"
+  },
+  {
+    "file": "FJ1491M.obj",
+    "fma_id": "FMA38505",
+    "bp_id": "BP8489",
+    "name": "left extensor digiti minimi"
+  },
+  {
+    "file": "FJ1492M.obj",
+    "fma_id": "FMA38502",
+    "bp_id": "BP8560",
+    "name": "left extensor digitorum"
+  },
+  {
+    "file": "FJ1406M.obj",
+    "fma_id": "FMA22549",
+    "bp_id": "BP8162",
+    "name": "left extensor digitorum longus"
+  },
+  {
+    "file": "FJ1407M.obj",
+    "fma_id": "FMA51145",
+    "bp_id": "BP8118",
+    "name": "left extensor hallucis brevis"
+  },
+  {
+    "file": "FJ1408M.obj",
+    "fma_id": "FMA22547",
+    "bp_id": "BP7858",
+    "name": "left extensor hallucis longus"
+  },
+  {
+    "file": "FJ1493M.obj",
+    "fma_id": "FMA38526",
+    "bp_id": "BP8779",
+    "name": "left extensor indicis"
+  },
+  {
+    "file": "FJ1494M.obj",
+    "fma_id": "FMA38520",
+    "bp_id": "BP9253",
+    "name": "left extensor pollicis brevis"
+  },
+  {
+    "file": "FJ1495M.obj",
+    "fma_id": "FMA38523",
+    "bp_id": "BP8191",
+    "name": "left extensor pollicis longus"
+  },
+  {
+    "file": "FJ1452M.obj",
+    "fma_id": "FMA13337",
+    "bp_id": "BP8154",
+    "name": "left external oblique"
+  },
+  {
+    "file": "FJ1409M.obj",
+    "fma_id": "FMA22555",
+    "bp_id": "BP8977",
+    "name": "left fibularis brevis"
+  },
+  {
+    "file": "FJ1410M.obj",
+    "fma_id": "FMA22553",
+    "bp_id": "BP8846",
+    "name": "left fibularis longus"
+  },
+  {
+    "file": "FJ1411M.obj",
+    "fma_id": "FMA22551",
+    "bp_id": "BP9228",
+    "name": "left fibularis tertius"
+  },
+  {
+    "file": "FJ1412M.obj",
+    "fma_id": "FMA37466",
+    "bp_id": "BP8992",
+    "name": "left flexor accessorius"
+  },
+  {
+    "file": "FJ1496M.obj",
+    "fma_id": "FMA38461",
+    "bp_id": "BP8940",
+    "name": "left flexor carpi radialis"
+  },
+  {
+    "file": "FJ1413M.obj",
+    "fma_id": "FMA37462",
+    "bp_id": "BP9215",
+    "name": "left flexor digitorum brevis"
+  },
+  {
+    "file": "FJ1414M.obj",
+    "fma_id": "FMA65017",
+    "bp_id": "BP8888",
+    "name": "left flexor digitorum longus"
+  },
+  {
+    "file": "FJ1497M.obj",
+    "fma_id": "FMA38480",
+    "bp_id": "BP7826",
+    "name": "left flexor digitorum profundus"
+  },
+  {
+    "file": "FJ1475M.obj",
+    "fma_id": "FMA38471",
+    "bp_id": "BP8284",
+    "name": "left flexor digitorum superficialis"
+  },
+  {
+    "file": "FJ1499M.obj",
+    "fma_id": "FMA38471",
+    "bp_id": "BP8284",
+    "name": "left flexor digitorum superficialis"
+  },
+  {
+    "file": "FJ1415M.obj",
+    "fma_id": "FMA65015",
+    "bp_id": "BP7949",
+    "name": "left flexor hallucis longus"
+  },
+  {
+    "file": "FJ1469.obj",
+    "fma_id": "FMA37389",
+    "bp_id": "BP7575",
+    "name": "left flexor pollicis brevis"
+  },
+  {
+    "file": "FJ1498M.obj",
+    "fma_id": "FMA38484",
+    "bp_id": "BP9106",
+    "name": "left flexor pollicis longus"
+  },
+  {
+    "file": "FJ1416M.obj",
+    "fma_id": "FMA22337",
+    "bp_id": "BP8454",
+    "name": "left gemellus inferior"
+  },
+  {
+    "file": "FJ1417M.obj",
+    "fma_id": "FMA22335",
+    "bp_id": "BP8028",
+    "name": "left gemellus superior"
+  },
+  {
+    "file": "FJ1559.obj",
+    "fma_id": "FMA46327",
+    "bp_id": "BP7578",
+    "name": "left geniohyoid"
+  },
+  {
+    "file": "FJ1418M.obj",
+    "fma_id": "FMA22329",
+    "bp_id": "BP8401",
+    "name": "left gluteus maximus"
+  },
+  {
+    "file": "FJ1419M.obj",
+    "fma_id": "FMA22331",
+    "bp_id": "BP9213",
+    "name": "left gluteus medius"
+  },
+  {
+    "file": "FJ1420M.obj",
+    "fma_id": "FMA22333",
+    "bp_id": "BP8623",
+    "name": "left gluteus minimus"
+  },
+  {
+    "file": "FJ1421M.obj",
+    "fma_id": "FMA43884",
+    "bp_id": "BP8926",
+    "name": "left gracilis"
+  },
+  {
+    "file": "FJ1422M.obj",
+    "fma_id": "FMA22323",
+    "bp_id": "BP8312",
+    "name": "left iliacus"
+  },
+  {
+    "file": "FJ1453M.obj",
+    "fma_id": "FMA45859",
+    "bp_id": "BP8007",
+    "name": "left iliococcygeus"
+  },
+  {
+    "file": "FJ2544.obj",
+    "fma_id": "FMA45859",
+    "bp_id": "BP8007",
+    "name": "left iliococcygeus"
+  },
+  {
+    "file": "FJ1526M.obj",
+    "fma_id": "FMA22745",
+    "bp_id": "BP8048",
+    "name": "left iliocostalis cervicis"
+  },
+  {
+    "file": "FJ1527M.obj",
+    "fma_id": "FMA22741",
+    "bp_id": "BP8937",
+    "name": "left iliocostalis lumborum"
+  },
+  {
+    "file": "FJ1528M.obj",
+    "fma_id": "FMA22743",
+    "bp_id": "BP8748",
+    "name": "left iliocostalis thoracis"
+  },
+  {
+    "file": "FJ1294.obj",
+    "fma_id": "FMA49051",
+    "bp_id": "BP4948",
+    "name": "left inferior oblique"
+  },
+  {
+    "file": "FJ1295.obj",
+    "fma_id": "FMA49047",
+    "bp_id": "BP4945",
+    "name": "left inferior rectus"
+  },
+  {
+    "file": "FJ1500M.obj",
+    "fma_id": "FMA32548",
+    "bp_id": "BP8965",
+    "name": "left infraspinatus muscle"
+  },
+  {
+    "file": "FJ1551M.obj",
+    "fma_id": "FMA22891",
+    "bp_id": "BP9137",
+    "name": "left interspinalis thoracis"
+  },
+  {
+    "file": "FJ2778.obj",
+    "fma_id": "FMA46581",
+    "bp_id": "BP8828",
+    "name": "left lateral crico-arytenoid"
+  },
+  {
+    "file": "FJ1304.obj",
+    "fma_id": "FMA49055",
+    "bp_id": "BP4942",
+    "name": "left lateral rectus"
+  },
+  {
+    "file": "FJ1306.obj",
+    "fma_id": "FMA49049",
+    "bp_id": "BP4939",
+    "name": "left levator palpebrae superioris"
+  },
+  {
+    "file": "FJ1532M.obj",
+    "fma_id": "FMA32541",
+    "bp_id": "BP8746",
+    "name": "left levator scapulae"
+  },
+  {
+    "file": "FJ2741.obj",
+    "fma_id": "FMA46729",
+    "bp_id": "BP8365",
+    "name": "left levator veli palatini"
+  },
+  {
+    "file": "FJ1424M.obj",
+    "fma_id": "FMA44250",
+    "bp_id": "BP9273",
+    "name": "left long plantar ligament"
+  },
+  {
+    "file": "FJ1533M.obj",
+    "fma_id": "FMA22756",
+    "bp_id": "BP9081",
+    "name": "left longissimus capitis"
+  },
+  {
+    "file": "FJ1534M.obj",
+    "fma_id": "FMA22758",
+    "bp_id": "BP9126",
+    "name": "left longissimus cervicis"
+  },
+  {
+    "file": "FJ1535M.obj",
+    "fma_id": "FMA22753",
+    "bp_id": "BP8985",
+    "name": "left longissimus thoracis"
+  },
+  {
+    "file": "FJ1561.obj",
+    "fma_id": "FMA46310",
+    "bp_id": "BP7581",
+    "name": "left longus capitis"
+  },
+  {
+    "file": "FJ1308.obj",
+    "fma_id": "FMA49057",
+    "bp_id": "BP4935",
+    "name": "left medial rectus"
+  },
+  {
+    "file": "FJ1562.obj",
+    "fma_id": "FMA46322",
+    "bp_id": "BP7582",
+    "name": "left mylohyoid"
+  },
+  {
+    "file": "FJ2780.obj",
+    "fma_id": "FMA46585",
+    "bp_id": "BP8893",
+    "name": "left oblique arytenoid"
+  },
+  {
+    "file": "FJ1425M.obj",
+    "fma_id": "FMA22327",
+    "bp_id": "BP8506",
+    "name": "left obturator externus"
+  },
+  {
+    "file": "FJ1426M.obj",
+    "fma_id": "FMA22325",
+    "bp_id": "BP7986",
+    "name": "left obturator internus"
+  },
+  {
+    "file": "FJ1565.obj",
+    "fma_id": "FMA13349",
+    "bp_id": "BP7585",
+    "name": "left omohyoid"
+  },
+  {
+    "file": "FJ1501M.obj",
+    "fma_id": "FMA37391",
+    "bp_id": "BP8596",
+    "name": "left opponens pollicis"
+  },
+  {
+    "file": "FJ1502M.obj",
+    "fma_id": "FMA38464",
+    "bp_id": "BP7781",
+    "name": "left palmaris longus"
+  },
+  {
+    "file": "FJ1427M.obj",
+    "fma_id": "FMA22451",
+    "bp_id": "BP8998",
+    "name": "left pectineus"
+  },
+  {
+    "file": "FJ1456M.obj",
+    "fma_id": "FMA13376",
+    "bp_id": "BP9038",
+    "name": "left pectoralis minor"
+  },
+  {
+    "file": "FJ1428M.obj",
+    "fma_id": "FMA22341",
+    "bp_id": "BP8131",
+    "name": "left piriformis"
+  },
+  {
+    "file": "FJ1429M.obj",
+    "fma_id": "FMA22561",
+    "bp_id": "BP8852",
+    "name": "left plantaris"
+  },
+  {
+    "file": "FJ1558.obj",
+    "fma_id": "FMA45740",
+    "bp_id": "BP7577",
+    "name": "left platysma"
+  },
+  {
+    "file": "FJ1430M.obj",
+    "fma_id": "FMA22592",
+    "bp_id": "BP9241",
+    "name": "left popliteus"
+  },
+  {
+    "file": "FJ2782.obj",
+    "fma_id": "FMA46578",
+    "bp_id": "BP7822",
+    "name": "left posterior crico-arytenoid"
+  },
+  {
+    "file": "FJ1503M.obj",
+    "fma_id": "FMA38455",
+    "bp_id": "BP7957",
+    "name": "left pronator quadratus"
+  },
+  {
+    "file": "FJ1431M.obj",
+    "fma_id": "FMA22343",
+    "bp_id": "BP8373",
+    "name": "left psoas major"
+  },
+  {
+    "file": "FJ1457M.obj",
+    "fma_id": "FMA45855",
+    "bp_id": "BP7791",
+    "name": "left pubococcygeus"
+  },
+  {
+    "file": "FJ2545.obj",
+    "fma_id": "FMA45855",
+    "bp_id": "BP7791",
+    "name": "left pubococcygeus"
+  },
+  {
+    "file": "FJ1458M.obj",
+    "fma_id": "FMA45857",
+    "bp_id": "BP8228",
+    "name": "left puborectalis"
+  },
+  {
+    "file": "FJ2546.obj",
+    "fma_id": "FMA45857",
+    "bp_id": "BP8228",
+    "name": "left puborectalis"
+  },
+  {
+    "file": "FJ1432M.obj",
+    "fma_id": "FMA22339",
+    "bp_id": "BP8661",
+    "name": "left quadratus femoris"
+  },
+  {
+    "file": "FJ1566.obj",
+    "fma_id": "FMA46314",
+    "bp_id": "BP7586",
+    "name": "left rectus capitis anterior"
+  },
+  {
+    "file": "FJ1569.obj",
+    "fma_id": "FMA46318",
+    "bp_id": "BP7589",
+    "name": "left rectus capitis lateralis"
+  },
+  {
+    "file": "FJ1567.obj",
+    "fma_id": "FMA32531",
+    "bp_id": "BP7587",
+    "name": "left rectus capitis posterior major"
+  },
+  {
+    "file": "FJ1568.obj",
+    "fma_id": "FMA32533",
+    "bp_id": "BP7588",
+    "name": "left rectus capitis posterior minor"
+  },
+  {
+    "file": "FJ1433M.obj",
+    "fma_id": "FMA38929",
+    "bp_id": "BP8094",
+    "name": "left rectus femoris"
+  },
+  {
+    "file": "FJ1536M.obj",
+    "fma_id": "FMA13382",
+    "bp_id": "BP9245",
+    "name": "left rhomboid major"
+  },
+  {
+    "file": "FJ1537M.obj",
+    "fma_id": "FMA13384",
+    "bp_id": "BP8585",
+    "name": "left rhomboid minor"
+  },
+  {
+    "file": "FJ1434M.obj",
+    "fma_id": "FMA22355",
+    "bp_id": "BP8876",
+    "name": "left sartorius"
+  },
+  {
+    "file": "FJ1570.obj",
+    "fma_id": "FMA13393",
+    "bp_id": "BP7590",
+    "name": "left scalenus anterior"
+  },
+  {
+    "file": "FJ1571.obj",
+    "fma_id": "FMA13391",
+    "bp_id": "BP7591",
+    "name": "left scalenus medius"
+  },
+  {
+    "file": "FJ1572.obj",
+    "fma_id": "FMA13389",
+    "bp_id": "BP4876",
+    "name": "left scalenus posterior"
+  },
+  {
+    "file": "FJ1435M.obj",
+    "fma_id": "FMA22449",
+    "bp_id": "BP7829",
+    "name": "left semimembranosus"
+  },
+  {
+    "file": "FJ1538M.obj",
+    "fma_id": "FMA22877",
+    "bp_id": "BP8700",
+    "name": "left semispinalis capitis"
+  },
+  {
+    "file": "FJ1539M.obj",
+    "fma_id": "FMA22875",
+    "bp_id": "BP8930",
+    "name": "left semispinalis cervicis"
+  },
+  {
+    "file": "FJ1540M.obj",
+    "fma_id": "FMA22873",
+    "bp_id": "BP8316",
+    "name": "left semispinalis thoracis"
+  },
+  {
+    "file": "FJ1436M.obj",
+    "fma_id": "FMA22359",
+    "bp_id": "BP9066",
+    "name": "left semitendinosus"
+  },
+  {
+    "file": "FJ1459M.obj",
+    "fma_id": "FMA13399",
+    "bp_id": "BP8760",
+    "name": "left serratus anterior"
+  },
+  {
+    "file": "FJ1541M.obj",
+    "fma_id": "FMA13406",
+    "bp_id": "BP9048",
+    "name": "left serratus posterior inferior"
+  },
+  {
+    "file": "FJ1542M.obj",
+    "fma_id": "FMA13404",
+    "bp_id": "BP8298",
+    "name": "left serratus posterior superior"
+  },
+  {
+    "file": "FJ1437M.obj",
+    "fma_id": "FMA22559",
+    "bp_id": "BP8819",
+    "name": "left soleus"
+  },
+  {
+    "file": "FJ1544M.obj",
+    "fma_id": "FMA22780",
+    "bp_id": "BP8979",
+    "name": "left spinalis thoracis"
+  },
+  {
+    "file": "FJ1545M.obj",
+    "fma_id": "FMA22729",
+    "bp_id": "BP8022",
+    "name": "left splenius capitis"
+  },
+  {
+    "file": "FJ1546M.obj",
+    "fma_id": "FMA22727",
+    "bp_id": "BP8241",
+    "name": "left splenius cervicis"
+  },
+  {
+    "file": "FJ1573.obj",
+    "fma_id": "FMA13409",
+    "bp_id": "BP4910",
+    "name": "left sternocleidomastoid"
+  },
+  {
+    "file": "FJ1574.obj",
+    "fma_id": "FMA13347",
+    "bp_id": "BP4918",
+    "name": "left sternohyoid"
+  },
+  {
+    "file": "FJ1575.obj",
+    "fma_id": "FMA13351",
+    "bp_id": "BP4924",
+    "name": "left sternothyroid"
+  },
+  {
+    "file": "FJ1576.obj",
+    "fma_id": "FMA45827",
+    "bp_id": "BP4902",
+    "name": "left stylohyoid"
+  },
+  {
+    "file": "FJ1460M.obj",
+    "fma_id": "FMA13411",
+    "bp_id": "BP8460",
+    "name": "left subclavius"
+  },
+  {
+    "file": "FJ1504M.obj",
+    "fma_id": "FMA13415",
+    "bp_id": "BP8214",
+    "name": "left subscapularis"
+  },
+  {
+    "file": "FJ1322.obj",
+    "fma_id": "FMA49053",
+    "bp_id": "BP4933",
+    "name": "left superior oblique"
+  },
+  {
+    "file": "FJ1323.obj",
+    "fma_id": "FMA49045",
+    "bp_id": "BP4930",
+    "name": "left superior rectus"
+  },
+  {
+    "file": "FJ1505M.obj",
+    "fma_id": "FMA38514",
+    "bp_id": "BP8499",
+    "name": "left supinator"
+  },
+  {
+    "file": "FJ1506M.obj",
+    "fma_id": "FMA32545",
+    "bp_id": "BP8376",
+    "name": "left supraspinatus"
+  },
+  {
+    "file": "FJ1438M.obj",
+    "fma_id": "FMA22426",
+    "bp_id": "BP9184",
+    "name": "left tensor fasciae latae"
+  },
+  {
+    "file": "FJ2748.obj",
+    "fma_id": "FMA46732",
+    "bp_id": "BP9103",
+    "name": "left tensor veli palatini"
+  },
+  {
+    "file": "FJ1507M.obj",
+    "fma_id": "FMA32552",
+    "bp_id": "BP8287",
+    "name": "left teres major"
+  },
+  {
+    "file": "FJ1508M.obj",
+    "fma_id": "FMA32554",
+    "bp_id": "BP9197",
+    "name": "left teres minor"
+  },
+  {
+    "file": "FJ2784.obj",
+    "fma_id": "FMA46590",
+    "bp_id": "BP7801",
+    "name": "left thyro-arytenoid"
+  },
+  {
+    "file": "FJ2785.obj",
+    "fma_id": "FMA46590",
+    "bp_id": "BP7801",
+    "name": "left thyro-arytenoid"
+  },
+  {
+    "file": "FJ1577.obj",
+    "fma_id": "FMA13353",
+    "bp_id": "BP4921",
+    "name": "left thyrohyoid"
+  },
+  {
+    "file": "FJ1439M.obj",
+    "fma_id": "FMA22545",
+    "bp_id": "BP8720",
+    "name": "left tibialis anterior"
+  },
+  {
+    "file": "FJ1440M.obj",
+    "fma_id": "FMA65019",
+    "bp_id": "BP9159",
+    "name": "left tibialis posterior"
+  },
+  {
+    "file": "FJ1461M.obj",
+    "fma_id": "FMA9762",
+    "bp_id": "BP9030",
+    "name": "left transversus thoracis"
+  },
+  {
+    "file": "FJ1441M.obj",
+    "fma_id": "FMA38935",
+    "bp_id": "BP9207",
+    "name": "left vastus intermedius"
+  },
+  {
+    "file": "FJ1442M.obj",
+    "fma_id": "FMA38931",
+    "bp_id": "BP8754",
+    "name": "left vastus lateralis"
+  },
+  {
+    "file": "FJ1443M.obj",
+    "fma_id": "FMA38933",
+    "bp_id": "BP9128",
+    "name": "left vastus medialis"
+  },
+  {
+    "file": "FJ1478M.obj",
+    "fma_id": "FMA37687",
+    "bp_id": "BP8816",
+    "name": "long head of left biceps brachii"
+  },
+  {
+    "file": "FJ1395M.obj",
+    "fma_id": "FMA45889",
+    "bp_id": "BP8331",
+    "name": "long head of left biceps femoris"
+  },
+  {
+    "file": "FJ1479M.obj",
+    "fma_id": "FMA37700",
+    "bp_id": "BP8344",
+    "name": "long head of left triceps brachii"
+  },
+  {
+    "file": "FJ1478.obj",
+    "fma_id": "FMA37686",
+    "bp_id": "BP5566",
+    "name": "long head of right biceps brachii"
+  },
+  {
+    "file": "FJ1395.obj",
+    "fma_id": "FMA45888",
+    "bp_id": "BP5575",
+    "name": "long head of right biceps femoris"
+  },
+  {
+    "file": "FJ1479.obj",
+    "fma_id": "FMA37699",
+    "bp_id": "BP5564",
+    "name": "long head of right triceps brachii"
+  },
+  {
+    "file": "FJ1396M.obj",
+    "fma_id": "FMA45972",
+    "bp_id": "BP8945",
+    "name": "medial head of left flexor hallucis brevis"
+  },
+  {
+    "file": "FJ1397M.obj",
+    "fma_id": "FMA45958",
+    "bp_id": "BP9217",
+    "name": "medial head of left gastrocnemius"
+  },
+  {
+    "file": "FJ1480M.obj",
+    "fma_id": "FMA37696",
+    "bp_id": "BP8257",
+    "name": "medial head of left triceps brachii"
+  },
+  {
+    "file": "FJ1396.obj",
+    "fma_id": "FMA45971",
+    "bp_id": "BP5546",
+    "name": "medial head of right flexor hallucis brevis"
+  },
+  {
+    "file": "FJ1397.obj",
+    "fma_id": "FMA45957",
+    "bp_id": "BP5539",
+    "name": "medial head of right gastrocnemius"
+  },
+  {
+    "file": "FJ1480.obj",
+    "fma_id": "FMA37695",
+    "bp_id": "BP5562",
+    "name": "medial head of right triceps brachii"
+  },
+  {
+    "file": "FJ1548M.obj",
+    "fma_id": "FMA22851",
+    "bp_id": "BP8809",
+    "name": "medial lumbar intertransversarius"
+  },
+  {
+    "file": "FJ2789.obj",
+    "fma_id": "FMA55237",
+    "bp_id": "BP8581",
+    "name": "median cricothyroid ligament"
+  },
+  {
+    "file": "FJ1398M.obj",
+    "fma_id": "FMA46019",
+    "bp_id": "BP8542",
+    "name": "oblique head of left adductor hallucis"
+  },
+  {
+    "file": "FJ1481M.obj",
+    "fma_id": "FMA46122",
+    "bp_id": "BP8248",
+    "name": "oblique head of left adductor pollicis"
+  },
+  {
+    "file": "FJ1398.obj",
+    "fma_id": "FMA46018",
+    "bp_id": "BP5578",
+    "name": "oblique head of right adductor hallucis"
+  },
+  {
+    "file": "FJ1481.obj",
+    "fma_id": "FMA46121",
+    "bp_id": "BP5560",
+    "name": "oblique head of right adductor pollicis"
+  },
+  {
+    "file": "FJ2781.obj",
+    "fma_id": "FMA46614",
+    "bp_id": "BP8175",
+    "name": "oblique part of left cricothyroid"
+  },
+  {
+    "file": "FJ2799.obj",
+    "fma_id": "FMA46613",
+    "bp_id": "BP9077",
+    "name": "oblique part of right cricothyroid"
+  },
+  {
+    "file": "FJ1399M.obj",
+    "fma_id": "FMA86035",
+    "bp_id": "BP9018",
+    "name": "opponens digiti minimi of left foot"
+  },
+  {
+    "file": "FJ1482M.obj",
+    "fma_id": "FMA37401",
+    "bp_id": "BP8204",
+    "name": "opponens digiti minimi of left hand"
+  },
+  {
+    "file": "FJ1399.obj",
+    "fma_id": "FMA86034",
+    "bp_id": "BP5046",
+    "name": "opponens digiti minimi of right foot"
+  },
+  {
+    "file": "FJ1482.obj",
+    "fma_id": "FMA37400",
+    "bp_id": "BP4860",
+    "name": "opponens digiti minimi of right hand"
+  },
+  {
+    "file": "FJ1400.obj",
+    "fma_id": "FMA37459",
+    "bp_id": "BP5054",
+    "name": "right abductor hallucis"
+  },
+  {
+    "file": "FJ1483.obj",
+    "fma_id": "FMA37386",
+    "bp_id": "BP4855",
+    "name": "right abductor pollicis brevis"
+  },
+  {
+    "file": "FJ1484.obj",
+    "fma_id": "FMA38516",
+    "bp_id": "BP4820",
+    "name": "right abductor pollicis longus"
+  },
+  {
+    "file": "FJ1401.obj",
+    "fma_id": "FMA22452",
+    "bp_id": "BP4986",
+    "name": "right adductor brevis"
+  },
+  {
+    "file": "FJ1402.obj",
+    "fma_id": "FMA22456",
+    "bp_id": "BP4984",
+    "name": "right adductor longus"
+  },
+  {
+    "file": "FJ1403.obj",
+    "fma_id": "FMA22459",
+    "bp_id": "BP4982",
+    "name": "right adductor magnus"
+  },
+  {
+    "file": "FJ1404.obj",
+    "fma_id": "FMA43886",
+    "bp_id": "BP4980",
+    "name": "right adductor minimus"
+  },
+  {
+    "file": "FJ1485.obj",
+    "fma_id": "FMA37705",
+    "bp_id": "BP4802",
+    "name": "right anconeus"
+  },
+  {
+    "file": "FJ2792.obj",
+    "fma_id": "FMA55113",
+    "bp_id": "BP9249",
+    "name": "right arytenoid cartilage"
+  },
+  {
+    "file": "FJ1486.obj",
+    "fma_id": "FMA37668",
+    "bp_id": "BP4807",
+    "name": "right brachialis"
+  },
+  {
+    "file": "FJ1487.obj",
+    "fma_id": "FMA38486",
+    "bp_id": "BP4833",
+    "name": "right brachioradialis"
+  },
+  {
+    "file": "FJ1405.obj",
+    "fma_id": "FMA258847",
+    "bp_id": "BP5098",
+    "name": "right calcaneal tendon"
+  },
+  {
+    "file": "FJ2547.obj",
+    "fma_id": "FMA46443",
+    "bp_id": "BP8115",
+    "name": "right coccygeus"
+  },
+  {
+    "file": "FJ1488.obj",
+    "fma_id": "FMA37665",
+    "bp_id": "BP4805",
+    "name": "right coracobrachialis"
+  },
+  {
+    "file": "FJ1556.obj",
+    "fma_id": "FMA46292",
+    "bp_id": "BP7592",
+    "name": "right digastric"
+  },
+  {
+    "file": "FJ1579.obj",
+    "fma_id": "FMA46292",
+    "bp_id": "BP7592",
+    "name": "right digastric"
+  },
+  {
+    "file": "FJ1489.obj",
+    "fma_id": "FMA38498",
+    "bp_id": "BP4823",
+    "name": "right extensor carpi radialis brevis"
+  },
+  {
+    "file": "FJ1490.obj",
+    "fma_id": "FMA38495",
+    "bp_id": "BP4831",
+    "name": "right extensor carpi radialis longus"
+  },
+  {
+    "file": "FJ1472.obj",
+    "fma_id": "FMA38507",
+    "bp_id": "BP4829",
+    "name": "right extensor carpi ulnaris"
+  },
+  {
+    "file": "FJ1517.obj",
+    "fma_id": "FMA38507",
+    "bp_id": "BP4829",
+    "name": "right extensor carpi ulnaris"
+  },
+  {
+    "file": "FJ1491.obj",
+    "fma_id": "FMA38504",
+    "bp_id": "BP4825",
+    "name": "right extensor digiti minimi"
+  },
+  {
+    "file": "FJ1492.obj",
+    "fma_id": "FMA38501",
+    "bp_id": "BP4827",
+    "name": "right extensor digitorum"
+  },
+  {
+    "file": "FJ1406.obj",
+    "fma_id": "FMA22548",
+    "bp_id": "BP5024",
+    "name": "right extensor digitorum longus"
+  },
+  {
+    "file": "FJ1407.obj",
+    "fma_id": "FMA51144",
+    "bp_id": "BP5059",
+    "name": "right extensor hallucis brevis"
+  },
+  {
+    "file": "FJ1408.obj",
+    "fma_id": "FMA22546",
+    "bp_id": "BP5022",
+    "name": "right extensor hallucis longus"
+  },
+  {
+    "file": "FJ1493.obj",
+    "fma_id": "FMA38525",
+    "bp_id": "BP4812",
+    "name": "right extensor indicis"
+  },
+  {
+    "file": "FJ1494.obj",
+    "fma_id": "FMA38519",
+    "bp_id": "BP4818",
+    "name": "right extensor pollicis brevis"
+  },
+  {
+    "file": "FJ1495.obj",
+    "fma_id": "FMA38522",
+    "bp_id": "BP4816",
+    "name": "right extensor pollicis longus"
+  },
+  {
+    "file": "FJ1452.obj",
+    "fma_id": "FMA13336",
+    "bp_id": "BP4967",
+    "name": "right external oblique"
+  },
+  {
+    "file": "FJ1409.obj",
+    "fma_id": "FMA22554",
+    "bp_id": "BP5015",
+    "name": "right fibularis brevis"
+  },
+  {
+    "file": "FJ1410.obj",
+    "fma_id": "FMA22552",
+    "bp_id": "BP5013",
+    "name": "right fibularis longus"
+  },
+  {
+    "file": "FJ1411.obj",
+    "fma_id": "FMA22550",
+    "bp_id": "BP5020",
+    "name": "right fibularis tertius"
+  },
+  {
+    "file": "FJ1412.obj",
+    "fma_id": "FMA37465",
+    "bp_id": "BP5052",
+    "name": "right flexor accessorius"
+  },
+  {
+    "file": "FJ1496.obj",
+    "fma_id": "FMA38460",
+    "bp_id": "BP4841",
+    "name": "right flexor carpi radialis"
+  },
+  {
+    "file": "FJ1413.obj",
+    "fma_id": "FMA37461",
+    "bp_id": "BP5048",
+    "name": "right flexor digitorum brevis"
+  },
+  {
+    "file": "FJ1414.obj",
+    "fma_id": "FMA65016",
+    "bp_id": "BP5010",
+    "name": "right flexor digitorum longus"
+  },
+  {
+    "file": "FJ1497.obj",
+    "fma_id": "FMA38479",
+    "bp_id": "BP4848",
+    "name": "right flexor digitorum profundus"
+  },
+  {
+    "file": "FJ1475.obj",
+    "fma_id": "FMA38470",
+    "bp_id": "BP4837",
+    "name": "right flexor digitorum superficialis"
+  },
+  {
+    "file": "FJ1499.obj",
+    "fma_id": "FMA38470",
+    "bp_id": "BP4837",
+    "name": "right flexor digitorum superficialis"
+  },
+  {
+    "file": "FJ1415.obj",
+    "fma_id": "FMA65014",
+    "bp_id": "BP5008",
+    "name": "right flexor hallucis longus"
+  },
+  {
+    "file": "FJ1469M.obj",
+    "fma_id": "FMA37388",
+    "bp_id": "BP8958",
+    "name": "right flexor pollicis brevis"
+  },
+  {
+    "file": "FJ1498.obj",
+    "fma_id": "FMA38482",
+    "bp_id": "BP4844",
+    "name": "right flexor pollicis longus"
+  },
+  {
+    "file": "FJ1416.obj",
+    "fma_id": "FMA22336",
+    "bp_id": "BP5070",
+    "name": "right gemellus inferior"
+  },
+  {
+    "file": "FJ1417.obj",
+    "fma_id": "FMA22334",
+    "bp_id": "BP5068",
+    "name": "right gemellus superior"
+  },
+  {
+    "file": "FJ1580.obj",
+    "fma_id": "FMA46326",
+    "bp_id": "BP4906",
+    "name": "right geniohyoid"
+  },
+  {
+    "file": "FJ1418.obj",
+    "fma_id": "FMA22328",
+    "bp_id": "BP5065",
+    "name": "right gluteus maximus"
+  },
+  {
+    "file": "FJ1419.obj",
+    "fma_id": "FMA22330",
+    "bp_id": "BP5063",
+    "name": "right gluteus medius"
+  },
+  {
+    "file": "FJ1420.obj",
+    "fma_id": "FMA22332",
+    "bp_id": "BP5083",
+    "name": "right gluteus minimus"
+  },
+  {
+    "file": "FJ1421.obj",
+    "fma_id": "FMA43883",
+    "bp_id": "BP4976",
+    "name": "right gracilis"
+  },
+  {
+    "file": "FJ1422.obj",
+    "fma_id": "FMA22322",
+    "bp_id": "BP5085",
+    "name": "right iliacus"
+  },
+  {
+    "file": "FJ2549.obj",
+    "fma_id": "FMA45858",
+    "bp_id": "BP8874",
+    "name": "right iliococcygeus"
+  },
+  {
+    "file": "FJ1526.obj",
+    "fma_id": "FMA22744",
+    "bp_id": "BP4755",
+    "name": "right iliocostalis cervicis"
+  },
+  {
+    "file": "FJ1527.obj",
+    "fma_id": "FMA22740",
+    "bp_id": "BP4753",
+    "name": "right iliocostalis lumborum"
+  },
+  {
+    "file": "FJ1528.obj",
+    "fma_id": "FMA22742",
+    "bp_id": "BP4751",
+    "name": "right iliocostalis thoracis"
+  },
+  {
+    "file": "FJ1345.obj",
+    "fma_id": "FMA49050",
+    "bp_id": "BP4947",
+    "name": "right inferior oblique"
+  },
+  {
+    "file": "FJ1346.obj",
+    "fma_id": "FMA49046",
+    "bp_id": "BP4944",
+    "name": "right inferior rectus"
+  },
+  {
+    "file": "FJ1500.obj",
+    "fma_id": "FMA32547",
+    "bp_id": "BP4797",
+    "name": "right infraspinatus muscle"
+  },
+  {
+    "file": "FJ1581.obj",
+    "fma_id": "FMA258850",
+    "bp_id": "BP6514",
+    "name": "right intermediate tendon"
+  },
+  {
+    "file": "FJ1551.obj",
+    "fma_id": "FMA22890",
+    "bp_id": "BP4725",
+    "name": "right interspinalis thoracis"
+  },
+  {
+    "file": "FJ2796.obj",
+    "fma_id": "FMA46580",
+    "bp_id": "BP8618",
+    "name": "right lateral crico-arytenoid"
+  },
+  {
+    "file": "FJ1355.obj",
+    "fma_id": "FMA49054",
+    "bp_id": "BP4941",
+    "name": "right lateral rectus"
+  },
+  {
+    "file": "FJ1357.obj",
+    "fma_id": "FMA49048",
+    "bp_id": "BP4938",
+    "name": "right levator palpebrae superioris"
+  },
+  {
+    "file": "FJ1532.obj",
+    "fma_id": "FMA32540",
+    "bp_id": "BP4786",
+    "name": "right levator scapulae"
+  },
+  {
+    "file": "FJ2753.obj",
+    "fma_id": "FMA46728",
+    "bp_id": "BP9032",
+    "name": "right levator veli palatini"
+  },
+  {
+    "file": "FJ1424.obj",
+    "fma_id": "FMA44249",
+    "bp_id": "BP5093",
+    "name": "right long plantar ligament"
+  },
+  {
+    "file": "FJ1533.obj",
+    "fma_id": "FMA22754",
+    "bp_id": "BP4748",
+    "name": "right longissimus capitis"
+  },
+  {
+    "file": "FJ1534.obj",
+    "fma_id": "FMA22757",
+    "bp_id": "BP4746",
+    "name": "right longissimus cervicis"
+  },
+  {
+    "file": "FJ1535.obj",
+    "fma_id": "FMA22751",
+    "bp_id": "BP4744",
+    "name": "right longissimus thoracis"
+  },
+  {
+    "file": "FJ1582.obj",
+    "fma_id": "FMA46309",
+    "bp_id": "BP4703",
+    "name": "right longus capitis"
+  },
+  {
+    "file": "FJ1359.obj",
+    "fma_id": "FMA49056",
+    "bp_id": "BP4936",
+    "name": "right medial rectus"
+  },
+  {
+    "file": "FJ1583.obj",
+    "fma_id": "FMA46321",
+    "bp_id": "BP4904",
+    "name": "right mylohyoid"
+  },
+  {
+    "file": "FJ2798.obj",
+    "fma_id": "FMA46584",
+    "bp_id": "BP9152",
+    "name": "right oblique arytenoid"
+  },
+  {
+    "file": "FJ1425.obj",
+    "fma_id": "FMA22326",
+    "bp_id": "BP5081",
+    "name": "right obturator externus"
+  },
+  {
+    "file": "FJ1426.obj",
+    "fma_id": "FMA22324",
+    "bp_id": "BP5079",
+    "name": "right obturator internus"
+  },
+  {
+    "file": "FJ1586.obj",
+    "fma_id": "FMA13348",
+    "bp_id": "BP4915",
+    "name": "right omohyoid"
+  },
+  {
+    "file": "FJ1501.obj",
+    "fma_id": "FMA37390",
+    "bp_id": "BP4853",
+    "name": "right opponens pollicis"
+  },
+  {
+    "file": "FJ1502.obj",
+    "fma_id": "FMA38463",
+    "bp_id": "BP4839",
+    "name": "right palmaris longus"
+  },
+  {
+    "file": "FJ1427.obj",
+    "fma_id": "FMA22450",
+    "bp_id": "BP4978",
+    "name": "right pectineus"
+  },
+  {
+    "file": "FJ1456.obj",
+    "fma_id": "FMA13375",
+    "bp_id": "BP4775",
+    "name": "right pectoralis minor"
+  },
+  {
+    "file": "FJ1428.obj",
+    "fma_id": "FMA22340",
+    "bp_id": "BP5076",
+    "name": "right piriformis"
+  },
+  {
+    "file": "FJ1429.obj",
+    "fma_id": "FMA22560",
+    "bp_id": "BP5001",
+    "name": "right plantaris"
+  },
+  {
+    "file": "FJ1587.obj",
+    "fma_id": "FMA45739",
+    "bp_id": "BP4912",
+    "name": "right platysma"
+  },
+  {
+    "file": "FJ1430.obj",
+    "fma_id": "FMA22591",
+    "bp_id": "BP5006",
+    "name": "right popliteus"
+  },
+  {
+    "file": "FJ2800.obj",
+    "fma_id": "FMA46577",
+    "bp_id": "BP8360",
+    "name": "right posterior crico-arytenoid"
+  },
+  {
+    "file": "FJ1503.obj",
+    "fma_id": "FMA38454",
+    "bp_id": "BP4846",
+    "name": "right pronator quadratus"
+  },
+  {
+    "file": "FJ1431.obj",
+    "fma_id": "FMA22342",
+    "bp_id": "BP4701",
+    "name": "right psoas major"
+  },
+  {
+    "file": "FJ2550.obj",
+    "fma_id": "FMA45854",
+    "bp_id": "BP9143",
+    "name": "right pubococcygeus"
+  },
+  {
+    "file": "FJ2551.obj",
+    "fma_id": "FMA45856",
+    "bp_id": "BP8202",
+    "name": "right puborectalis"
+  },
+  {
+    "file": "FJ1432.obj",
+    "fma_id": "FMA22338",
+    "bp_id": "BP5074",
+    "name": "right quadratus femoris"
+  },
+  {
+    "file": "FJ1588.obj",
+    "fma_id": "FMA46313",
+    "bp_id": "BP4708",
+    "name": "right rectus capitis anterior"
+  },
+  {
+    "file": "FJ1591.obj",
+    "fma_id": "FMA46317",
+    "bp_id": "BP4706",
+    "name": "right rectus capitis lateralis"
+  },
+  {
+    "file": "FJ1589.obj",
+    "fma_id": "FMA32530",
+    "bp_id": "BP4736",
+    "name": "right rectus capitis posterior major"
+  },
+  {
+    "file": "FJ1590.obj",
+    "fma_id": "FMA32532",
+    "bp_id": "BP4734",
+    "name": "right rectus capitis posterior minor"
+  },
+  {
+    "file": "FJ1433.obj",
+    "fma_id": "FMA38928",
+    "bp_id": "BP5598",
+    "name": "right rectus femoris"
+  },
+  {
+    "file": "FJ1536.obj",
+    "fma_id": "FMA13381",
+    "bp_id": "BP4780",
+    "name": "right rhomboid major"
+  },
+  {
+    "file": "FJ1537.obj",
+    "fma_id": "FMA13383",
+    "bp_id": "BP4784",
+    "name": "right rhomboid minor"
+  },
+  {
+    "file": "FJ1434.obj",
+    "fma_id": "FMA22354",
+    "bp_id": "BP4994",
+    "name": "right sartorius"
+  },
+  {
+    "file": "FJ1592.obj",
+    "fma_id": "FMA13392",
+    "bp_id": "BP4880",
+    "name": "right scalenus anterior"
+  },
+  {
+    "file": "FJ1593.obj",
+    "fma_id": "FMA13390",
+    "bp_id": "BP4878",
+    "name": "right scalenus medius"
+  },
+  {
+    "file": "FJ1594.obj",
+    "fma_id": "FMA13388",
+    "bp_id": "BP4875",
+    "name": "right scalenus posterior"
+  },
+  {
+    "file": "FJ1435.obj",
+    "fma_id": "FMA22448",
+    "bp_id": "BP4989",
+    "name": "right semimembranosus"
+  },
+  {
+    "file": "FJ1538.obj",
+    "fma_id": "FMA22876",
+    "bp_id": "BP4717",
+    "name": "right semispinalis capitis"
+  },
+  {
+    "file": "FJ1539.obj",
+    "fma_id": "FMA22874",
+    "bp_id": "BP4715",
+    "name": "right semispinalis cervicis"
+  },
+  {
+    "file": "FJ1540.obj",
+    "fma_id": "FMA22872",
+    "bp_id": "BP4713",
+    "name": "right semispinalis thoracis"
+  },
+  {
+    "file": "FJ1436.obj",
+    "fma_id": "FMA22358",
+    "bp_id": "BP4991",
+    "name": "right semitendinosus"
+  },
+  {
+    "file": "FJ1459.obj",
+    "fma_id": "FMA13398",
+    "bp_id": "BP4782",
+    "name": "right serratus anterior"
+  },
+  {
+    "file": "FJ1541.obj",
+    "fma_id": "FMA13405",
+    "bp_id": "BP4768",
+    "name": "right serratus posterior inferior"
+  },
+  {
+    "file": "FJ1542.obj",
+    "fma_id": "FMA13403",
+    "bp_id": "BP4766",
+    "name": "right serratus posterior superior"
+  },
+  {
+    "file": "FJ1437.obj",
+    "fma_id": "FMA22558",
+    "bp_id": "BP4999",
+    "name": "right soleus"
+  },
+  {
+    "file": "FJ1544.obj",
+    "fma_id": "FMA22779",
+    "bp_id": "BP4763",
+    "name": "right spinalis thoracis"
+  },
+  {
+    "file": "FJ1545.obj",
+    "fma_id": "FMA22728",
+    "bp_id": "BP4758",
+    "name": "right splenius capitis"
+  },
+  {
+    "file": "FJ1546.obj",
+    "fma_id": "FMA22726",
+    "bp_id": "BP4760",
+    "name": "right splenius cervicis"
+  },
+  {
+    "file": "FJ1595.obj",
+    "fma_id": "FMA13408",
+    "bp_id": "BP4909",
+    "name": "right sternocleidomastoid"
+  },
+  {
+    "file": "FJ1596.obj",
+    "fma_id": "FMA13346",
+    "bp_id": "BP4917",
+    "name": "right sternohyoid"
+  },
+  {
+    "file": "FJ1597.obj",
+    "fma_id": "FMA13350",
+    "bp_id": "BP4923",
+    "name": "right sternothyroid"
+  },
+  {
+    "file": "FJ1598.obj",
+    "fma_id": "FMA45826",
+    "bp_id": "BP4901",
+    "name": "right stylohyoid"
+  },
+  {
+    "file": "FJ1460.obj",
+    "fma_id": "FMA13412",
+    "bp_id": "BP4773",
+    "name": "right subclavius"
+  },
+  {
+    "file": "FJ1504.obj",
+    "fma_id": "FMA13414",
+    "bp_id": "BP4795",
+    "name": "right subscapularis"
+  },
+  {
+    "file": "FJ1373.obj",
+    "fma_id": "FMA49052",
+    "bp_id": "BP4932",
+    "name": "right superior oblique"
+  },
+  {
+    "file": "FJ1374.obj",
+    "fma_id": "FMA49044",
+    "bp_id": "BP4929",
+    "name": "right superior rectus"
+  },
+  {
+    "file": "FJ1505.obj",
+    "fma_id": "FMA38513",
+    "bp_id": "BP4814",
+    "name": "right supinator"
+  },
+  {
+    "file": "FJ1506.obj",
+    "fma_id": "FMA32544",
+    "bp_id": "BP4791",
+    "name": "right supraspinatus"
+  },
+  {
+    "file": "FJ1438.obj",
+    "fma_id": "FMA22425",
+    "bp_id": "BP5072",
+    "name": "right tensor fasciae latae"
+  },
+  {
+    "file": "FJ2760.obj",
+    "fma_id": "FMA46731",
+    "bp_id": "BP8501",
+    "name": "right tensor veli palatini"
+  },
+  {
+    "file": "FJ1507.obj",
+    "fma_id": "FMA32551",
+    "bp_id": "BP4789",
+    "name": "right teres major"
+  },
+  {
+    "file": "FJ1508.obj",
+    "fma_id": "FMA32553",
+    "bp_id": "BP4793",
+    "name": "right teres minor"
+  },
+  {
+    "file": "FJ2802.obj",
+    "fma_id": "FMA46589",
+    "bp_id": "BP7867",
+    "name": "right thyro-arytenoid"
+  },
+  {
+    "file": "FJ2803.obj",
+    "fma_id": "FMA46589",
+    "bp_id": "BP7867",
+    "name": "right thyro-arytenoid"
+  },
+  {
+    "file": "FJ1599.obj",
+    "fma_id": "FMA13352",
+    "bp_id": "BP4920",
+    "name": "right thyrohyoid"
+  },
+  {
+    "file": "FJ1439.obj",
+    "fma_id": "FMA22544",
+    "bp_id": "BP5018",
+    "name": "right tibialis anterior"
+  },
+  {
+    "file": "FJ1440.obj",
+    "fma_id": "FMA65018",
+    "bp_id": "BP5004",
+    "name": "right tibialis posterior"
+  },
+  {
+    "file": "FJ1461.obj",
+    "fma_id": "FMA9761",
+    "bp_id": "BP4963",
+    "name": "right transversus thoracis"
+  },
+  {
+    "file": "FJ1441.obj",
+    "fma_id": "FMA38934",
+    "bp_id": "BP5604",
+    "name": "right vastus intermedius"
+  },
+  {
+    "file": "FJ1442.obj",
+    "fma_id": "FMA38930",
+    "bp_id": "BP5602",
+    "name": "right vastus lateralis"
+  },
+  {
+    "file": "FJ1443.obj",
+    "fma_id": "FMA38932",
+    "bp_id": "BP5600",
+    "name": "right vastus medialis"
+  },
+  {
+    "file": "FJ1385M.obj",
+    "fma_id": "FMA37720",
+    "bp_id": "BP8179",
+    "name": "second lumbrical of left foot"
+  },
+  {
+    "file": "FJ1385.obj",
+    "fma_id": "FMA37719",
+    "bp_id": "BP5040",
+    "name": "second lumbrical of right foot"
+  },
+  {
+    "file": "FJ1386M.obj",
+    "fma_id": "FMA37744",
+    "bp_id": "BP8916",
+    "name": "second plantar interosseous of left foot"
+  },
+  {
+    "file": "FJ1386.obj",
+    "fma_id": "FMA37743",
+    "bp_id": "BP5033",
+    "name": "second plantar interosseous of right foot"
+  },
+  {
+    "file": "FJ1549M.obj",
+    "fma_id": "FMA71442",
+    "bp_id": "BP9131",
+    "name": "set of anterior cervical intertransversarii"
+  },
+  {
+    "file": "FJ1509M.obj",
+    "fma_id": "FMA42405",
+    "bp_id": "BP8036",
+    "name": "set of dorsal interossei of left hand"
+  },
+  {
+    "file": "FJ1509.obj",
+    "fma_id": "FMA42404",
+    "bp_id": "BP6629",
+    "name": "set of dorsal interossei of right hand"
+  },
+  {
+    "file": "FJ1552M.obj",
+    "fma_id": "FMA71309",
+    "bp_id": "BP9080",
+    "name": "set of interspinales cervicis"
+  },
+  {
+    "file": "FJ1550M.obj",
+    "fma_id": "FMA71307",
+    "bp_id": "BP8370",
+    "name": "set of interspinales lumborum"
+  },
+  {
+    "file": "FJ1462M.obj",
+    "fma_id": "FMA74078",
+    "bp_id": "BP8675",
+    "name": "set of left levatores costarum breves"
+  },
+  {
+    "file": "FJ1463M.obj",
+    "fma_id": "FMA74076",
+    "bp_id": "BP8466",
+    "name": "set of left levatores costarum longi"
+  },
+  {
+    "file": "FJ1510M.obj",
+    "fma_id": "FMA42399",
+    "bp_id": "BP8053",
+    "name": "set of lumbricals of left hand"
+  },
+  {
+    "file": "FJ1510.obj",
+    "fma_id": "FMA42398",
+    "bp_id": "BP6633",
+    "name": "set of lumbricals of right hand"
+  },
+  {
+    "file": "FJ1511M.obj",
+    "fma_id": "FMA42403",
+    "bp_id": "BP8246",
+    "name": "set of palmar interossei of left hand"
+  },
+  {
+    "file": "FJ1511.obj",
+    "fma_id": "FMA42402",
+    "bp_id": "BP6631",
+    "name": "set of palmar interossei of right hand"
+  },
+  {
+    "file": "FJ1553M.obj",
+    "fma_id": "FMA71443",
+    "bp_id": "BP8656",
+    "name": "set of posterior cervical intertransversarii"
+  },
+  {
+    "file": "FJ1462.obj",
+    "fma_id": "FMA74077",
+    "bp_id": "BP6639",
+    "name": "set of right levatores costarum breves"
+  },
+  {
+    "file": "FJ1463.obj",
+    "fma_id": "FMA74075",
+    "bp_id": "BP6637",
+    "name": "set of right levatores costarum longi"
+  },
+  {
+    "file": "FJ1512M.obj",
+    "fma_id": "FMA37685",
+    "bp_id": "BP9153",
+    "name": "short head of left biceps brachii"
+  },
+  {
+    "file": "FJ1444M.obj",
+    "fma_id": "FMA45892",
+    "bp_id": "BP8616",
+    "name": "short head of left biceps femoris"
+  },
+  {
+    "file": "FJ1512.obj",
+    "fma_id": "FMA37684",
+    "bp_id": "BP5558",
+    "name": "short head of right biceps brachii"
+  },
+  {
+    "file": "FJ1444.obj",
+    "fma_id": "FMA45891",
+    "bp_id": "BP5573",
+    "name": "short head of right biceps femoris"
+  },
+  {
+    "file": "FJ1513M.obj",
+    "fma_id": "FMA34685",
+    "bp_id": "BP8151",
+    "name": "spinal part of left deltoid"
+  },
+  {
+    "file": "FJ1513.obj",
+    "fma_id": "FMA34684",
+    "bp_id": "BP5607",
+    "name": "spinal part of right deltoid"
+  },
+  {
+    "file": "FJ1543M.obj",
+    "fma_id": "FMA77179",
+    "bp_id": "BP8423",
+    "name": "spinalis"
+  },
+  {
+    "file": "FJ1464M.obj",
+    "fma_id": "FMA79980",
+    "bp_id": "BP8323",
+    "name": "sternocostal part of left pectoralis major"
+  },
+  {
+    "file": "FJ1464.obj",
+    "fma_id": "FMA79979",
+    "bp_id": "BP5613",
+    "name": "sternocostal part of right pectoralis major"
+  },
+  {
+    "file": "FJ2783.obj",
+    "fma_id": "FMA46612",
+    "bp_id": "BP8529",
+    "name": "straight part of left cricothyroid"
+  },
+  {
+    "file": "FJ2801.obj",
+    "fma_id": "FMA46611",
+    "bp_id": "BP8055",
+    "name": "straight part of right cricothyroid"
+  },
+  {
+    "file": "FJ1514M.obj",
+    "fma_id": "FMA65199",
+    "bp_id": "BP8722",
+    "name": "superficial head of left flexor pollicis brevis"
+  },
+  {
+    "file": "FJ1514.obj",
+    "fma_id": "FMA65198",
+    "bp_id": "BP5556",
+    "name": "superficial head of right flexor pollicis brevis"
+  },
+  {
+    "file": "FJ1600.obj",
+    "fma_id": "FMA46284",
+    "bp_id": "BP5595",
+    "name": "superior oblique part of left longus colli"
+  },
+  {
+    "file": "FJ1465M.obj",
+    "fma_id": "FMA46442",
+    "bp_id": "BP9016",
+    "name": "tendinous arch of levator ani"
+  },
+  {
+    "file": "FJ2552.obj",
+    "fma_id": "FMA46442",
+    "bp_id": "BP9016",
+    "name": "tendinous arch of levator ani"
+  },
+  {
+    "file": "FJ2553.obj",
+    "fma_id": "FMA46442",
+    "bp_id": "BP9016",
+    "name": "tendinous arch of levator ani"
+  },
+  {
+    "file": "FJ1343.obj",
+    "fma_id": "FMA54159",
+    "bp_id": "BP6511",
+    "name": "tendon of right levator palpebrae superioris"
+  },
+  {
+    "file": "FJ1387M.obj",
+    "fma_id": "FMA37486",
+    "bp_id": "BP8902",
+    "name": "third lumbrical of left foot"
+  },
+  {
+    "file": "FJ1387.obj",
+    "fma_id": "FMA37485",
+    "bp_id": "BP5038",
+    "name": "third lumbrical of right foot"
+  },
+  {
+    "file": "FJ1388M.obj",
+    "fma_id": "FMA37742",
+    "bp_id": "BP9175",
+    "name": "third plantar interosseous of left foot"
+  },
+  {
+    "file": "FJ1388.obj",
+    "fma_id": "FMA37741",
+    "bp_id": "BP5031",
+    "name": "third plantar interosseous of right foot"
+  },
+  {
+    "file": "FJ2809.obj",
+    "fma_id": "FMA46582",
+    "bp_id": "BP8905",
+    "name": "transverse arytenoid"
+  },
+  {
+    "file": "FJ1445M.obj",
+    "fma_id": "FMA46021",
+    "bp_id": "BP8394",
+    "name": "transverse head of left adductor hallucis"
+  },
+  {
+    "file": "FJ1515M.obj",
+    "fma_id": "FMA46124",
+    "bp_id": "BP8885",
+    "name": "transverse head of left adductor pollicis"
+  },
+  {
+    "file": "FJ1445.obj",
+    "fma_id": "FMA46020",
+    "bp_id": "BP5580",
+    "name": "transverse head of right adductor hallucis"
+  },
+  {
+    "file": "FJ1515.obj",
+    "fma_id": "FMA46123",
+    "bp_id": "BP5543",
+    "name": "transverse head of right adductor pollicis"
+  },
+  {
+    "file": "FJ1554M.obj",
+    "fma_id": "FMA33585",
+    "bp_id": "BP8252",
+    "name": "transverse part of left trapezius"
+  },
+  {
+    "file": "FJ1554.obj",
+    "fma_id": "FMA33584",
+    "bp_id": "BP5610",
+    "name": "transverse part of right trapezius"
+  },
+  {
+    "file": "FJ1518M.obj",
+    "fma_id": "FMA38620",
+    "bp_id": "BP8540",
+    "name": "ulnar head of left flexor carpi ulnaris"
+  },
+  {
+    "file": "FJ1516M.obj",
+    "fma_id": "FMA38563",
+    "bp_id": "BP9043",
+    "name": "ulnar head of left pronator teres"
+  },
+  {
+    "file": "FJ1518.obj",
+    "fma_id": "FMA38619",
+    "bp_id": "BP5554",
+    "name": "ulnar head of right flexor carpi ulnaris"
+  },
+  {
+    "file": "FJ1516.obj",
+    "fma_id": "FMA38562",
+    "bp_id": "BP5552",
+    "name": "ulnar head of right pronator teres"
+  },
+  {
+    "file": "FJ1601.obj",
+    "fma_id": "FMA46286",
+    "bp_id": "BP5593",
+    "name": "vertical intermediate part of left longus colli"
+  }
+]

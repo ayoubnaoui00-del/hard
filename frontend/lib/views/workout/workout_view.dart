@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../../config/theme.dart';
 import '../../viewmodels/workout/workout_viewmodel.dart';
+import '../../widgets/gradient_background.dart';
 
 class WorkoutView extends ConsumerStatefulWidget {
   const WorkoutView({super.key});
@@ -27,9 +29,12 @@ class _WorkoutViewState extends ConsumerState<WorkoutView> {
     final workoutViewModel = ref.read(workoutViewModelProvider.notifier);
     final workouts = workoutState.workouts;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Workouts'),
+    return GradientBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          title: const Text('Workouts'),
         actions: [
           IconButton(
             icon: const Icon(Icons.add_rounded),
@@ -40,12 +45,12 @@ class _WorkoutViewState extends ConsumerState<WorkoutView> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => context.go('/workouts/log'),
-        backgroundColor: const Color(0xFFFF5252),
-        foregroundColor: Colors.white,
+        backgroundColor: AppTheme.velocityLime,
+        foregroundColor: AppTheme.velocityDark,
         icon: const Icon(Icons.add_rounded),
         label: const Text(
           'Log Workout',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(fontWeight: FontWeight.w900),
         ),
       ),
       body: RefreshIndicator(
@@ -66,11 +71,11 @@ class _WorkoutViewState extends ConsumerState<WorkoutView> {
                                 CircleAvatar(
                                   radius: 36,
                                   backgroundColor:
-                                      const Color(0xFFFF5252).withValues(alpha: 0.15),
+                                      AppTheme.velocityLime.withValues(alpha: 0.15),
                                   child: const Icon(
                                     Icons.fitness_center_rounded,
                                     size: 36,
-                                    color: Color(0xFFFF5252),
+                                    color: AppTheme.velocityLime,
                                   ),
                                 ),
                                 const SizedBox(height: 16),
@@ -79,13 +84,14 @@ class _WorkoutViewState extends ConsumerState<WorkoutView> {
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
+                                    color: AppTheme.velocityTextPrimary,
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-                                Text(
+                                const Text(
                                   'Start tracking your sets, reps, and volume to level up your strength!',
                                   style: TextStyle(
-                                    color: Colors.grey.shade400,
+                                    color: AppTheme.velocityTextSecondary,
                                     fontSize: 13,
                                   ),
                                   textAlign: TextAlign.center,
@@ -94,16 +100,16 @@ class _WorkoutViewState extends ConsumerState<WorkoutView> {
                                 ElevatedButton.icon(
                                   onPressed: () => context.go('/workouts/log'),
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: const Color(0xFFFF5252),
-                                    foregroundColor: Colors.white,
+                                    backgroundColor: AppTheme.velocityLime,
+                                    foregroundColor: AppTheme.velocityDark,
                                     shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
+                                      borderRadius: BorderRadius.circular(14),
                                     ),
                                   ),
                                   icon: const Icon(Icons.play_arrow_rounded),
                                   label: const Text(
                                     'Start Empty Workout',
-                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                    style: TextStyle(fontWeight: FontWeight.w900),
                                   ),
                                 ),
                               ],
@@ -133,10 +139,10 @@ class _WorkoutViewState extends ConsumerState<WorkoutView> {
                                   CircleAvatar(
                                     radius: 18,
                                     backgroundColor:
-                                        const Color(0xFFFF5252).withValues(alpha: 0.15),
+                                        AppTheme.velocityLime.withValues(alpha: 0.15),
                                     child: const Icon(
                                       Icons.fitness_center_rounded,
-                                      color: Color(0xFFFF5252),
+                                      color: AppTheme.velocityLime,
                                       size: 18,
                                     ),
                                   ),
@@ -150,15 +156,16 @@ class _WorkoutViewState extends ConsumerState<WorkoutView> {
                                           workout.name,
                                           style: const TextStyle(
                                             fontSize: 16,
-                                            fontWeight: FontWeight.bold,
+                                            fontWeight: FontWeight.w900,
+                                            color: AppTheme.velocityTextPrimary,
                                           ),
                                         ),
                                         const SizedBox(height: 2),
                                         Text(
                                           dateStr,
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontSize: 11,
-                                            color: Colors.grey.shade400,
+                                            color: AppTheme.velocityTextSecondary,
                                           ),
                                         ),
                                       ],
@@ -170,15 +177,16 @@ class _WorkoutViewState extends ConsumerState<WorkoutView> {
                                       vertical: 4,
                                     ),
                                     decoration: BoxDecoration(
-                                      color: const Color(0xFF282832),
+                                      color: AppTheme.velocitySurfaceMuted,
                                       borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(color: AppTheme.velocityBorder),
                                     ),
                                     child: Text(
                                       '${workout.duration}m',
                                       style: const TextStyle(
                                         fontSize: 12,
                                         fontWeight: FontWeight.bold,
-                                        color: Color(0xFF2979FF),
+                                        color: AppTheme.velocityAccentBlue,
                                       ),
                                     ),
                                   ),
@@ -193,15 +201,15 @@ class _WorkoutViewState extends ConsumerState<WorkoutView> {
                                     '${workout.workoutExercises.length} ${workout.workoutExercises.length == 1 ? "Exercise" : "Exercises"} • ${workout.totalSets} Sets',
                                     style: const TextStyle(
                                       fontSize: 12,
-                                      color: Colors.grey,
+                                      color: AppTheme.velocityTextSecondary,
                                     ),
                                   ),
                                   Text(
                                     '${NumberFormat('#,##0').format(workout.totalVolume)} kg',
                                     style: const TextStyle(
                                       fontSize: 13,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xFF00E676),
+                                      fontWeight: FontWeight.w900,
+                                      color: AppTheme.velocityLime,
                                     ),
                                   ),
                                 ],
@@ -211,9 +219,9 @@ class _WorkoutViewState extends ConsumerState<WorkoutView> {
                                 const SizedBox(height: 8),
                                 Text(
                                   workout.notes!,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 11,
-                                    color: Colors.grey.shade400,
+                                    color: AppTheme.velocityTextMuted,
                                     fontStyle: FontStyle.italic,
                                   ),
                                 ),
@@ -225,6 +233,7 @@ class _WorkoutViewState extends ConsumerState<WorkoutView> {
                     },
                   ),
       ),
-    );
-  }
+    ),
+  );
+}
 }

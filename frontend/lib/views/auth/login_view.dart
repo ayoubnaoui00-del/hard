@@ -252,7 +252,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                     children: [
                       Text(
                         "Don't have an account?",
-                        style: TextStyle(color: Colors.grey.shade600),
+                        style: const TextStyle(color: AppTheme.velocityTextSecondary),
                       ),
                       TextButton(
                         onPressed: loginState.isLoading
@@ -261,7 +261,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                         child: const Text(
                           'Sign Up',
                           style: TextStyle(
-                            color: AppTheme.velocityDark,
+                            color: AppTheme.velocityLime,
                             fontWeight: FontWeight.bold,
                           ),
                         ),

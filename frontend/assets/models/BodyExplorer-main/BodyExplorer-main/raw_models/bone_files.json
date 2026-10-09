@@ -1,0 +1,1208 @@
+[
+  {
+    "file": "FJ3176.obj",
+    "fma_id": "FMA12519",
+    "bp_id": "BP8831",
+    "name": "atlas"
+  },
+  {
+    "file": "FJ3177.obj",
+    "fma_id": "FMA12520",
+    "bp_id": "BP8459",
+    "name": "axis"
+  },
+  {
+    "file": "FJ3178.obj",
+    "fma_id": "FMA7487",
+    "bp_id": "BP8989",
+    "name": "body of sternum"
+  },
+  {
+    "file": "FJ3182.obj",
+    "fma_id": "FMA32651",
+    "bp_id": "BP9247",
+    "name": "distal phalanx of left big toe"
+  },
+  {
+    "file": "FJ3181.obj",
+    "fma_id": "FMA32657",
+    "bp_id": "BP8789",
+    "name": "distal phalanx of left fourth toe"
+  },
+  {
+    "file": "FJ3183.obj",
+    "fma_id": "FMA23953",
+    "bp_id": "BP8295",
+    "name": "distal phalanx of left index finger"
+  },
+  {
+    "file": "FJ3184.obj",
+    "fma_id": "FMA23959",
+    "bp_id": "BP8799",
+    "name": "distal phalanx of left little finger"
+  },
+  {
+    "file": "FJ3185.obj",
+    "fma_id": "FMA32659",
+    "bp_id": "BP8818",
+    "name": "distal phalanx of left little toe"
+  },
+  {
+    "file": "FJ3186.obj",
+    "fma_id": "FMA23955",
+    "bp_id": "BP8844",
+    "name": "distal phalanx of left middle finger"
+  },
+  {
+    "file": "FJ3187.obj",
+    "fma_id": "FMA23957",
+    "bp_id": "BP9065",
+    "name": "distal phalanx of left ring finger"
+  },
+  {
+    "file": "FJ3179.obj",
+    "fma_id": "FMA32653",
+    "bp_id": "BP8108",
+    "name": "distal phalanx of left second toe"
+  },
+  {
+    "file": "FJ3180.obj",
+    "fma_id": "FMA32655",
+    "bp_id": "BP7955",
+    "name": "distal phalanx of left third toe"
+  },
+  {
+    "file": "FJ3188.obj",
+    "fma_id": "FMA23951",
+    "bp_id": "BP9118",
+    "name": "distal phalanx of left thumb"
+  },
+  {
+    "file": "FJ3192.obj",
+    "fma_id": "FMA32650",
+    "bp_id": "BP9282",
+    "name": "distal phalanx of right big toe"
+  },
+  {
+    "file": "FJ3191.obj",
+    "fma_id": "FMA32656",
+    "bp_id": "BP9261",
+    "name": "distal phalanx of right fourth toe"
+  },
+  {
+    "file": "FJ3193.obj",
+    "fma_id": "FMA24460",
+    "bp_id": "BP8939",
+    "name": "distal phalanx of right index finger"
+  },
+  {
+    "file": "FJ3194.obj",
+    "fma_id": "FMA24463",
+    "bp_id": "BP8637",
+    "name": "distal phalanx of right little finger"
+  },
+  {
+    "file": "FJ3195.obj",
+    "fma_id": "FMA32658",
+    "bp_id": "BP8695",
+    "name": "distal phalanx of right little toe"
+  },
+  {
+    "file": "FJ3196.obj",
+    "fma_id": "FMA24461",
+    "bp_id": "BP8483",
+    "name": "distal phalanx of right middle finger"
+  },
+  {
+    "file": "FJ3197.obj",
+    "fma_id": "FMA24462",
+    "bp_id": "BP7961",
+    "name": "distal phalanx of right ring finger"
+  },
+  {
+    "file": "FJ3189.obj",
+    "fma_id": "FMA32652",
+    "bp_id": "BP8472",
+    "name": "distal phalanx of right second toe"
+  },
+  {
+    "file": "FJ3190.obj",
+    "fma_id": "FMA32654",
+    "bp_id": "BP9005",
+    "name": "distal phalanx of right third toe"
+  },
+  {
+    "file": "FJ3198.obj",
+    "fma_id": "FMA24459",
+    "bp_id": "BP8436",
+    "name": "distal phalanx of right thumb"
+  },
+  {
+    "file": "FJ3174.obj",
+    "fma_id": "FMA9991",
+    "bp_id": "BP9221",
+    "name": "eighth thoracic vertebra"
+  },
+  {
+    "file": "FJ3155.obj",
+    "fma_id": "FMA10059",
+    "bp_id": "BP8043",
+    "name": "eleventh thoracic vertebra"
+  },
+  {
+    "file": "FJ3199.obj",
+    "fma_id": "FMA52740",
+    "bp_id": "BP8991",
+    "name": "ethmoid"
+  },
+  {
+    "file": "FJ3167.obj",
+    "fma_id": "FMA12523",
+    "bp_id": "BP8835",
+    "name": "fifth cervical vertebra"
+  },
+  {
+    "file": "FJ3168.obj",
+    "fma_id": "FMA13076",
+    "bp_id": "BP8280",
+    "name": "fifth lumbar vertebra"
+  },
+  {
+    "file": "FJ3169.obj",
+    "fma_id": "FMA9922",
+    "bp_id": "BP8643",
+    "name": "fifth thoracic vertebra"
+  },
+  {
+    "file": "FJ3157.obj",
+    "fma_id": "FMA13072",
+    "bp_id": "BP8948",
+    "name": "first lumbar vertebra"
+  },
+  {
+    "file": "FJ3158.obj",
+    "fma_id": "FMA9165",
+    "bp_id": "BP8981",
+    "name": "first thoracic vertebra"
+  },
+  {
+    "file": "FJ3164.obj",
+    "fma_id": "FMA12522",
+    "bp_id": "BP8003",
+    "name": "fourth cervical vertebra"
+  },
+  {
+    "file": "FJ3165.obj",
+    "fma_id": "FMA13075",
+    "bp_id": "BP8133",
+    "name": "fourth lumbar vertebra"
+  },
+  {
+    "file": "FJ3166.obj",
+    "fma_id": "FMA9248",
+    "bp_id": "BP9156",
+    "name": "fourth thoracic vertebra"
+  },
+  {
+    "file": "FJ3200.obj",
+    "fma_id": "FMA52734",
+    "bp_id": "BP8209",
+    "name": "frontal bone"
+  },
+  {
+    "file": "FJ2772.obj",
+    "fma_id": "FMA52749",
+    "bp_id": "BP8836",
+    "name": "hyoid bone"
+  },
+  {
+    "file": "FJ3201.obj",
+    "fma_id": "FMA52749",
+    "bp_id": "BP8836",
+    "name": "hyoid bone"
+  },
+  {
+    "file": "FJ3256.obj",
+    "fma_id": "FMA24498",
+    "bp_id": "BP8533",
+    "name": "left calcaneus"
+  },
+  {
+    "file": "FJ3257.obj",
+    "fma_id": "FMA24447",
+    "bp_id": "BP7959",
+    "name": "left capitate"
+  },
+  {
+    "file": "FJ3237.obj",
+    "fma_id": "FMA13323",
+    "bp_id": "BP8841",
+    "name": "left clavicle"
+  },
+  {
+    "file": "FJ3258.obj",
+    "fma_id": "FMA24529",
+    "bp_id": "BP8538",
+    "name": "left cuboid bone"
+  },
+  {
+    "file": "FJ3235.obj",
+    "fma_id": "FMA8310",
+    "bp_id": "BP8708",
+    "name": "left eighth rib"
+  },
+  {
+    "file": "FJ3226.obj",
+    "fma_id": "FMA8532",
+    "bp_id": "BP9097",
+    "name": "left eleventh rib"
+  },
+  {
+    "file": "FJ3259.obj",
+    "fma_id": "FMA24475",
+    "bp_id": "BP9042",
+    "name": "left femur"
+  },
+  {
+    "file": "FJ3260.obj",
+    "fma_id": "FMA24481",
+    "bp_id": "BP8251",
+    "name": "left fibula"
+  },
+  {
+    "file": "FJ3252.obj",
+    "fma_id": "FMA24473",
+    "bp_id": "BP8000",
+    "name": "left fifth metacarpal bone"
+  },
+  {
+    "file": "FJ3253.obj",
+    "fma_id": "FMA24516",
+    "bp_id": "BP9237",
+    "name": "left fifth metatarsal bone"
+  },
+  {
+    "file": "FJ3232.obj",
+    "fma_id": "FMA8093",
+    "bp_id": "BP8479",
+    "name": "left fifth rib"
+  },
+  {
+    "file": "FJ3240.obj",
+    "fma_id": "FMA24465",
+    "bp_id": "BP8887",
+    "name": "left first metacarpal bone"
+  },
+  {
+    "file": "FJ3241.obj",
+    "fma_id": "FMA24508",
+    "bp_id": "BP8160",
+    "name": "left first metatarsal bone"
+  },
+  {
+    "file": "FJ3228.obj",
+    "fma_id": "FMA7987",
+    "bp_id": "BP8800",
+    "name": "left first rib"
+  },
+  {
+    "file": "FJ3249.obj",
+    "fma_id": "FMA24471",
+    "bp_id": "BP9203",
+    "name": "left fourth metacarpal bone"
+  },
+  {
+    "file": "FJ3250.obj",
+    "fma_id": "FMA24514",
+    "bp_id": "BP8511",
+    "name": "left fourth metatarsal bone"
+  },
+  {
+    "file": "FJ3231.obj",
+    "fma_id": "FMA8148",
+    "bp_id": "BP8081",
+    "name": "left fourth rib"
+  },
+  {
+    "file": "FJ3261.obj",
+    "fma_id": "FMA24449",
+    "bp_id": "BP8883",
+    "name": "left hamate"
+  },
+  {
+    "file": "FJ3288.obj",
+    "fma_id": "FMA16587",
+    "bp_id": "BP8950",
+    "name": "left hip bone"
+  },
+  {
+    "file": "FJ3262.obj",
+    "fma_id": "FMA23131",
+    "bp_id": "BP9191",
+    "name": "left humerus"
+  },
+  {
+    "file": "FJ3264.obj",
+    "fma_id": "FMA24524",
+    "bp_id": "BP8520",
+    "name": "left intermediate cuneiform bone"
+  },
+  {
+    "file": "FJ3265.obj",
+    "fma_id": "FMA53646",
+    "bp_id": "BP8103",
+    "name": "left lacrimal bone"
+  },
+  {
+    "file": "FJ3267.obj",
+    "fma_id": "FMA24526",
+    "bp_id": "BP8347",
+    "name": "left lateral cuneiform bone"
+  },
+  {
+    "file": "FJ3268.obj",
+    "fma_id": "FMA24438",
+    "bp_id": "BP8493",
+    "name": "left lunate"
+  },
+  {
+    "file": "FJ3269.obj",
+    "fma_id": "FMA53650",
+    "bp_id": "BP9046",
+    "name": "left maxilla"
+  },
+  {
+    "file": "FJ3271.obj",
+    "fma_id": "FMA24522",
+    "bp_id": "BP8774",
+    "name": "left medial cuneiform bone"
+  },
+  {
+    "file": "FJ3272.obj",
+    "fma_id": "FMA53648",
+    "bp_id": "BP8558",
+    "name": "left nasal bone"
+  },
+  {
+    "file": "FJ3236.obj",
+    "fma_id": "FMA8391",
+    "bp_id": "BP8438",
+    "name": "left ninth rib"
+  },
+  {
+    "file": "FJ3273.obj",
+    "fma_id": "FMA53656",
+    "bp_id": "BP7930",
+    "name": "left palatine bone"
+  },
+  {
+    "file": "FJ3274.obj",
+    "fma_id": "FMA52789",
+    "bp_id": "BP9209",
+    "name": "left parietal bone"
+  },
+  {
+    "file": "FJ3275.obj",
+    "fma_id": "FMA24487",
+    "bp_id": "BP8378",
+    "name": "left patella"
+  },
+  {
+    "file": "FJ3276.obj",
+    "fma_id": "FMA24442",
+    "bp_id": "BP8957",
+    "name": "left pisiform"
+  },
+  {
+    "file": "FJ3277.obj",
+    "fma_id": "FMA23465",
+    "bp_id": "BP9059",
+    "name": "left radius"
+  },
+  {
+    "file": "FJ3278.obj",
+    "fma_id": "FMA24436",
+    "bp_id": "BP8122",
+    "name": "left scaphoid"
+  },
+  {
+    "file": "FJ3279.obj",
+    "fma_id": "FMA13396",
+    "bp_id": "BP9121",
+    "name": "left scapula"
+  },
+  {
+    "file": "FJ3243.obj",
+    "fma_id": "FMA24467",
+    "bp_id": "BP8909",
+    "name": "left second metacarpal bone"
+  },
+  {
+    "file": "FJ3244.obj",
+    "fma_id": "FMA24510",
+    "bp_id": "BP8915",
+    "name": "left second metatarsal bone"
+  },
+  {
+    "file": "FJ3229.obj",
+    "fma_id": "FMA8012",
+    "bp_id": "BP8996",
+    "name": "left second rib"
+  },
+  {
+    "file": "FJ3234.obj",
+    "fma_id": "FMA8256",
+    "bp_id": "BP9230",
+    "name": "left seventh rib"
+  },
+  {
+    "file": "FJ3233.obj",
+    "fma_id": "FMA8202",
+    "bp_id": "BP9041",
+    "name": "left sixth rib"
+  },
+  {
+    "file": "FJ3280.obj",
+    "fma_id": "FMA24483",
+    "bp_id": "BP9187",
+    "name": "left talus"
+  },
+  {
+    "file": "FJ3281.obj",
+    "fma_id": "FMA52739",
+    "bp_id": "BP7991",
+    "name": "left temporal bone"
+  },
+  {
+    "file": "FJ3225.obj",
+    "fma_id": "FMA8472",
+    "bp_id": "BP9155",
+    "name": "left tenth rib"
+  },
+  {
+    "file": "FJ3246.obj",
+    "fma_id": "FMA24469",
+    "bp_id": "BP8863",
+    "name": "left third metacarpal bone"
+  },
+  {
+    "file": "FJ3247.obj",
+    "fma_id": "FMA24512",
+    "bp_id": "BP8967",
+    "name": "left third metatarsal bone"
+  },
+  {
+    "file": "FJ3230.obj",
+    "fma_id": "FMA8039",
+    "bp_id": "BP8357",
+    "name": "left third rib"
+  },
+  {
+    "file": "FJ3282.obj",
+    "fma_id": "FMA24478",
+    "bp_id": "BP9202",
+    "name": "left tibia"
+  },
+  {
+    "file": "FJ3283.obj",
+    "fma_id": "FMA24444",
+    "bp_id": "BP9024",
+    "name": "left trapezium"
+  },
+  {
+    "file": "FJ3284.obj",
+    "fma_id": "FMA24445",
+    "bp_id": "BP9272",
+    "name": "left trapezoid"
+  },
+  {
+    "file": "FJ3227.obj",
+    "fma_id": "FMA8534",
+    "bp_id": "BP9061",
+    "name": "left twelfth rib"
+  },
+  {
+    "file": "FJ3286.obj",
+    "fma_id": "FMA23468",
+    "bp_id": "BP9070",
+    "name": "left ulna"
+  },
+  {
+    "file": "FJ3287.obj",
+    "fma_id": "FMA52893",
+    "bp_id": "BP8495",
+    "name": "left zygomatic bone"
+  },
+  {
+    "file": "FJ3289.obj",
+    "fma_id": "FMA52748",
+    "bp_id": "BP8107",
+    "name": "mandible"
+  },
+  {
+    "file": "FJ3290.obj",
+    "fma_id": "FMA7486",
+    "bp_id": "BP8562",
+    "name": "manubrium"
+  },
+  {
+    "file": "FJ3295.obj",
+    "fma_id": "FMA32647",
+    "bp_id": "BP9004",
+    "name": "middle phalanx of left fourth toe"
+  },
+  {
+    "file": "FJ3296.obj",
+    "fma_id": "FMA23938",
+    "bp_id": "BP9063",
+    "name": "middle phalanx of left index finger"
+  },
+  {
+    "file": "FJ3297.obj",
+    "fma_id": "FMA23944",
+    "bp_id": "BP8595",
+    "name": "middle phalanx of left little finger"
+  },
+  {
+    "file": "FJ3298.obj",
+    "fma_id": "FMA230988",
+    "bp_id": "BP9035",
+    "name": "middle phalanx of left little toe"
+  },
+  {
+    "file": "FJ3299.obj",
+    "fma_id": "FMA23940",
+    "bp_id": "BP8456",
+    "name": "middle phalanx of left middle finger"
+  },
+  {
+    "file": "FJ3291.obj",
+    "fma_id": "FMA23942",
+    "bp_id": "BP8611",
+    "name": "middle phalanx of left ring finger"
+  },
+  {
+    "file": "FJ3293.obj",
+    "fma_id": "FMA32643",
+    "bp_id": "BP7873",
+    "name": "middle phalanx of left second toe"
+  },
+  {
+    "file": "FJ3294.obj",
+    "fma_id": "FMA32645",
+    "bp_id": "BP7748",
+    "name": "middle phalanx of left third toe"
+  },
+  {
+    "file": "FJ3302.obj",
+    "fma_id": "FMA32646",
+    "bp_id": "BP8576",
+    "name": "middle phalanx of right fourth toe"
+  },
+  {
+    "file": "FJ3303.obj",
+    "fma_id": "FMA24455",
+    "bp_id": "BP8523",
+    "name": "middle phalanx of right index finger"
+  },
+  {
+    "file": "FJ3304.obj",
+    "fma_id": "FMA24458",
+    "bp_id": "BP8491",
+    "name": "middle phalanx of right little finger"
+  },
+  {
+    "file": "FJ3305.obj",
+    "fma_id": "FMA230986",
+    "bp_id": "BP9234",
+    "name": "middle phalanx of right little toe"
+  },
+  {
+    "file": "FJ3306.obj",
+    "fma_id": "FMA24456",
+    "bp_id": "BP9150",
+    "name": "middle phalanx of right middle finger"
+  },
+  {
+    "file": "FJ3292.obj",
+    "fma_id": "FMA24457",
+    "bp_id": "BP8451",
+    "name": "middle phalanx of right ring finger"
+  },
+  {
+    "file": "FJ3300.obj",
+    "fma_id": "FMA32642",
+    "bp_id": "BP8488",
+    "name": "middle phalanx of right second toe"
+  },
+  {
+    "file": "FJ3301.obj",
+    "fma_id": "FMA32644",
+    "bp_id": "BP9047",
+    "name": "middle phalanx of right third toe"
+  },
+  {
+    "file": "FJ3307.obj",
+    "fma_id": "FMA24501",
+    "bp_id": "BP8599",
+    "name": "navicular bone of left foot"
+  },
+  {
+    "file": "FJ3308.obj",
+    "fma_id": "FMA24500",
+    "bp_id": "BP9133",
+    "name": "navicular bone of right foot"
+  },
+  {
+    "file": "FJ3175.obj",
+    "fma_id": "FMA10014",
+    "bp_id": "BP8178",
+    "name": "ninth thoracic vertebra"
+  },
+  {
+    "file": "FJ3309.obj",
+    "fma_id": "FMA52735",
+    "bp_id": "BP9177",
+    "name": "occipital bone"
+  },
+  {
+    "file": "FJ3329.obj",
+    "fma_id": "FMA43254",
+    "bp_id": "BP8653",
+    "name": "proximal phalanx of left big toe"
+  },
+  {
+    "file": "FJ3312.obj",
+    "fma_id": "FMA32639",
+    "bp_id": "BP8346",
+    "name": "proximal phalanx of left fourth toe"
+  },
+  {
+    "file": "FJ3313.obj",
+    "fma_id": "FMA71915",
+    "bp_id": "BP8328",
+    "name": "proximal phalanx of left index finger"
+  },
+  {
+    "file": "FJ3314.obj",
+    "fma_id": "FMA66791",
+    "bp_id": "BP8710",
+    "name": "proximal phalanx of left little finger"
+  },
+  {
+    "file": "FJ3315.obj",
+    "fma_id": "FMA32641",
+    "bp_id": "BP8594",
+    "name": "proximal phalanx of left little toe"
+  },
+  {
+    "file": "FJ3316.obj",
+    "fma_id": "FMA71908",
+    "bp_id": "BP8864",
+    "name": "proximal phalanx of left middle finger"
+  },
+  {
+    "file": "FJ3317.obj",
+    "fma_id": "FMA71916",
+    "bp_id": "BP7936",
+    "name": "proximal phalanx of left ring finger"
+  },
+  {
+    "file": "FJ3328.obj",
+    "fma_id": "FMA32635",
+    "bp_id": "BP9088",
+    "name": "proximal phalanx of left second toe"
+  },
+  {
+    "file": "FJ3311.obj",
+    "fma_id": "FMA32637",
+    "bp_id": "BP8837",
+    "name": "proximal phalanx of left third toe"
+  },
+  {
+    "file": "FJ3318.obj",
+    "fma_id": "FMA65470",
+    "bp_id": "BP7897",
+    "name": "proximal phalanx of left thumb"
+  },
+  {
+    "file": "FJ3310.obj",
+    "fma_id": "FMA43253",
+    "bp_id": "BP8785",
+    "name": "proximal phalanx of right big toe"
+  },
+  {
+    "file": "FJ3321.obj",
+    "fma_id": "FMA32638",
+    "bp_id": "BP8281",
+    "name": "proximal phalanx of right fourth toe"
+  },
+  {
+    "file": "FJ3322.obj",
+    "fma_id": "FMA24451",
+    "bp_id": "BP8914",
+    "name": "proximal phalanx of right index finger"
+  },
+  {
+    "file": "FJ3323.obj",
+    "fma_id": "FMA24454",
+    "bp_id": "BP8100",
+    "name": "proximal phalanx of right little finger"
+  },
+  {
+    "file": "FJ3324.obj",
+    "fma_id": "FMA32640",
+    "bp_id": "BP8417",
+    "name": "proximal phalanx of right little toe"
+  },
+  {
+    "file": "FJ3325.obj",
+    "fma_id": "FMA24452",
+    "bp_id": "BP9025",
+    "name": "proximal phalanx of right middle finger"
+  },
+  {
+    "file": "FJ3326.obj",
+    "fma_id": "FMA24453",
+    "bp_id": "BP8330",
+    "name": "proximal phalanx of right ring finger"
+  },
+  {
+    "file": "FJ3319.obj",
+    "fma_id": "FMA32634",
+    "bp_id": "BP9196",
+    "name": "proximal phalanx of right second toe"
+  },
+  {
+    "file": "FJ3320.obj",
+    "fma_id": "FMA32636",
+    "bp_id": "BP8762",
+    "name": "proximal phalanx of right third toe"
+  },
+  {
+    "file": "FJ3327.obj",
+    "fma_id": "FMA24450",
+    "bp_id": "BP8017",
+    "name": "proximal phalanx of right thumb"
+  },
+  {
+    "file": "FJ3360.obj",
+    "fma_id": "FMA24497",
+    "bp_id": "BP9040",
+    "name": "right calcaneus"
+  },
+  {
+    "file": "FJ3361.obj",
+    "fma_id": "FMA24446",
+    "bp_id": "BP8528",
+    "name": "right capitate"
+  },
+  {
+    "file": "FJ3362.obj",
+    "fma_id": "FMA13322",
+    "bp_id": "BP9271",
+    "name": "right clavicle"
+  },
+  {
+    "file": "FJ3364.obj",
+    "fma_id": "FMA24528",
+    "bp_id": "BP8873",
+    "name": "right cuboid bone"
+  },
+  {
+    "file": "FJ3347.obj",
+    "fma_id": "FMA8283",
+    "bp_id": "BP9073",
+    "name": "right eighth rib"
+  },
+  {
+    "file": "FJ3331.obj",
+    "fma_id": "FMA8531",
+    "bp_id": "BP8951",
+    "name": "right eleventh rib"
+  },
+  {
+    "file": "FJ3365.obj",
+    "fma_id": "FMA24474",
+    "bp_id": "BP8920",
+    "name": "right femur"
+  },
+  {
+    "file": "FJ3366.obj",
+    "fma_id": "FMA24480",
+    "bp_id": "BP8009",
+    "name": "right fibula"
+  },
+  {
+    "file": "FJ3358.obj",
+    "fma_id": "FMA24472",
+    "bp_id": "BP8925",
+    "name": "right fifth metacarpal bone"
+  },
+  {
+    "file": "FJ3359.obj",
+    "fma_id": "FMA24515",
+    "bp_id": "BP7912",
+    "name": "right fifth metatarsal bone"
+  },
+  {
+    "file": "FJ3342.obj",
+    "fma_id": "FMA8066",
+    "bp_id": "BP8792",
+    "name": "right fifth rib"
+  },
+  {
+    "file": "FJ3350.obj",
+    "fma_id": "FMA24464",
+    "bp_id": "BP8547",
+    "name": "right first metacarpal bone"
+  },
+  {
+    "file": "FJ3351.obj",
+    "fma_id": "FMA24507",
+    "bp_id": "BP8230",
+    "name": "right first metatarsal bone"
+  },
+  {
+    "file": "FJ3334.obj",
+    "fma_id": "FMA7857",
+    "bp_id": "BP8341",
+    "name": "right first rib"
+  },
+  {
+    "file": "FJ3356.obj",
+    "fma_id": "FMA24470",
+    "bp_id": "BP8444",
+    "name": "right fourth metacarpal bone"
+  },
+  {
+    "file": "FJ3357.obj",
+    "fma_id": "FMA24513",
+    "bp_id": "BP9130",
+    "name": "right fourth metatarsal bone"
+  },
+  {
+    "file": "FJ3340.obj",
+    "fma_id": "FMA7957",
+    "bp_id": "BP9092",
+    "name": "right fourth rib"
+  },
+  {
+    "file": "FJ3367.obj",
+    "fma_id": "FMA24448",
+    "bp_id": "BP9266",
+    "name": "right hamate"
+  },
+  {
+    "file": "FJ3152.obj",
+    "fma_id": "FMA16586",
+    "bp_id": "BP8768",
+    "name": "right hip bone"
+  },
+  {
+    "file": "FJ3368.obj",
+    "fma_id": "FMA23130",
+    "bp_id": "BP9206",
+    "name": "right humerus"
+  },
+  {
+    "file": "FJ3370.obj",
+    "fma_id": "FMA24523",
+    "bp_id": "BP9110",
+    "name": "right intermediate cuneiform bone"
+  },
+  {
+    "file": "FJ3371.obj",
+    "fma_id": "FMA53645",
+    "bp_id": "BP8741",
+    "name": "right lacrimal bone"
+  },
+  {
+    "file": "FJ3373.obj",
+    "fma_id": "FMA24525",
+    "bp_id": "BP8730",
+    "name": "right lateral cuneiform bone"
+  },
+  {
+    "file": "FJ3374.obj",
+    "fma_id": "FMA24437",
+    "bp_id": "BP9284",
+    "name": "right lunate"
+  },
+  {
+    "file": "FJ3375.obj",
+    "fma_id": "FMA53649",
+    "bp_id": "BP8309",
+    "name": "right maxilla"
+  },
+  {
+    "file": "FJ3377.obj",
+    "fma_id": "FMA24521",
+    "bp_id": "BP8830",
+    "name": "right medial cuneiform bone"
+  },
+  {
+    "file": "FJ3378.obj",
+    "fma_id": "FMA53647",
+    "bp_id": "BP9060",
+    "name": "right nasal bone"
+  },
+  {
+    "file": "FJ3348.obj",
+    "fma_id": "FMA8364",
+    "bp_id": "BP9181",
+    "name": "right ninth rib"
+  },
+  {
+    "file": "FJ3379.obj",
+    "fma_id": "FMA53655",
+    "bp_id": "BP8406",
+    "name": "right palatine bone"
+  },
+  {
+    "file": "FJ3380.obj",
+    "fma_id": "FMA52788",
+    "bp_id": "BP9057",
+    "name": "right parietal bone"
+  },
+  {
+    "file": "FJ3381.obj",
+    "fma_id": "FMA24486",
+    "bp_id": "BP8390",
+    "name": "right patella"
+  },
+  {
+    "file": "FJ3382.obj",
+    "fma_id": "FMA24441",
+    "bp_id": "BP8770",
+    "name": "right pisiform"
+  },
+  {
+    "file": "FJ3349.obj",
+    "fma_id": "FMA23464",
+    "bp_id": "BP8464",
+    "name": "right radius"
+  },
+  {
+    "file": "FJ3383.obj",
+    "fma_id": "FMA24435",
+    "bp_id": "BP8724",
+    "name": "right scaphoid"
+  },
+  {
+    "file": "FJ3384.obj",
+    "fma_id": "FMA13395",
+    "bp_id": "BP9101",
+    "name": "right scapula"
+  },
+  {
+    "file": "FJ3352.obj",
+    "fma_id": "FMA24466",
+    "bp_id": "BP8219",
+    "name": "right second metacarpal bone"
+  },
+  {
+    "file": "FJ3353.obj",
+    "fma_id": "FMA24509",
+    "bp_id": "BP8627",
+    "name": "right second metatarsal bone"
+  },
+  {
+    "file": "FJ3336.obj",
+    "fma_id": "FMA7882",
+    "bp_id": "BP9279",
+    "name": "right second rib"
+  },
+  {
+    "file": "FJ3346.obj",
+    "fma_id": "FMA8229",
+    "bp_id": "BP8211",
+    "name": "right seventh rib"
+  },
+  {
+    "file": "FJ3344.obj",
+    "fma_id": "FMA8175",
+    "bp_id": "BP8881",
+    "name": "right sixth rib"
+  },
+  {
+    "file": "FJ3385.obj",
+    "fma_id": "FMA24482",
+    "bp_id": "BP8033",
+    "name": "right talus"
+  },
+  {
+    "file": "FJ3386.obj",
+    "fma_id": "FMA52738",
+    "bp_id": "BP8875",
+    "name": "right temporal bone"
+  },
+  {
+    "file": "FJ3330.obj",
+    "fma_id": "FMA8445",
+    "bp_id": "BP8407",
+    "name": "right tenth rib"
+  },
+  {
+    "file": "FJ3354.obj",
+    "fma_id": "FMA24468",
+    "bp_id": "BP8629",
+    "name": "right third metacarpal bone"
+  },
+  {
+    "file": "FJ3355.obj",
+    "fma_id": "FMA24511",
+    "bp_id": "BP8802",
+    "name": "right third metatarsal bone"
+  },
+  {
+    "file": "FJ3338.obj",
+    "fma_id": "FMA7909",
+    "bp_id": "BP8969",
+    "name": "right third rib"
+  },
+  {
+    "file": "FJ3387.obj",
+    "fma_id": "FMA24477",
+    "bp_id": "BP8031",
+    "name": "right tibia"
+  },
+  {
+    "file": "FJ3388.obj",
+    "fma_id": "FMA24443",
+    "bp_id": "BP8566",
+    "name": "right trapezium"
+  },
+  {
+    "file": "FJ3389.obj",
+    "fma_id": "FMA23725",
+    "bp_id": "BP7880",
+    "name": "right trapezoid"
+  },
+  {
+    "file": "FJ3332.obj",
+    "fma_id": "FMA8533",
+    "bp_id": "BP9236",
+    "name": "right twelfth rib"
+  },
+  {
+    "file": "FJ3391.obj",
+    "fma_id": "FMA23467",
+    "bp_id": "BP8233",
+    "name": "right ulna"
+  },
+  {
+    "file": "FJ3392.obj",
+    "fma_id": "FMA52892",
+    "bp_id": "BP8777",
+    "name": "right zygomatic bone"
+  },
+  {
+    "file": "FJ3159.obj",
+    "fma_id": "FMA13073",
+    "bp_id": "BP8995",
+    "name": "second lumbar vertebra"
+  },
+  {
+    "file": "FJ3160.obj",
+    "fma_id": "FMA9187",
+    "bp_id": "BP8475",
+    "name": "second thoracic vertebra"
+  },
+  {
+    "file": "FJ3266.obj",
+    "fma_id": "FMA45098",
+    "bp_id": "BP8272",
+    "name": "sesamoid bone of left foot"
+  },
+  {
+    "file": "FJ3270.obj",
+    "fma_id": "FMA45098",
+    "bp_id": "BP8272",
+    "name": "sesamoid bone of left foot"
+  },
+  {
+    "file": "FJ3372.obj",
+    "fma_id": "FMA45097",
+    "bp_id": "BP8756",
+    "name": "sesamoid bone of right foot"
+  },
+  {
+    "file": "FJ3376.obj",
+    "fma_id": "FMA45097",
+    "bp_id": "BP8756",
+    "name": "sesamoid bone of right foot"
+  },
+  {
+    "file": "FJ3172.obj",
+    "fma_id": "FMA12525",
+    "bp_id": "BP7979",
+    "name": "seventh cervical vertebra"
+  },
+  {
+    "file": "FJ3173.obj",
+    "fma_id": "FMA9968",
+    "bp_id": "BP8840",
+    "name": "seventh thoracic vertebra"
+  },
+  {
+    "file": "FJ3170.obj",
+    "fma_id": "FMA12524",
+    "bp_id": "BP7845",
+    "name": "sixth cervical vertebra"
+  },
+  {
+    "file": "FJ3171.obj",
+    "fma_id": "FMA9945",
+    "bp_id": "BP8303",
+    "name": "sixth thoracic vertebra"
+  },
+  {
+    "file": "FJ3394.obj",
+    "fma_id": "FMA52736",
+    "bp_id": "BP8498",
+    "name": "sphenoid bone"
+  },
+  {
+    "file": "FJ3154.obj",
+    "fma_id": "FMA10037",
+    "bp_id": "BP8412",
+    "name": "tenth thoracic vertebra"
+  },
+  {
+    "file": "FJ3161.obj",
+    "fma_id": "FMA12521",
+    "bp_id": "BP9108",
+    "name": "third cervical vertebra"
+  },
+  {
+    "file": "FJ3162.obj",
+    "fma_id": "FMA13074",
+    "bp_id": "BP8227",
+    "name": "third lumbar vertebra"
+  },
+  {
+    "file": "FJ3163.obj",
+    "fma_id": "FMA9209",
+    "bp_id": "BP8726",
+    "name": "third thoracic vertebra"
+  },
+  {
+    "file": "FJ3156.obj",
+    "fma_id": "FMA10081",
+    "bp_id": "BP9250",
+    "name": "twelfth thoracic vertebra"
+  },
+  {
+    "file": "FJ3395.obj",
+    "fma_id": "FMA9710",
+    "bp_id": "BP8776",
+    "name": "vomer"
+  },
+  {
+    "file": "FJ3153.obj",
+    "fma_id": "FMA7488",
+    "bp_id": "BP7865",
+    "name": "xiphoid process"
+  }
+]

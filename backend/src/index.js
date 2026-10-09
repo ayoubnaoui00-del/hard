@@ -14,6 +14,7 @@ import agentRouter from './routes/agent.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const datasetDir = path.resolve(__dirname, '../exercises-dataset-main');
+const modelsDir = path.resolve(__dirname, '../public/models');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -33,7 +34,7 @@ app.use((req, res, next) => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Static Media Serving for Exercise Images and Demonstration Videos
+// Static Media Serving for Exercise Images, Videos, and 3D Models
 const staticOptions = {
   maxAge: '1d',
   setHeaders: (res) => {
@@ -47,9 +48,14 @@ app.use('/media/videos', express.static(path.join(datasetDir, 'videos'), staticO
 app.use('/images', express.static(path.join(datasetDir, 'images'), staticOptions));
 app.use('/videos', express.static(path.join(datasetDir, 'videos'), staticOptions));
 
+app.use('/media/models', express.static(modelsDir, staticOptions));
+app.use('/models', express.static(modelsDir, staticOptions));
+
 app.use('/api/media/exercises', express.static(datasetDir, staticOptions));
 app.use('/api/media/images', express.static(path.join(datasetDir, 'images'), staticOptions));
 app.use('/api/media/videos', express.static(path.join(datasetDir, 'videos'), staticOptions));
+app.use('/api/media/models', express.static(modelsDir, staticOptions));
+app.use('/api/models', express.static(modelsDir, staticOptions));
 
 // Register API Routes (supporting both / and /api prefixes)
 const mountRoutes = (prefix = '') => {

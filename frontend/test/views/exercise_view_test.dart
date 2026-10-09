@@ -62,6 +62,28 @@ class _FakeExerciseRepository implements IExerciseRepository {
   }
 
   @override
+  Future<ExercisePageResponse> getExercisesPaginated({
+    String? muscle,
+    String? search,
+    int page = 1,
+    int limit = 20,
+  }) async {
+    final list = await getExercises(
+      muscle: muscle,
+      search: search,
+      page: page,
+      limit: limit,
+    );
+    return ExercisePageResponse(
+      exercises: list,
+      total: list.length,
+      page: page,
+      totalPages: 1,
+      hasMore: false,
+    );
+  }
+
+  @override
   Future<ExerciseModel?> getExerciseById(String id) async {
     try {
       return exercises.firstWhere((e) => e.id == id);
@@ -113,9 +135,9 @@ void main() {
       await tester.tap(tab3d);
       await tester.pumpAndSettle();
 
-      // Verify Body Map Canvas & Front View indicator rendered
+      // Verify Body Map Canvas rendered
       expect(find.text('Interactive Body Map'), findsWidgets);
-      expect(find.text('Front View'), findsOneWidget);
+      expect(find.byIcon(Icons.sync_rounded), findsOneWidget);
 
       // Tap back to All Exercises
       await tester.tap(find.text('All Exercises'));
@@ -172,6 +194,35 @@ void main() {
       expect(find.text('Instructions'), findsOneWidget);
       expect(find.text('Form Tip & Coaching Cue'), findsOneWidget);
       expect(find.text('Log This Exercise'), findsOneWidget);
+    });
+
+    testWidgets('Scrolling down triggers smooth collapse of filter buttons and scrolling up restores them', (tester) async {
+      await tester.pumpWidget(createWidgetUnderTest());
+      await tester.pumpAndSettle();
+
+      // Initially filter buttons are visible (sizeFactor == 1.0)
+      expect(find.text('Chest'), findsWidgets);
+      final sizeTransitionFinder = find.byType(SizeTransition);
+      expect(sizeTransitionFinder, findsOneWidget);
+      final sizeTransitionInitial = tester.widget<SizeTransition>(sizeTransitionFinder);
+      expect(sizeTransitionInitial.sizeFactor.value, 1.0);
+
+      // Scroll down list
+      await tester.drag(find.byType(ListView).last, const Offset(0, -200));
+      await tester.pumpAndSettle();
+
+      // Size factor has smoothly collapsed to 0.0
+      final sizeTransitionCollapsed = tester.widget<SizeTransition>(sizeTransitionFinder);
+      expect(sizeTransitionCollapsed.sizeFactor.value, 0.0);
+
+      // Scroll back up
+      await tester.drag(find.byType(ListView).last, const Offset(0, 200));
+      await tester.pumpAndSettle();
+
+      // Size factor is restored to 1.0
+      final sizeTransitionRestored = tester.widget<SizeTransition>(sizeTransitionFinder);
+      expect(sizeTransitionRestored.sizeFactor.value, 1.0);
+      expect(find.text('Chest'), findsWidgets);
     });
   });
 }

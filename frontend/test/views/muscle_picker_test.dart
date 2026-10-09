@@ -120,6 +120,28 @@ class FakeExerciseRepository implements IExerciseRepository {
   }
 
   @override
+  Future<ExercisePageResponse> getExercisesPaginated({
+    String? muscle,
+    String? search,
+    int page = 1,
+    int limit = 20,
+  }) async {
+    final list = await getExercises(
+      muscle: muscle,
+      search: search,
+      page: page,
+      limit: limit,
+    );
+    return ExercisePageResponse(
+      exercises: list,
+      total: list.length,
+      page: page,
+      totalPages: 1,
+      hasMore: false,
+    );
+  }
+
+  @override
   Future<ExerciseModel?> getExerciseById(String id) async {
     for (final list in exercisesByMuscle.values) {
       for (final ex in list) {
@@ -155,7 +177,7 @@ void main() {
   }
 
   group('MusclePickerView Tests (Task 5.7 / HRD-32)', () {
-    testWidgets('Renders Body Map, Front View indicator, and all muscle chips', (tester) async {
+    testWidgets('Renders Body Map, rotate view action, and all muscle chips', (tester) async {
       tester.view.physicalSize = const Size(1080, 1920);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(() {
@@ -169,8 +191,8 @@ void main() {
       // Title
       expect(find.text('Interactive Body Map'), findsOneWidget);
 
-      // Front View indicator
-      expect(find.text('Front View'), findsOneWidget);
+      // Rotate view button
+      expect(find.byIcon(Icons.sync_rounded), findsWidgets);
 
       // All 6 muscle group chips
       expect(find.text('Chest'), findsWidgets);
@@ -185,7 +207,7 @@ void main() {
       expect(find.text('Incline Dumbbell Fly'), findsOneWidget);
     });
 
-    testWidgets('Tapping view toggle switches between Front View and Back View', (tester) async {
+    testWidgets('Tapping view toggle rotates between Front and Back View', (tester) async {
       tester.view.physicalSize = const Size(1080, 1920);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(() {
@@ -196,13 +218,10 @@ void main() {
       await tester.pumpWidget(createWidgetUnderTest());
       await tester.pumpAndSettle();
 
-      expect(find.text('Front View'), findsOneWidget);
-
-      // Tap Front View toggle button
-      await tester.tap(find.text('Front View'));
+      // Tap rotate view button
+      await tester.tap(find.byIcon(Icons.sync_rounded).first);
       await tester.pumpAndSettle();
 
-      expect(find.text('Back View'), findsOneWidget);
       // Auto selects Back when rotated to Back View
       expect(find.text('Conventional Deadlift'), findsOneWidget);
     });
@@ -226,12 +245,14 @@ void main() {
       // Legs exercise is displayed
       expect(find.text('Barbell Back Squat'), findsOneWidget);
 
-      // Form tip callout is rendered
-      expect(find.text('Keep knees tracking over toes.'), findsOneWidget);
-
       // Alternative exercises are shown
       expect(find.text('Front Squat'), findsOneWidget);
       expect(find.text('Leg Press'), findsOneWidget);
+
+      // Form tips are shown on-demand when tapping exercise details
+      await tester.tap(find.text('Barbell Back Squat'));
+      await tester.pumpAndSettle();
+      expect(find.text('Keep knees tracking over toes.'), findsOneWidget);
     });
 
     testWidgets('Search query filters exercises within selected muscle', (tester) async {

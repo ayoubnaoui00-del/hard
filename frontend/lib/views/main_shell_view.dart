@@ -3,6 +3,8 @@ import 'package:go_router/go_router.dart';
 
 import '../config/theme.dart';
 
+import '../widgets/gradient_background.dart';
+
 class MainShellView extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
 
@@ -15,10 +17,11 @@ class MainShellView extends StatelessWidget {
   Widget build(BuildContext context) {
     final currentIndex = navigationShell.currentIndex;
 
-    return Scaffold(
-      backgroundColor: AppTheme.velocityBackground,
-      extendBody: true,
-      body: navigationShell,
+    return GradientBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        extendBody: true,
+        body: navigationShell,
       bottomNavigationBar: SafeArea(
         top: false,
         child: Padding(
@@ -26,18 +29,19 @@ class MainShellView extends StatelessWidget {
           child: Container(
             height: 72,
             decoration: BoxDecoration(
-              color: AppTheme.velocityLime,
+              color: AppTheme.velocitySurface,
               borderRadius: BorderRadius.circular(36),
+              border: Border.all(color: AppTheme.velocityBorder, width: 1.2),
               boxShadow: [
                 BoxShadow(
-                  color: AppTheme.velocityLime.withValues(alpha: 0.4),
-                  blurRadius: 20,
+                  color: Colors.black.withValues(alpha: 0.45),
+                  blurRadius: 24,
                   offset: const Offset(0, 8),
                 ),
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.08),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
+                  color: AppTheme.velocityLime.withValues(alpha: 0.06),
+                  blurRadius: 12,
+                  offset: const Offset(0, 2),
                 ),
               ],
             ),
@@ -89,7 +93,8 @@ class MainShellView extends StatelessWidget {
           ),
         ),
       ),
-    );
+    ),
+  );
   }
 
   void _onTap(int index) {
@@ -120,7 +125,7 @@ class MainShellView extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Icon container with active dark badge
+            // Icon container with active glowing badge
             AnimatedContainer(
               duration: const Duration(milliseconds: 200),
               padding: EdgeInsets.symmetric(
@@ -129,16 +134,22 @@ class MainShellView extends StatelessWidget {
               ),
               decoration: BoxDecoration(
                 color: isSelected
-                    ? AppTheme.velocityDark
+                    ? AppTheme.velocityLime.withValues(alpha: 0.16)
                     : Colors.transparent,
                 borderRadius: BorderRadius.circular(16),
+                border: isSelected
+                    ? Border.all(
+                        color: AppTheme.velocityLime.withValues(alpha: 0.4),
+                        width: 1,
+                      )
+                    : null,
               ),
               child: Icon(
                 isSelected ? activeIcon : icon,
                 size: 22,
                 color: isSelected
-                    ? AppTheme.velocityLimeBright
-                    : const Color(0xFF384353),
+                    ? AppTheme.velocityLime
+                    : AppTheme.velocityTextMuted,
               ),
             ),
             const SizedBox(height: 3),
@@ -148,8 +159,8 @@ class MainShellView extends StatelessWidget {
                 fontSize: 11,
                 fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
                 color: isSelected
-                    ? AppTheme.velocityDark
-                    : const Color(0xFF384353),
+                    ? AppTheme.velocityLime
+                    : AppTheme.velocityTextMuted,
                 letterSpacing: 0.1,
               ),
             ),

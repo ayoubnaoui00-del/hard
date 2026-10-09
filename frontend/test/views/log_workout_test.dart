@@ -83,6 +83,28 @@ class FakeExerciseRepository implements IExerciseRepository {
   }
 
   @override
+  Future<ExercisePageResponse> getExercisesPaginated({
+    String? muscle,
+    String? search,
+    int page = 1,
+    int limit = 20,
+  }) async {
+    final list = await getExercises(
+      muscle: muscle,
+      search: search,
+      page: page,
+      limit: limit,
+    );
+    return ExercisePageResponse(
+      exercises: list,
+      total: list.length,
+      page: page,
+      totalPages: 1,
+      hasMore: false,
+    );
+  }
+
+  @override
   Future<ExerciseModel?> getExerciseById(String id) async {
     return const ExerciseModel(
       id: 'bench-001',

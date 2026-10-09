@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../config/theme.dart';
 import '../../viewmodels/auth/register_viewmodel.dart';
+import 'widgets/register_form_fields.dart';
 
 class RegisterView extends ConsumerStatefulWidget {
   const RegisterView({super.key});
@@ -121,7 +122,8 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
             child: Form(
               key: _formKey,
               child: Column(
@@ -179,198 +181,28 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                     const SizedBox(height: 20),
                   ],
 
-                  // Username Input Field
-                  TextFormField(
-                    controller: _usernameController,
-                    onChanged: viewModel.setUsername,
-                    decoration: InputDecoration(
-                      labelText: 'Username',
-                      hintText: 'e.g. iron_athlete',
-                      prefixIcon: const Icon(Icons.person_outline),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    textInputAction: TextInputAction.next,
-                    enabled: !registerState.isLoading,
-                    validator: (val) {
-                      if (val == null || val.trim().isEmpty) {
-                        return 'Username is required';
-                      }
-                      if (val.trim().length < 3) {
-                        return 'Username must be at least 3 characters long';
-                      }
-                      return null;
+                  // Form Fields
+                  RegisterFormFields(
+                    usernameController: _usernameController,
+                    emailController: _emailController,
+                    passwordController: _passwordController,
+                    confirmPasswordController: _confirmPasswordController,
+                    obscurePassword: _obscurePassword,
+                    obscureConfirmPassword: _obscureConfirmPassword,
+                    onToggleObscurePassword: () {
+                      setState(() {
+                        _obscurePassword = !_obscurePassword;
+                      });
                     },
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Email Input Field
-                  TextFormField(
-                    controller: _emailController,
-                    onChanged: viewModel.setEmail,
-                    decoration: InputDecoration(
-                      labelText: 'Email Address',
-                      hintText: 'athlete@hard.com',
-                      prefixIcon: const Icon(Icons.email_outlined),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    keyboardType: TextInputType.emailAddress,
-                    textInputAction: TextInputAction.next,
-                    enabled: !registerState.isLoading,
-                    validator: (val) {
-                      if (val == null || val.trim().isEmpty) {
-                        return 'Email is required';
-                      }
-                      if (!val.contains('@') || !val.contains('.')) {
-                        return 'Please enter a valid email address';
-                      }
-                      return null;
+                    onToggleObscureConfirmPassword: () {
+                      setState(() {
+                        _obscureConfirmPassword = !_obscureConfirmPassword;
+                      });
                     },
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Password Input Field
-                  TextFormField(
-                    controller: _passwordController,
-                    onChanged: viewModel.setPassword,
-                    decoration: InputDecoration(
-                      labelText: 'Password',
-                      prefixIcon: const Icon(Icons.lock_outline),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _obscurePassword
-                              ? Icons.visibility_outlined
-                              : Icons.visibility_off_outlined,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _obscurePassword = !_obscurePassword;
-                          });
-                        },
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    obscureText: _obscurePassword,
-                    textInputAction: TextInputAction.next,
-                    enabled: !registerState.isLoading,
-                    validator: (val) {
-                      if (val == null || val.isEmpty) {
-                        return 'Password is required';
-                      }
-                      if (val.length < 6) {
-                        return 'Password must be at least 6 characters long';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Confirm Password Input Field
-                  TextFormField(
-                    controller: _confirmPasswordController,
-                    onChanged: viewModel.setConfirmPassword,
-                    decoration: InputDecoration(
-                      labelText: 'Confirm Password',
-                      prefixIcon: const Icon(Icons.lock_reset_outlined),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _obscureConfirmPassword
-                              ? Icons.visibility_outlined
-                              : Icons.visibility_off_outlined,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _obscureConfirmPassword = !_obscureConfirmPassword;
-                          });
-                        },
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    obscureText: _obscureConfirmPassword,
-                    textInputAction: TextInputAction.done,
-                    enabled: !registerState.isLoading,
-                    onFieldSubmitted: (_) => _handleRegister(),
-                    validator: (val) {
-                      if (val == null || val.isEmpty) {
-                        return 'Please confirm your password';
-                      }
-                      if (val != _passwordController.text) {
-                        return 'Passwords do not match';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Terms & Conditions Checkbox
-                  CheckboxListTile(
-                    value: registerState.acceptTerms,
-                    onChanged: registerState.isLoading
-                        ? null
-                        : viewModel.setAcceptTerms,
-                    controlAffinity: ListTileControlAffinity.leading,
-                    contentPadding: EdgeInsets.zero,
-                    activeColor: const Color(0xFFFF5252),
-                    title: Wrap(
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
-                        const Text(
-                          'I agree to the ',
-                          style: TextStyle(fontSize: 13),
-                        ),
-                        GestureDetector(
-                          onTap: _showTermsDialog,
-                          child: const Text(
-                            'Terms & Conditions',
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: AppTheme.velocityDark,
-                              fontWeight: FontWeight.bold,
-                              decoration: TextDecoration.underline,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-
-                  // Register Button
-                  ElevatedButton(
-                    onPressed: registerState.isLoading ? null : _handleRegister,
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                      backgroundColor: AppTheme.velocityLimeBright,
-                      foregroundColor: AppTheme.velocityDark,
-                    ),
-                    child: registerState.isLoading
-                        ? const SizedBox(
-                            height: 22,
-                            width: 22,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2.5,
-                              color: AppTheme.velocityDark,
-                            ),
-                          )
-                        : const Text(
-                            'Create Account',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w800,
-                              letterSpacing: 0.5,
-                              color: AppTheme.velocityDark,
-                            ),
-                          ),
+                    registerState: registerState,
+                    viewModel: viewModel,
+                    onShowTerms: _showTermsDialog,
+                    onSubmit: _handleRegister,
                   ),
                   const SizedBox(height: 20),
 
@@ -380,7 +212,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                     children: [
                       Text(
                         'Already have an account?',
-                        style: TextStyle(color: Colors.grey.shade400),
+                        style: const TextStyle(color: AppTheme.velocityTextSecondary),
                       ),
                       TextButton(
                         onPressed: registerState.isLoading
@@ -389,7 +221,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                         child: const Text(
                           'Log In',
                           style: TextStyle(
-                            color: Color(0xFFFF5252),
+                            color: AppTheme.velocityLime,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
