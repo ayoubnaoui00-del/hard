@@ -1,3 +1,5 @@
+import '../config/constants.dart';
+
 class WorkoutExerciseModel {
   final dynamic id;
   final dynamic workoutId;
@@ -8,6 +10,7 @@ class WorkoutExerciseModel {
   final int order;
   final String? exerciseName;
   final String? muscleGroup;
+  final String? imageUrl;
 
   const WorkoutExerciseModel({
     this.id,
@@ -19,6 +22,7 @@ class WorkoutExerciseModel {
     this.order = 1,
     this.exerciseName,
     this.muscleGroup,
+    this.imageUrl,
   });
 
   double get volume => sets * reps * weight;
@@ -26,10 +30,16 @@ class WorkoutExerciseModel {
   factory WorkoutExerciseModel.fromJson(Map<String, dynamic> json) {
     String? exName;
     String? exMuscle;
+    String? exImage;
     if (json['exercise'] is Map<String, dynamic>) {
       exName = json['exercise']['name'] as String?;
       exMuscle = json['exercise']['muscleGroup'] as String?;
+      exImage = json['exercise']['imageUrl'] as String? ??
+          json['exercise']['image'] as String? ??
+          json['exercise']['gifUrl'] as String? ??
+          json['exercise']['videoUrl'] as String?;
     }
+    exImage ??= json['imageUrl'] as String? ?? json['image'] as String?;
 
     return WorkoutExerciseModel(
       id: json['id'],
@@ -41,6 +51,7 @@ class WorkoutExerciseModel {
       order: json['order'] as int? ?? 1,
       exerciseName: exName ?? json['exerciseName'] as String?,
       muscleGroup: exMuscle ?? json['muscleGroup'] as String?,
+      imageUrl: AppConstants.resolveMediaUrl(exImage),
     );
   }
 
@@ -55,6 +66,7 @@ class WorkoutExerciseModel {
       'order': order,
       if (exerciseName != null) 'exerciseName': exerciseName,
       if (muscleGroup != null) 'muscleGroup': muscleGroup,
+      if (imageUrl != null) 'imageUrl': imageUrl,
     };
   }
 
@@ -68,6 +80,7 @@ class WorkoutExerciseModel {
     int? order,
     String? exerciseName,
     String? muscleGroup,
+    String? imageUrl,
   }) {
     return WorkoutExerciseModel(
       id: id ?? this.id,
@@ -79,6 +92,7 @@ class WorkoutExerciseModel {
       order: order ?? this.order,
       exerciseName: exerciseName ?? this.exerciseName,
       muscleGroup: muscleGroup ?? this.muscleGroup,
+      imageUrl: imageUrl ?? this.imageUrl,
     );
   }
 

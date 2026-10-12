@@ -29,7 +29,7 @@ class UserState {
 }
 
 class UserViewModel extends Notifier<UserState> {
-  late final IUserRepository _userRepository;
+  late IUserRepository _userRepository;
 
   @override
   UserState build() {

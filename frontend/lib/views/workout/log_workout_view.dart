@@ -41,7 +41,7 @@ class _LogWorkoutViewState extends ConsumerState<LogWorkoutView> {
     super.initState();
     _exercises.add(
       const WorkoutExerciseModel(
-        exerciseId: 'bench-press-001',
+        exerciseId: 'b2c417b1-d865-466c-9305-57a55d264bff',
         exerciseName: 'Barbell Bench Press',
         muscleGroup: 'Chest',
         sets: 3,
@@ -92,6 +92,7 @@ class _LogWorkoutViewState extends ConsumerState<LogWorkoutView> {
           exerciseId: exercise.id,
           exerciseName: exercise.name,
           muscleGroup: exercise.muscleGroup,
+          imageUrl: exercise.imageUrl ?? exercise.videoUrl ?? exercise.gifUrl,
           sets: 3,
           reps: 10,
           weight: 20.0,
@@ -153,38 +154,85 @@ class _LogWorkoutViewState extends ConsumerState<LogWorkoutView> {
     final duration = int.tryParse(_durationController.text.trim()) ?? 45;
     final notes = _notesController.text.trim().isEmpty ? null : _notesController.text.trim();
 
-    final created = await ref.read(workoutViewModelProvider.notifier).createWorkout(
-          name: name,
-          date: _selectedDate,
-          duration: duration,
-          exercises: _exercises,
-          notes: notes,
-        );
-    final success = created != null;
+    try {
+      final created = await ref.read(workoutViewModelProvider.notifier).createWorkout(
+            name: name,
+            date: _selectedDate,
+            duration: duration,
+            exercises: _exercises,
+            notes: notes,
+          );
+      final success = created != null;
 
-    if (success && mounted) {
-      ref.invalidate(homeViewModelProvider);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Row(
-            children: [
-              Icon(Icons.check_circle_rounded, color: AppTheme.velocityLime),
-              SizedBox(width: 10),
-              Text('Workout logged successfully! 🎉', style: TextStyle(fontWeight: FontWeight.bold)),
-            ],
+      if (!mounted) return;
+
+      if (success) {
+        ref.invalidate(homeViewModelProvider);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Row(
+              children: [
+                Icon(Icons.check_circle_rounded, color: AppTheme.velocityLime),
+                SizedBox(width: 10),
+                Text('Workout logged successfully! 🎉', style: TextStyle(fontWeight: FontWeight.bold)),
+              ],
+            ),
+            backgroundColor: AppTheme.velocityDarkSurface,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           ),
-          backgroundColor: AppTheme.velocityDarkSurface,
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        ),
-      );
-      final router = GoRouter.maybeOf(context);
-      if (router != null && router.canPop()) {
-        router.pop();
-      } else if (Navigator.of(context).canPop()) {
-        Navigator.of(context).pop();
-      } else if (router != null) {
-        router.go('/workouts');
+        );
+        final router = GoRouter.maybeOf(context);
+        if (router != null && router.canPop()) {
+          router.pop();
+        } else if (Navigator.of(context).canPop()) {
+          Navigator.of(context).pop();
+        } else if (router != null) {
+          router.go('/workouts');
+        }
+      } else {
+        final errorMsg = ref.read(workoutViewModelProvider).errorMessage ?? 'Failed to log workout session. Please try again.';
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                const Icon(Icons.error_outline_rounded, color: Colors.redAccent),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    errorMsg,
+                    style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                  ),
+                ),
+              ],
+            ),
+            backgroundColor: AppTheme.velocityDarkSurface,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                const Icon(Icons.error_outline_rounded, color: Colors.redAccent),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    'An error occurred: ${e.toString()}',
+                    style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                  ),
+                ),
+              ],
+            ),
+            backgroundColor: AppTheme.velocityDarkSurface,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          ),
+        );
       }
     }
   }

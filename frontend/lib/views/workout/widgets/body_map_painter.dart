@@ -16,11 +16,11 @@ class BodyMapPainter extends CustomPainter {
     final centerX = size.width / 2;
 
     final basePaint = Paint()
-      ..color = const Color(0xFF2B3340)
+      ..color = const Color(0xFFD1D5DB)
       ..style = PaintingStyle.fill;
 
     final baseBorderPaint = Paint()
-      ..color = const Color(0xFF424D5E)
+      ..color = const Color(0xFF9CA3AF)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.2;
 

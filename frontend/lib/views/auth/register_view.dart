@@ -116,7 +116,13 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
         title: const Text('Create Account'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_rounded),
-          onPressed: () => context.pop(),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/login');
+            }
+          },
         ),
       ),
       body: SafeArea(

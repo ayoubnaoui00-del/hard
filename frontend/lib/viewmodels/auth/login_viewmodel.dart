@@ -48,7 +48,7 @@ class LoginState {
 }
 
 class LoginViewModel extends Notifier<LoginState> {
-  late final IAuthRepository _authRepository;
+  late IAuthRepository _authRepository;
 
   @override
   LoginState build() {

@@ -6,6 +6,104 @@ export const AGENT_TOOLS = [
   {
     type: 'function',
     function: {
+      name: 'logWorkout',
+      description: 'Log and save a completed workout session with exercises, sets, reps, and weights to the database. Automatically computes volume, updates streak, and awards XP.',
+      parameters: {
+        type: 'object',
+        properties: {
+          name: {
+            type: 'string',
+            description: 'Name of the workout session (e.g. "Chest & Triceps", "Heavy Leg Day", "Push Day").',
+          },
+          duration: {
+            type: 'number',
+            description: 'Estimated workout duration in minutes (e.g. 45, 60).',
+          },
+          exercises: {
+            type: 'array',
+            description: 'List of performed exercises with sets, reps, and weight.',
+            items: {
+              type: 'object',
+              properties: {
+                exerciseName: {
+                  type: 'string',
+                  description: 'Name of the exercise (e.g. "Barbell Bench Press", "Squat", "Pull-up").',
+                },
+                sets: {
+                  type: 'number',
+                  description: 'Number of sets completed.',
+                },
+                reps: {
+                  type: 'number',
+                  description: 'Number of repetitions per set.',
+                },
+                weight: {
+                  type: 'number',
+                  description: 'Weight lifted in kilograms (kg) (0 for bodyweight).',
+                },
+              },
+              required: ['exerciseName', 'sets', 'reps'],
+            },
+          },
+          notes: {
+            type: 'string',
+            description: 'Optional workout notes or feedback.',
+          },
+        },
+        required: ['name', 'exercises'],
+      },
+    },
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'getUserStats',
+      description: 'Retrieve current athlete stats including level, total XP, current streak, total workouts logged, and total volume lifted.',
+      parameters: {
+        type: 'object',
+        properties: {},
+      },
+    },
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'getRecentWorkouts',
+      description: 'Fetch the athlete\'s recent workout history including exercises, sets, reps, and weights to analyze progress or check previous performance.',
+      parameters: {
+        type: 'object',
+        properties: {
+          limit: {
+            type: 'number',
+            description: 'Number of recent workouts to retrieve (default 3, max 10).',
+          },
+          exerciseFilter: {
+            type: 'string',
+            description: 'Optional exercise name to filter or search for (e.g. "Bench Press", "Squat").',
+          },
+        },
+      },
+    },
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'getLeaderboard',
+      description: 'Check global athlete leaderboard standings, top rankings, and the user\'s current rank based on total XP.',
+      parameters: {
+        type: 'object',
+        properties: {
+          limit: {
+            type: 'number',
+            description: 'Number of top athletes to display (default 5, max 20).',
+          },
+        },
+      },
+    },
+  },
+  {
+    type: 'function',
+    function: {
       name: 'addXp',
       description: 'Award XP (experience points) to the athlete for logging a workout, hitting a PR, or achieving a milestone.',
       parameters: {
@@ -85,3 +183,4 @@ export const AGENT_TOOLS = [
     },
   },
 ];
+

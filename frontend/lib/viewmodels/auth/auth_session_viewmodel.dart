@@ -38,7 +38,7 @@ class AuthSessionState {
 }
 
 class AuthSessionViewModel extends Notifier<AuthSessionState> {
-  late final IAuthRepository _authRepository;
+  late IAuthRepository _authRepository;
 
   @override
   AuthSessionState build() {

@@ -93,13 +93,15 @@ Widget buildExercisePill(String text, Color color) {
 }
 
 Widget buildExerciseThumbnail(ExerciseModel exercise, Color muscleColor, {double size = 48}) {
-  final videoUrl = exercise.videoUrl ?? exercise.gifUrl;
-  if (videoUrl != null && videoUrl.isNotEmpty) {
+  final mediaUrl = (exercise.imageUrl != null && exercise.imageUrl!.trim().isNotEmpty)
+      ? exercise.imageUrl!
+      : (exercise.videoUrl ?? exercise.gifUrl);
+  if (mediaUrl != null && mediaUrl.isNotEmpty) {
     return Container(
       width: size,
       height: size,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.velocitySurfaceMuted,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
           color: muscleColor.withValues(alpha: 0.35),
@@ -116,7 +118,7 @@ Widget buildExerciseThumbnail(ExerciseModel exercise, Color muscleColor, {double
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12.5),
         child: Image.network(
-          videoUrl,
+          mediaUrl,
           fit: BoxFit.cover,
           errorBuilder: (context, error, stackTrace) {
             return Center(

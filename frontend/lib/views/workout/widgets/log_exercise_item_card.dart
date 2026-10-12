@@ -43,19 +43,59 @@ class LogExerciseItemCard extends StatelessWidget {
           // Header: Name, Muscle Badge, Delete
           Row(
             children: [
-              Container(
-                width: 38,
-                height: 38,
-                decoration: BoxDecoration(
-                  color: AppTheme.velocityLime.withValues(alpha: 0.25),
-                  borderRadius: BorderRadius.circular(12),
+              if (exercise.imageUrl != null && exercise.imageUrl!.trim().isNotEmpty)
+                Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: AppTheme.velocitySurfaceMuted,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: AppTheme.velocityLime.withValues(alpha: 0.35),
+                      width: 1.2,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.15),
+                        blurRadius: 6,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(11),
+                    child: Image.network(
+                      exercise.imageUrl!,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => Container(
+                        color: AppTheme.velocityLime.withValues(alpha: 0.20),
+                        child: const Icon(
+                          Icons.fitness_center_rounded,
+                          color: AppTheme.velocityLime,
+                          size: 20,
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              else
+                Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: AppTheme.velocityLime.withValues(alpha: 0.20),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: AppTheme.velocityLime.withValues(alpha: 0.35),
+                      width: 1.2,
+                    ),
+                  ),
+                  child: const Icon(
+                    Icons.fitness_center_rounded,
+                    color: AppTheme.velocityLime,
+                    size: 20,
+                  ),
                 ),
-                child: const Icon(
-                  Icons.fitness_center_rounded,
-                  color: AppTheme.velocityLime,
-                  size: 18,
-                ),
-              ),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(

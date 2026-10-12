@@ -77,9 +77,9 @@ class HomeState {
 }
 
 class HomeViewModel extends Notifier<HomeState> {
-  late final IAuthRepository _authRepository;
-  late final IWorkoutRepository _workoutRepository;
-  late final IAchievementRepository _achievementRepository;
+  late IAuthRepository _authRepository;
+  late IWorkoutRepository _workoutRepository;
+  late IAchievementRepository _achievementRepository;
 
   @override
   HomeState build() {

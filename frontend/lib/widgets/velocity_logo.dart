@@ -22,8 +22,14 @@ class VelocityLogo extends StatelessWidget {
         SizedBox(
           width: size,
           height: size,
-          child: CustomPaint(
-            painter: _VelocityIconPainter(),
+          child: Image.asset(
+            'assets/images/hard_logo.png',
+            width: size,
+            height: size,
+            fit: BoxFit.contain,
+            errorBuilder: (context, error, stackTrace) => CustomPaint(
+              painter: _VelocityIconPainter(),
+            ),
           ),
         ),
         if (showText) ...[

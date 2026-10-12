@@ -63,7 +63,7 @@ class RegisterState {
 }
 
 class RegisterViewModel extends Notifier<RegisterState> {
-  late final IAuthRepository _authRepository;
+  late IAuthRepository _authRepository;
 
   @override
   RegisterState build() {

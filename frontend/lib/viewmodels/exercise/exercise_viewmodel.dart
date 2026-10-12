@@ -87,7 +87,7 @@ class ExerciseListState {
 }
 
 class ExerciseListViewModel extends Notifier<ExerciseListState> {
-  late final IExerciseRepository _repository;
+  late IExerciseRepository _repository;
   Timer? _debounceTimer;
 
   static const int _pageSize = 20;

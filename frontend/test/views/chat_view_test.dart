@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gymtrack/models/chat_model.dart';
 import 'package:gymtrack/repositories/chat_repository.dart';
 import 'package:gymtrack/views/coach/coach_view.dart';
+import 'package:gymtrack/views/coach/widgets/coach_bubble.dart';
 
 class MockChatRepository implements IChatRepository {
   List<ConversationModel> conversations = [
@@ -39,7 +40,7 @@ class MockChatRepository implements IChatRepository {
   }
 
   @override
-  Future<ConversationModel> getConversation(int id) async {
+  Future<ConversationModel> getConversation(dynamic id) async {
     return conversations.firstWhere((c) => c.id == id);
   }
 
@@ -60,7 +61,7 @@ class MockChatRepository implements IChatRepository {
 
   @override
   Future<ChatMessageModel> addMessage(
-    int conversationId, {
+    dynamic conversationId, {
     required String content,
     required String role,
   }) async {
@@ -73,12 +74,12 @@ class MockChatRepository implements IChatRepository {
   }
 
   @override
-  Future<void> deleteConversation(int id) async {
+  Future<void> deleteConversation(dynamic id) async {
     conversations.removeWhere((c) => c.id == id);
   }
 
   @override
-  Stream<String> streamChatMessage(String message, {int? conversationId}) async* {
+  Stream<String> streamChatMessage(String message, {dynamic conversationId}) async* {
     yield 'Great question! ';
     yield 'Focus on progressive overload ';
     yield 'and consistent recovery.';
@@ -219,6 +220,42 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Form Tips'), findsOneWidget);
+    });
+
+    testWidgets('CoachChatBubble parses markdown asterisks into bold-italic styling without stars', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: CoachChatBubble(
+              isUser: false,
+              content: 'Ensure **Protein:** 30g within 1 hour.',
+              timestamp: DateTime.now(),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      // Ensure raw asterisks are not in the rendered spans
+      expect(find.text('Ensure **Protein:** 30g within 1 hour.'), findsNothing);
+
+      // Verify Text.rich widget contains bold-italic span for Protein:
+      final textRichFinder = find.byType(Text);
+      expect(textRichFinder, findsWidgets);
+
+      final textWidget = tester.widget<Text>(textRichFinder.first);
+      expect(textWidget.textSpan, isNotNull);
+
+      final spans = (textWidget.textSpan as TextSpan).children!;
+      // Span 1: "Ensure "
+      expect((spans[0] as TextSpan).text, 'Ensure ');
+      // Span 2: "Protein:" with bold italic
+      final highlightedSpan = spans[1] as TextSpan;
+      expect(highlightedSpan.text, 'Protein:');
+      expect(highlightedSpan.style?.fontStyle, FontStyle.italic);
+      expect(highlightedSpan.style?.fontWeight, FontWeight.w800);
+      // Span 3: " 30g within 1 hour."
+      expect((spans[2] as TextSpan).text, ' 30g within 1 hour.');
     });
   });
 }

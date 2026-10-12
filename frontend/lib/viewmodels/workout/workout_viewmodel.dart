@@ -40,7 +40,7 @@ class WorkoutState {
 }
 
 class WorkoutViewModel extends Notifier<WorkoutState> {
-  late final IWorkoutRepository _workoutRepository;
+  late IWorkoutRepository _workoutRepository;
 
   @override
   WorkoutState build() {

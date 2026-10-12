@@ -87,9 +87,9 @@ class ProfileState {
 }
 
 class ProfileViewModel extends Notifier<ProfileState> {
-  late final IUserRepository _userRepository;
-  late final IWorkoutRepository _workoutRepository;
-  late final IAchievementRepository _achievementRepository;
+  late IUserRepository _userRepository;
+  late IWorkoutRepository _workoutRepository;
+  late IAchievementRepository _achievementRepository;
 
   @override
   ProfileState build() {

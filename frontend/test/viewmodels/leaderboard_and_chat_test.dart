@@ -13,7 +13,7 @@ class FakeChatRepository implements IChatRepository {
   }
 
   @override
-  Future<ConversationModel> getConversation(int id) async {
+  Future<ConversationModel> getConversation(dynamic id) async {
     return ConversationModel(
       id: id,
       userId: 1,
@@ -47,7 +47,7 @@ class FakeChatRepository implements IChatRepository {
 
   @override
   Future<ChatMessageModel> addMessage(
-    int conversationId, {
+    dynamic conversationId, {
     required String content,
     required String role,
   }) async {
@@ -60,12 +60,12 @@ class FakeChatRepository implements IChatRepository {
   }
 
   @override
-  Future<void> deleteConversation(int id) async {
+  Future<void> deleteConversation(dynamic id) async {
     conversations.removeWhere((c) => c.id == id);
   }
 
   @override
-  Stream<String> streamChatMessage(String message, {int? conversationId}) async* {
+  Stream<String> streamChatMessage(String message, {dynamic conversationId}) async* {
     yield 'Great job ';
     yield 'on your bench press! ';
     yield 'Keep it up!';

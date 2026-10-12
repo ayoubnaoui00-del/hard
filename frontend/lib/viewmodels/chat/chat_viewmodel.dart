@@ -51,7 +51,7 @@ class ChatState {
 }
 
 class ChatViewModel extends Notifier<ChatState> {
-  late final IChatRepository _chatRepository;
+  late IChatRepository _chatRepository;
 
   @override
   ChatState build() {
@@ -122,10 +122,7 @@ class ChatViewModel extends Notifier<ChatState> {
   Future<void> fetchChatHistory(dynamic conversationId) async {
     state = state.copyWith(isLoading: true, clearError: true);
     try {
-      final id = conversationId is int
-          ? conversationId
-          : int.tryParse(conversationId.toString()) ?? 0;
-      final conv = await _chatRepository.getConversation(id);
+      final conv = await _chatRepository.getConversation(conversationId);
       if (!ref.mounted) return;
       state = state.copyWith(
         currentConversation: conv,
@@ -143,10 +140,7 @@ class ChatViewModel extends Notifier<ChatState> {
 
   Future<void> deleteConversation(dynamic conversationId) async {
     try {
-      final id = conversationId is int
-          ? conversationId
-          : int.tryParse(conversationId.toString()) ?? 0;
-      await _chatRepository.deleteConversation(id);
+      await _chatRepository.deleteConversation(conversationId);
       if (!ref.mounted) return;
       final updatedConvs =
           state.conversations.where((c) => c.id != conversationId).toList();
@@ -177,9 +171,6 @@ class ChatViewModel extends Notifier<ChatState> {
     }
 
     final convId = state.currentConversation?.id;
-    final int? parsedConvId = convId is int
-        ? convId
-        : int.tryParse(convId?.toString() ?? '');
 
     final userMessage = ChatMessageModel(
       conversationId: convId,
@@ -199,7 +190,7 @@ class ChatViewModel extends Notifier<ChatState> {
     try {
       final stream = _chatRepository.streamChatMessage(
         trimmed,
-        conversationId: parsedConvId,
+        conversationId: convId,
       );
 
       String accumulatedResponse = '';

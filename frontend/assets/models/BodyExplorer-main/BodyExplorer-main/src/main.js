@@ -82,23 +82,24 @@ function classifyMuscleGroup(name) {
 
 // ───────────── Materials ─────────────
 const baselineMaterial = new THREE.MeshStandardMaterial({
-  color: new THREE.Color(0x1e2736),
-  roughness: 0.55,
-  metalness: 0.1,
+  color: new THREE.Color(0xd1d5db), // High-visibility anatomical light grey
+  roughness: 0.45,
+  metalness: 0.08,
   side: THREE.DoubleSide,
 });
 
 const highlightMaterial = new THREE.MeshStandardMaterial({
-  color: new THREE.Color(0xcefa2b),
-  roughness: 0.35,
-  metalness: 0.15,
+  color: new THREE.Color(0xcefa2b), // Signature Velocity Lime highlight
+  roughness: 0.32,
+  metalness: 0.12,
   emissive: new THREE.Color(0x354700),
+  emissiveIntensity: 0.7,
   side: THREE.DoubleSide,
 });
 
 const tendonMaterial = new THREE.MeshStandardMaterial({
-  color: new THREE.Color(0x273142),
-  roughness: 0.6,
+  color: new THREE.Color(0x9ca3af), // Slate grey for tendons/ligaments
+  roughness: 0.55,
   metalness: 0.05,
   side: THREE.DoubleSide,
 });
@@ -115,9 +116,16 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.6;
+renderer.toneMappingExposure = 1.35;
 
 const scene = new THREE.Scene();
+
+function getOptimalCameraDistance() {
+  const aspect = window.innerWidth / window.innerHeight;
+  if (aspect < 0.6) return 36;
+  if (aspect < 0.8) return 33;
+  return 31;
+}
 
 const camera = new THREE.PerspectiveCamera(
   45,
@@ -125,40 +133,45 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   150
 );
-camera.position.set(0, 5, 34);
+camera.position.set(0, 0, getOptimalCameraDistance());
 
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
 controls.dampingFactor = 0.08;
-controls.minDistance = 14;
-controls.maxDistance = 55;
-controls.target.set(0, 5, 0);
+controls.minDistance = 10;
+controls.maxDistance = 50;
+controls.target.set(0, 0, 0);
 controls.enablePan = false;
 controls.autoRotate = false;
 controls.autoRotateSpeed = 0.8;
 
-// ───────────── Lighting (Dark studio fitness vibe) ─────────────
-const ambientLight = new THREE.AmbientLight(0x222c3d, 1.3);
+// ───────────── Lighting ─────────────
+const ambientLight = new THREE.AmbientLight(0xffffff, 1.35);
 scene.add(ambientLight);
 
 // Key directional light (top-front-right)
-const keyLight = new THREE.DirectionalLight(0xffffff, 1.7);
+const keyLight = new THREE.DirectionalLight(0xffffff, 1.4);
 keyLight.position.set(10, 18, 14);
 scene.add(keyLight);
 
-// Subtle electric blue/purple fill (bottom-left)
-const fillLight = new THREE.DirectionalLight(0x2979ff, 0.85);
-fillLight.position.set(-12, 6, -10);
+// Soft fill light (bottom-left)
+const fillLight = new THREE.DirectionalLight(0xe2e8f0, 0.75);
+fillLight.position.set(-12, 6, 10);
 scene.add(fillLight);
 
-// Electric lime rim light (from top-back)
-const rimLight = new THREE.DirectionalLight(0xcefa2b, 1.4);
-rimLight.position.set(0, 12, -18);
+// Back light for posterior definition
+const backLight = new THREE.DirectionalLight(0xffffff, 0.9);
+backLight.position.set(0, 10, -18);
+scene.add(backLight);
+
+// Subtle rim light (from top-back)
+const rimLight = new THREE.DirectionalLight(0xcefa2b, 0.4);
+rimLight.position.set(8, 14, -12);
 scene.add(rimLight);
 
 // Front fill light
-const frontLight = new THREE.DirectionalLight(0xffffff, 0.75);
-frontLight.position.set(0, 6, 22);
+const frontLight = new THREE.DirectionalLight(0xffffff, 0.85);
+frontLight.position.set(0, 4, 20);
 scene.add(frontLight);
 
 // ───────────── State ─────────────
@@ -225,7 +238,7 @@ loader.load(
     const center = box.getCenter(new THREE.Vector3());
     const size = box.getSize(new THREE.Vector3());
 
-    const targetHeight = 30;
+    const targetHeight = 22.0;
     const scaleFactor = targetHeight / size.z;
 
     root.traverse((child) => {
@@ -307,9 +320,10 @@ window.resetCamera = function() {
 
 // ───────────── Smooth Camera Transitions ─────────────
 function smoothRotateTo(isFront, duration = 650) {
-  const targetZ = isFront ? 34 : -34;
+  const dist = getOptimalCameraDistance();
+  const targetZ = isFront ? dist : -dist;
   const startPos = camera.position.clone();
-  const endPos = new THREE.Vector3(0, 5, targetZ);
+  const endPos = new THREE.Vector3(0, 0, targetZ);
   const startTime = performance.now();
 
   function step(now) {
@@ -318,7 +332,7 @@ function smoothRotateTo(isFront, duration = 650) {
     const ease = progress < 0.5 ? 4 * progress * progress * progress : 1 - Math.pow(-2 * progress + 2, 3) / 2;
 
     camera.position.lerpVectors(startPos, endPos, ease);
-    controls.target.set(0, 5, 0);
+    controls.target.set(0, 0, 0);
     controls.update();
 
     if (progress < 1) {
@@ -377,6 +391,11 @@ window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
+  const dist = getOptimalCameraDistance();
+  const isBack = camera.position.z < 0;
+  camera.position.set(0, 0, isBack ? -dist : dist);
+  controls.target.set(0, 0, 0);
+  controls.update();
 });
 
 // ───────────── Render Loop ─────────────

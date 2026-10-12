@@ -5,15 +5,15 @@ import '../services/api_service.dart';
 
 abstract class IChatRepository {
   Future<List<ConversationModel>> getConversations({int page = 1, int limit = 20});
-  Future<ConversationModel> getConversation(int id);
+  Future<ConversationModel> getConversation(dynamic id);
   Future<ConversationModel> createConversation({String? title, String? topic});
   Future<ChatMessageModel> addMessage(
-    int conversationId, {
+    dynamic conversationId, {
     required String content,
     required String role,
   });
-  Future<void> deleteConversation(int id);
-  Stream<String> streamChatMessage(String message, {int? conversationId});
+  Future<void> deleteConversation(dynamic id);
+  Stream<String> streamChatMessage(String message, {dynamic conversationId});
 }
 
 class ChatRepository implements IChatRepository {
@@ -44,7 +44,7 @@ class ChatRepository implements IChatRepository {
   }
 
   @override
-  Future<ConversationModel> getConversation(int id) async {
+  Future<ConversationModel> getConversation(dynamic id) async {
     final response = await apiService.get('/conversations/$id');
     final responseData = response.data as Map<String, dynamic>;
     final data = responseData['data'] as Map<String, dynamic>? ?? responseData;
@@ -74,7 +74,7 @@ class ChatRepository implements IChatRepository {
 
   @override
   Future<ChatMessageModel> addMessage(
-    int conversationId, {
+    dynamic conversationId, {
     required String content,
     required String role,
   }) async {
@@ -94,17 +94,17 @@ class ChatRepository implements IChatRepository {
   }
 
   @override
-  Future<void> deleteConversation(int id) async {
+  Future<void> deleteConversation(dynamic id) async {
     await apiService.delete('/conversations/$id');
   }
 
   @override
-  Stream<String> streamChatMessage(String message, {int? conversationId}) {
+  Stream<String> streamChatMessage(String message, {dynamic conversationId}) {
     return apiService.streamChat(
       '/agent/chat',
       {
         'message': message,
-        'conversationId': ?conversationId,
+        if (conversationId != null) 'conversationId': conversationId.toString(),
       },
     );
   }

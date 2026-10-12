@@ -83,7 +83,7 @@ class BodyMapConsole extends StatelessWidget {
           ],
 
           SizedBox(
-            height: 200,
+            height: isEmbedded ? 285 : 340,
             child: InteractiveBodyModel(
               selectedMuscle: selectedMuscle,
               isFrontView: isFrontView,

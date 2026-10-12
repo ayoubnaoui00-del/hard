@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../viewmodels/auth/auth_session_viewmodel.dart';
+import '../views/auth/welcome_view.dart';
 import '../views/auth/login_view.dart';
 import '../views/auth/register_view.dart';
 import '../views/main_shell_view.dart';
@@ -29,7 +30,8 @@ class RouterNotifier extends ChangeNotifier {
   String? redirect(BuildContext context, GoRouterState state) {
     final authSession = _ref.read(authSessionViewModelProvider);
     final isAuthenticated = authSession.isAuthenticated;
-    final isAuthRoute = state.matchedLocation == '/login' ||
+    final isAuthRoute = state.matchedLocation == '/welcome' ||
+        state.matchedLocation == '/login' ||
         state.matchedLocation == '/register';
 
     // If unauthenticated and trying to access protected routes, redirect to login
@@ -37,8 +39,10 @@ class RouterNotifier extends ChangeNotifier {
       return '/login';
     }
 
-    // If authenticated and trying to access auth screens, redirect to home
-    if (isAuthenticated && isAuthRoute) {
+    // If authenticated and trying to access login or register screens, redirect to home
+    if (isAuthenticated &&
+        (state.matchedLocation == '/login' ||
+            state.matchedLocation == '/register')) {
       return '/home';
     }
 
@@ -55,10 +59,16 @@ final routerProvider = Provider<GoRouter>((ref) {
 
   return GoRouter(
     navigatorKey: _rootNavigatorKey,
-    initialLocation: '/login',
+    initialLocation: '/welcome',
     refreshListenable: notifier,
     redirect: notifier.redirect,
     routes: [
+      // First / Welcome Landing Screen
+      GoRoute(
+        path: '/welcome',
+        builder: (context, state) => const WelcomeView(),
+      ),
+
       // Auth Routes
       GoRoute(
         path: '/login',
@@ -159,8 +169,12 @@ final routerProvider = Provider<GoRouter>((ref) {
 // Fallback constant router if accessed without provider (backwards compatibility)
 final appRouter = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: '/login',
+  initialLocation: '/welcome',
   routes: [
+    GoRoute(
+      path: '/welcome',
+      builder: (context, state) => const WelcomeView(),
+    ),
     GoRoute(
       path: '/login',
       builder: (context, state) => const LoginView(),
