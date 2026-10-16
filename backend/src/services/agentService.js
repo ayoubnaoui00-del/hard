@@ -46,7 +46,7 @@ class AgentService {
     const nonExerciseTopics = [
       'protein', 'carb', 'calorie', 'macro', 'diet', 'food', 'meal', 'nutrition',
       'creatine', 'supplement', 'vitamin', 'water', 'hydration', 'sleep', 'rest day',
-      'leaderboard', 'rank', 'streak', 'level', 'xp', 'hello', 'hi', 'hey', 'thanks', 'thank you'
+      'streak', 'level', 'xp', 'hello', 'hi', 'hey', 'thanks', 'thank you'
     ];
     const isNonExercise = nonExerciseTopics.some((kw) => lower.includes(kw));
 
@@ -191,8 +191,6 @@ class AgentService {
     const relevantTools = [];
     if (lower.includes('log') && (lower.includes('workout') || lower.includes('set') || lower.includes('bench') || lower.includes('reps'))) {
       relevantTools.push('logWorkout');
-    } else if (lower.includes('leaderboard') || lower.includes('rank') || lower.includes('standings')) {
-      relevantTools.push('getLeaderboard');
     } else if (lower.includes('stats') || lower.includes('my level') || lower.includes('my xp') || lower.includes('total volume')) {
       relevantTools.push('getUserStats');
     } else if (lower.includes('suggest next') || lower.includes('next exercise')) {

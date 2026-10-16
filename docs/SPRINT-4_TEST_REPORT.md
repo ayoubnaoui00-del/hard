@@ -36,8 +36,8 @@
 - **Result:** `11 passed, 0 failed`
 
 ### 4. AI Function Calling & Actions (`tests/function-calling.test.js`)
-- 9 tests covering JSON Schema tool definitions, 6 core backend actions (`addXp`, `updateLeaderboard`, `checkAchievements`, `suggestNextExercise`, `generateWorkoutPlan`, `updateStreak`), dispatcher routing, and error resilience.
-- **Result:** `9 passed, 0 failed`
+- Tests covering JSON Schema tool definitions, core backend actions (`addXp`, `checkAchievements`, `suggestNextExercise`, `generateWorkoutPlan`, `updateStreak`), dispatcher routing, and error resilience.
+- **Result:** `All passed, 0 failed`
 
 ---
 

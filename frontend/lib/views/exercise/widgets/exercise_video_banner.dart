@@ -20,9 +20,9 @@ class ExerciseVideoBanner extends StatelessWidget {
       width: double.infinity,
       height: 220,
       decoration: BoxDecoration(
-        color: const Color(0xFF0F1117),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppTheme.velocityBorder, width: 1.2),
+        border: Border.all(color: Colors.white, width: 1.2),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.12),
@@ -36,6 +36,7 @@ class ExerciseVideoBanner extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: [
+            Container(color: Colors.white),
             if (videoUrl != null)
               Image.network(
                 videoUrl,
@@ -52,7 +53,7 @@ class ExerciseVideoBanner extends StatelessWidget {
                           child: CircularProgressIndicator(
                             strokeWidth: 2.5,
                             valueColor: AlwaysStoppedAnimation<Color>(
-                              AppTheme.velocityLime,
+                              AppTheme.velocityDarkSurface,
                             ),
                           ),
                         ),
@@ -61,7 +62,7 @@ class ExerciseVideoBanner extends StatelessWidget {
                           'Loading demonstration video...',
                           style: TextStyle(
                             fontSize: 12,
-                            color: Colors.white70,
+                            color: Color(0xFF64748B),
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -71,11 +72,17 @@ class ExerciseVideoBanner extends StatelessWidget {
                 },
                 errorBuilder: (context, error, stackTrace) {
                   debugPrint('[ExerciseMedia] Error loading video demo: $videoUrl: $error');
-                  return buildVisualPreviewFallback(exercise, muscleColor);
+                  return Container(
+                    color: const Color(0xFF0F1117),
+                    child: buildVisualPreviewFallback(exercise, muscleColor),
+                  );
                 },
               )
             else
-              buildVisualPreviewFallback(exercise, muscleColor),
+              Container(
+                color: const Color(0xFF0F1117),
+                child: buildVisualPreviewFallback(exercise, muscleColor),
+              ),
 
             Positioned(
               top: 10,
@@ -83,9 +90,9 @@ class ExerciseVideoBanner extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 decoration: BoxDecoration(
-                  color: Colors.black.withValues(alpha: 0.7),
+                  color: Colors.black.withValues(alpha: 0.75),
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: Colors.white12),
+                  border: Border.all(color: Colors.white24),
                 ),
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,

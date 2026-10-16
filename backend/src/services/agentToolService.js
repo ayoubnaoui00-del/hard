@@ -3,6 +3,18 @@ import { User, Workout, WorkoutExercise, Exercise, Achievement } from '../models
 import xpService from './xpService.js';
 import achievementService from './achievementService.js';
 
+function getMuscleGroupWhere(muscle) {
+  if (!muscle) return null;
+  const trimmed = muscle.trim().toLowerCase();
+  if (trimmed === 'arms' || trimmed === 'arm') {
+    return { [Op.in]: ['Biceps', 'Triceps', 'Forearms', 'Arms'] };
+  }
+  if (trimmed === 'legs' || trimmed === 'leg') {
+    return { [Op.in]: ['Quadriceps', 'Hamstrings', 'Calves', 'Legs'] };
+  }
+  return { [Op.iLike]: `%${muscle.trim()}%` };
+}
+
 class AgentToolService {
   /**
    * 1. addXp(userId, amount, reason)
@@ -78,9 +90,7 @@ class AgentToolService {
     // 2. Fetch candidate exercises for the target muscle group
     const candidates = await Exercise.findAll({
       where: {
-        muscleGroup: {
-          [Op.iLike]: `%${targetGroup}%`,
-        },
+        muscleGroup: getMuscleGroupWhere(targetGroup),
       },
       limit: 20,
     });
@@ -137,9 +147,7 @@ class AgentToolService {
     // Fetch exercises for the focus
     let exercises = await Exercise.findAll({
       where: {
-        muscleGroup: {
-          [Op.iLike]: `%${targetFocus}%`,
-        },
+        muscleGroup: getMuscleGroupWhere(targetFocus),
       },
       limit: exerciseCount * 2,
     });
@@ -402,41 +410,6 @@ class AgentToolService {
   }
 
   /**
-   * 10. getLeaderboard(userId, { limit })
-   * Retrieves rankings of top athletes and user's relative position.
-   */
-  async handleGetLeaderboard(userId, { limit = 5 } = {}) {
-    const count = Math.max(1, Math.min(20, parseInt(limit, 10) || 5));
-
-    const allUsers = await User.findAll({
-      attributes: ['id', 'username', 'level', 'totalXp', 'streak'],
-      order: [['totalXp', 'DESC']],
-    });
-
-    const userIndex = allUsers.findIndex((u) => u.id === userId);
-    const userRank = userIndex >= 0 ? userIndex + 1 : allUsers.length;
-
-    const topLeaders = allUsers.slice(0, count).map((u, idx) => ({
-      rank: idx + 1,
-      username: u.username,
-      level: u.level,
-      totalXp: u.totalXp,
-      streak: u.streak,
-    }));
-
-    const currentUser = allUsers.find((u) => u.id === userId);
-
-    return {
-      success: true,
-      myRank: userRank,
-      totalAthletes: allUsers.length,
-      topAthletes: topLeaders,
-      myTotalXp: currentUser?.totalXp || 0,
-      message: `You are ranked #${userRank} out of ${allUsers.length} athletes with ${currentUser?.totalXp || 0} Total XP!`,
-    };
-  }
-
-  /**
    * Master dispatcher for agent function calls.
    * Ensures non-crashing execution with standardized response envelopes.
    */
@@ -449,8 +422,6 @@ class AgentToolService {
           return await this.handleGetUserStats(userId);
         case 'getRecentWorkouts':
           return await this.handleGetRecentWorkouts(userId, args);
-        case 'getLeaderboard':
-          return await this.handleGetLeaderboard(userId, args);
         case 'addXp':
           return await this.handleAddXp(userId, args);
         case 'checkAchievements':
@@ -464,7 +435,7 @@ class AgentToolService {
         default:
           return {
             success: false,
-            error: `Unknown tool function "${toolName}". Available tools: logWorkout, getUserStats, getRecentWorkouts, getLeaderboard, addXp, checkAchievements, suggestNextExercise, generateWorkoutPlan, updateStreak.`,
+            error: `Unknown tool function "${toolName}". Available tools: logWorkout, getUserStats, getRecentWorkouts, addXp, checkAchievements, suggestNextExercise, generateWorkoutPlan, updateStreak.`,
           };
       }
     } catch (err) {

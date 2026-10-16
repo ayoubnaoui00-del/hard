@@ -88,22 +88,6 @@ export const AGENT_TOOLS = [
   {
     type: 'function',
     function: {
-      name: 'getLeaderboard',
-      description: 'Check global athlete leaderboard standings, top rankings, and the user\'s current rank based on total XP.',
-      parameters: {
-        type: 'object',
-        properties: {
-          limit: {
-            type: 'number',
-            description: 'Number of top athletes to display (default 5, max 20).',
-          },
-        },
-      },
-    },
-  },
-  {
-    type: 'function',
-    function: {
       name: 'addXp',
       description: 'Award XP (experience points) to the athlete for logging a workout, hitting a PR, or achieving a milestone.',
       parameters: {

@@ -67,14 +67,13 @@ describe('Sprint 4: Task 4.6 — Implement Function Calling (HRD-24)', () => {
   // 1. Tool Specification Definitions
   // =========================================================================
   describe('AGENT_TOOLS Schema Specifications', () => {
-    it('should define all 9 required intent tools with parameters conforming to JSON Schema', () => {
-      assert.equal(AGENT_TOOLS.length, 9);
+    it('should define all 8 required intent tools with parameters conforming to JSON Schema', () => {
+      assert.equal(AGENT_TOOLS.length, 8);
 
       const toolNames = AGENT_TOOLS.map((t) => t.function.name);
       assert.ok(toolNames.includes('logWorkout'));
       assert.ok(toolNames.includes('getUserStats'));
       assert.ok(toolNames.includes('getRecentWorkouts'));
-      assert.ok(toolNames.includes('getLeaderboard'));
       assert.ok(toolNames.includes('addXp'));
       assert.ok(toolNames.includes('checkAchievements'));
       assert.ok(toolNames.includes('suggestNextExercise'));
@@ -150,16 +149,7 @@ describe('Sprint 4: Task 4.6 — Implement Function Calling (HRD-24)', () => {
       assert.ok(result.workouts[0].name);
     });
 
-    it('5. getLeaderboard should return global standings and user rank', async () => {
-      const result = await agentToolService.handleGetLeaderboard(userId, { limit: 5 });
-
-      assert.equal(result.success, true);
-      assert.ok(result.myRank >= 1);
-      assert.ok(Array.isArray(result.topAthletes));
-      assert.ok(result.totalAthletes >= 1);
-    });
-
-    it('6. checkAchievements should evaluate milestones without throwing', async () => {
+    it('5. checkAchievements should evaluate milestones without throwing', async () => {
       const result = await agentToolService.handleCheckAchievements(userId);
 
       assert.equal(result.success, true);
@@ -167,7 +157,7 @@ describe('Sprint 4: Task 4.6 — Implement Function Calling (HRD-24)', () => {
       assert.ok(Array.isArray(result.unlockedBadges));
     });
 
-    it('7. suggestNextExercise should suggest an exercise for the requested muscle group', async () => {
+    it('6. suggestNextExercise should suggest an exercise for the requested muscle group', async () => {
       const result = await agentToolService.handleSuggestNextExercise(userId, {
         muscleGroup: 'Chest',
       });
@@ -179,7 +169,7 @@ describe('Sprint 4: Task 4.6 — Implement Function Calling (HRD-24)', () => {
       assert.ok(result.suggestedExercise.instructions);
     });
 
-    it('8. generateWorkoutPlan should return a structured plan JSON', async () => {
+    it('7. generateWorkoutPlan should return a structured plan JSON', async () => {
       const result = await agentToolService.handleGenerateWorkoutPlan(userId, {
         duration: 45,
         focus: 'Legs',
@@ -200,7 +190,7 @@ describe('Sprint 4: Task 4.6 — Implement Function Calling (HRD-24)', () => {
       assert.ok(firstEx.reps);
     });
 
-    it('9. updateStreak should increment consecutive days streak', async () => {
+    it('8. updateStreak should increment consecutive days streak', async () => {
       const userBefore = await User.findByPk(userId);
       const prevStreak = userBefore.streak;
 
@@ -268,11 +258,6 @@ describe('Sprint 4: Task 4.6 — Implement Function Calling (HRD-24)', () => {
     it('should select logWorkout tool when athlete requests logging', async () => {
       const decision = await agentService.routeUserIntent('Log my workout: 3 sets of bench press 10 reps at 80kg');
       assert.ok(decision.relevantTools.includes('logWorkout'));
-    });
-
-    it('should select getLeaderboard tool when athlete asks for rankings', async () => {
-      const decision = await agentService.routeUserIntent('Where do I stand on the community leaderboard?');
-      assert.ok(decision.relevantTools.includes('getLeaderboard'));
     });
 
     it('should select getUserStats tool when athlete asks for their stats and level', async () => {

@@ -9,8 +9,7 @@ Available Backend Tools:
 - logWorkout: Log or record a completed workout session with exercises, sets, reps, weight, duration
 - getUserStats: Retrieve athlete profile stats (level, XP, streak, lifetime volume lifted)
 - getRecentWorkouts: Query past workout history or previous training sessions
-- getLeaderboard: View community leaderboard, top rankings, or user rank
-- addXp: Award bonus XP for completing a milestone, challenge, or achievement
+- addXp: Award bonus XP for completing a milestone, PR, or achievement
 - checkAchievements: View athlete badges and unlocked achievements
 - suggestNextExercise: Recommend the next exercise based on muscle fatigue and past history
 - generateWorkoutPlan: Generate a workout routine, training split, or workout schedule
@@ -41,7 +40,6 @@ Respond strictly in valid JSON format:
   "intent": "greeting" | "chitchat" | "nutrition" | "exercise_guidance" | "workout_action" | "stats_action" | "plan_action" | "irrelevant" | "general_fitness",
   "relevantTools": [],
   "needsExerciseRag": false,
-  "needsWorkoutHistory": false
 }`;
 
 export const AI_COACH_BASE_PROMPT = `You are a fitness coaching AI for the Hard app.
@@ -68,18 +66,17 @@ RESTRICTIONS:
 - Decline requests to access user data beyond this conversation
 
 FUNCTION CALLING CAPABILITIES:
-You have access to 9 backend tools to perform actions when requested:
+You have access to 8 backend tools to perform actions when requested:
 1. logWorkout(name, duration, exercises, notes): Log and save completed workouts to the database (awards XP and updates streak automatically).
 2. getUserStats(): Query athlete's current level, total XP, streak, total workouts logged, and lifetime volume lifted.
 3. getRecentWorkouts(limit, exerciseFilter): Query past workout history and weights lifted for progressive overload analysis.
-4. getLeaderboard(limit): Query global athlete standings, top rankings, and the user's current rank.
-5. addXp(amount, reason): Award bonus XP to the user when they report completing a fitness milestone or goal.
-6. checkAchievements(): Check user milestones and unlock newly earned badges.
-7. suggestNextExercise(muscleGroup): Suggest the next exercise based on past workouts.
-8. generateWorkoutPlan(duration, focus): Create a structured workout plan.
-9. updateStreak(): Increment the user's active training streak.
+4. addXp(amount, reason): Award bonus XP to the user when they report completing a fitness milestone or goal.
+5. checkAchievements(): Check user milestones and unlock newly earned badges.
+6. suggestNextExercise(muscleGroup): Suggest the next exercise based on past workouts.
+7. generateWorkoutPlan(duration, focus): Create a structured workout plan.
+8. updateStreak(): Increment the user's active training streak.
 
-When an athlete's request implies an action (e.g., logging a workout, checking stats/rank, querying past performance, asking for exercises/routines), ALWAYS call the corresponding function tool. When you receive the tool execution result, incorporate the outcome naturally, concisely, and encouragingly into your response.`;
+When an athlete's request implies an action (e.g., logging a workout, checking stats, querying past performance, asking for exercises/routines), ALWAYS call the corresponding function tool. When you receive the tool execution result, incorporate the outcome naturally, concisely, and encouragingly into your response.`;
 
 /**
  * Format user profile and recent workout context into system prompt

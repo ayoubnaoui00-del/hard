@@ -45,8 +45,14 @@ Color getMuscleColor(String muscle) {
     case 'shoulders':
       return const Color(0xFFFF9100);
     case 'arms':
+    case 'biceps':
+    case 'triceps':
+    case 'forearms':
       return const Color(0xFFB388FF);
     case 'legs':
+    case 'quadriceps':
+    case 'hamstrings':
+    case 'calves':
       return const Color(0xFF00E676);
     case 'core':
       return const Color(0xFF00E5FF);
@@ -64,8 +70,14 @@ IconData getMuscleIcon(String muscle) {
     case 'shoulders':
       return Icons.hardware_rounded;
     case 'arms':
+    case 'biceps':
+    case 'triceps':
+    case 'forearms':
       return Icons.sports_martial_arts_rounded;
     case 'legs':
+    case 'quadriceps':
+    case 'hamstrings':
+    case 'calves':
       return Icons.directions_run_rounded;
     case 'core':
       return Icons.adjust_rounded;

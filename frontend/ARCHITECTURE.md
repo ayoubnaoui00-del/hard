@@ -80,8 +80,6 @@ lib/
 │   │   └── exercise_view.dart
 │   ├── home/
 │   │   └── home_view.dart
-│   ├── social/
-│   │   └── social_view.dart
 │   ├── workout/
 │   │   └── workout_view.dart
 │   └── main_shell_view.dart

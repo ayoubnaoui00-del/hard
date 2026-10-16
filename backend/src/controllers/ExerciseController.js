@@ -61,9 +61,20 @@ class ExerciseController {
 
       const targetMuscle = muscle || muscleGroup;
       if (targetMuscle) {
-        where.muscleGroup = {
-          [Op.iLike]: `%${targetMuscle.trim()}%`,
-        };
+        const trimmed = targetMuscle.trim().toLowerCase();
+        if (trimmed === 'arms' || trimmed === 'arm') {
+          where.muscleGroup = {
+            [Op.in]: ['Biceps', 'Triceps', 'Forearms', 'Arms'],
+          };
+        } else if (trimmed === 'legs' || trimmed === 'leg') {
+          where.muscleGroup = {
+            [Op.in]: ['Quadriceps', 'Hamstrings', 'Calves', 'Legs'],
+          };
+        } else {
+          where.muscleGroup = {
+            [Op.iLike]: `%${targetMuscle.trim()}%`,
+          };
+        }
       }
 
       if (search) {
