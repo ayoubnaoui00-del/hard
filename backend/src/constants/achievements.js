@@ -150,15 +150,4 @@ export const ACHIEVEMENT_DEFINITIONS = [
     threshold: 10,
     check: (stats) => (stats.userLevel || 1) >= 10,
   },
-
-  // --- Challenge Wins ---
-  {
-    code: 'CHALLENGE_1',
-    type: 'CHALLENGE_WIN',
-    name: 'First Blood',
-    description: 'Won your first head-to-head challenge.',
-    badgeIcon: 'swords',
-    threshold: 1,
-    check: (stats) => (stats.challengeWins || 0) >= 1,
-  },
 ];

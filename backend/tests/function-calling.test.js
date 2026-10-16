@@ -1,6 +1,6 @@
 import { describe, it, before, after } from 'node:test';
 import assert from 'node:assert/strict';
-import { sequelize, User, Workout, XpLog, Leaderboard, Achievement, Conversation, Message } from '../src/models/index.js';
+import { sequelize, User, Workout, XpLog, Achievement, Conversation, Message } from '../src/models/index.js';
 import agentToolService from '../src/services/agentToolService.js';
 import agentService from '../src/services/agentService.js';
 import { AGENT_TOOLS } from '../src/constants/agentTools.js';
@@ -26,7 +26,6 @@ describe('Sprint 4: Task 4.6 — Implement Function Calling (HRD-24)', () => {
     const existing = await User.findOne({ where: { email: testUser.email } });
     if (existing) {
       await XpLog.destroy({ where: { userId: existing.id } });
-      await Leaderboard.destroy({ where: { userId: existing.id } });
       await Achievement.destroy({ where: { userId: existing.id } });
       await Conversation.destroy({ where: { userId: existing.id } });
       await Workout.destroy({ where: { userId: existing.id } });
@@ -56,7 +55,6 @@ describe('Sprint 4: Task 4.6 — Implement Function Calling (HRD-24)', () => {
     try {
       if (userId) {
         await XpLog.destroy({ where: { userId } });
-        await Leaderboard.destroy({ where: { userId } });
         await Achievement.destroy({ where: { userId } });
         await Conversation.destroy({ where: { userId } });
         await Workout.destroy({ where: { userId } });
@@ -69,12 +67,14 @@ describe('Sprint 4: Task 4.6 — Implement Function Calling (HRD-24)', () => {
   // 1. Tool Specification Definitions
   // =========================================================================
   describe('AGENT_TOOLS Schema Specifications', () => {
-    it('should define all 6 required tools with parameters conforming to JSON Schema', () => {
-      assert.equal(AGENT_TOOLS.length, 6);
+    it('should define all 8 required intent tools with parameters conforming to JSON Schema', () => {
+      assert.equal(AGENT_TOOLS.length, 8);
 
       const toolNames = AGENT_TOOLS.map((t) => t.function.name);
+      assert.ok(toolNames.includes('logWorkout'));
+      assert.ok(toolNames.includes('getUserStats'));
+      assert.ok(toolNames.includes('getRecentWorkouts'));
       assert.ok(toolNames.includes('addXp'));
-      assert.ok(toolNames.includes('updateLeaderboard'));
       assert.ok(toolNames.includes('checkAchievements'));
       assert.ok(toolNames.includes('suggestNextExercise'));
       assert.ok(toolNames.includes('generateWorkoutPlan'));
@@ -92,7 +92,7 @@ describe('Sprint 4: Task 4.6 — Implement Function Calling (HRD-24)', () => {
   // =========================================================================
   // 2. Individual Tool Execution (AgentToolService)
   // =========================================================================
-  describe('AgentToolService - 6 Core Functions Execution', () => {
+  describe('AgentToolService - Core Functions Execution', () => {
     it('1. addXp should award XP, log to XpLog, and update user totalXp', async () => {
       const result = await agentToolService.handleAddXp(userId, {
         amount: 75,
@@ -112,19 +112,44 @@ describe('Sprint 4: Task 4.6 — Implement Function Calling (HRD-24)', () => {
       assert.ok(log.description.includes('bench press'));
     });
 
-    it('2. updateLeaderboard should recalculate volume and rank', async () => {
-      const result = await agentToolService.handleUpdateLeaderboard(userId);
+    it('2. logWorkout should create a workout, calculate volume, and award XP', async () => {
+      const result = await agentToolService.handleLogWorkout(userId, {
+        name: 'AI Logged Push Day',
+        duration: 50,
+        exercises: [
+          { exerciseName: 'Barbell Bench Press', sets: 3, reps: 10, weight: 80 },
+          { exerciseName: 'Incline Dumbbell Press', sets: 3, reps: 12, weight: 24 },
+        ],
+        notes: 'Felt strong on all sets',
+      });
 
       assert.equal(result.success, true);
-      assert.ok(result.rank >= 1);
-      assert.ok(result.totalVolume >= 2500);
-
-      const lb = await Leaderboard.findOne({ where: { userId } });
-      assert.ok(lb);
-      assert.equal(lb.totalVolume, result.totalVolume);
+      assert.equal(result.name, 'AI Logged Push Day');
+      assert.ok(result.totalVolume > 0);
+      assert.ok(result.awardedXp > 0);
+      assert.ok(result.workoutId);
     });
 
-    it('3. checkAchievements should evaluate milestones without throwing', async () => {
+    it('3. getUserStats should return athlete summary with workouts and volume', async () => {
+      const result = await agentToolService.handleGetUserStats(userId);
+
+      assert.equal(result.success, true);
+      assert.equal(result.username, 'tool_tester');
+      assert.ok(result.totalWorkouts >= 1);
+      assert.ok(result.totalVolumeKg > 0);
+      assert.ok(result.nextLevelAt > 0);
+    });
+
+    it('4. getRecentWorkouts should return list of past logged workouts', async () => {
+      const result = await agentToolService.handleGetRecentWorkouts(userId, { limit: 5 });
+
+      assert.equal(result.success, true);
+      assert.ok(Array.isArray(result.workouts));
+      assert.ok(result.count >= 1);
+      assert.ok(result.workouts[0].name);
+    });
+
+    it('5. checkAchievements should evaluate milestones without throwing', async () => {
       const result = await agentToolService.handleCheckAchievements(userId);
 
       assert.equal(result.success, true);
@@ -132,7 +157,7 @@ describe('Sprint 4: Task 4.6 — Implement Function Calling (HRD-24)', () => {
       assert.ok(Array.isArray(result.unlockedBadges));
     });
 
-    it('4. suggestNextExercise should suggest an exercise for the requested muscle group', async () => {
+    it('6. suggestNextExercise should suggest an exercise for the requested muscle group', async () => {
       const result = await agentToolService.handleSuggestNextExercise(userId, {
         muscleGroup: 'Chest',
       });
@@ -144,7 +169,7 @@ describe('Sprint 4: Task 4.6 — Implement Function Calling (HRD-24)', () => {
       assert.ok(result.suggestedExercise.instructions);
     });
 
-    it('5. generateWorkoutPlan should return a structured plan JSON', async () => {
+    it('7. generateWorkoutPlan should return a structured plan JSON', async () => {
       const result = await agentToolService.handleGenerateWorkoutPlan(userId, {
         duration: 45,
         focus: 'Legs',
@@ -165,7 +190,7 @@ describe('Sprint 4: Task 4.6 — Implement Function Calling (HRD-24)', () => {
       assert.ok(firstEx.reps);
     });
 
-    it('6. updateStreak should increment consecutive days streak', async () => {
+    it('8. updateStreak should increment consecutive days streak', async () => {
       const userBefore = await User.findByPk(userId);
       const prevStreak = userBefore.streak;
 
@@ -197,6 +222,71 @@ describe('Sprint 4: Task 4.6 — Implement Function Calling (HRD-24)', () => {
 
       assert.equal(result.success, true);
       assert.equal(result.awardedXp, 25);
+    });
+
+    it('should route getUserStats correctly through agentService.executeTool', async () => {
+      const result = await agentService.executeTool(userId, 'getUserStats', {});
+
+      assert.equal(result.success, true);
+      assert.equal(result.username, 'tool_tester');
+    });
+  });
+
+  // =========================================================================
+  // 4. Pre-prompt Intent & Selective Tool Router (routeUserIntent)
+  // =========================================================================
+  describe('AgentService - Pre-prompt Intent & Selective Tool Routing', () => {
+    it('should classify casual greetings with NO tools and NO RAG context', async () => {
+      const decision1 = await agentService.routeUserIntent('Hello coach!');
+      assert.equal(decision1.intent, 'greeting');
+      assert.deepEqual(decision1.relevantTools, []);
+      assert.equal(decision1.needsExerciseRag, false);
+      assert.equal(decision1.needsWorkoutHistory, false);
+
+      const decision2 = await agentService.routeUserIntent('Hey, how are you doing today?');
+      assert.equal(decision2.intent, 'greeting');
+      assert.deepEqual(decision2.relevantTools, []);
+      assert.equal(decision2.needsExerciseRag, false);
+    });
+
+    it('should classify nutrition queries with NO tools and NO exercise RAG', async () => {
+      const decision = await agentService.routeUserIntent('How many grams of protein should I eat per day?');
+      assert.deepEqual(decision.relevantTools, []);
+      assert.equal(decision.needsExerciseRag, false);
+    });
+
+    it('should select logWorkout tool when athlete requests logging', async () => {
+      const decision = await agentService.routeUserIntent('Log my workout: 3 sets of bench press 10 reps at 80kg');
+      assert.ok(decision.relevantTools.includes('logWorkout'));
+    });
+
+    it('should select getUserStats tool when athlete asks for their stats and level', async () => {
+      const decision = await agentService.routeUserIntent('Show me my user stats and total volume lifted');
+      assert.ok(decision.relevantTools.includes('getUserStats'));
+    });
+
+    it('should select suggestNextExercise and flag workout history when athlete asks what to do next', async () => {
+      const decision = await agentService.routeUserIntent('Suggest next exercise for my chest session');
+      assert.ok(decision.relevantTools.includes('suggestNextExercise'));
+      assert.equal(decision.needsWorkoutHistory, true);
+    });
+
+    it('should select generateWorkoutPlan when athlete requests a routine', async () => {
+      const decision = await agentService.routeUserIntent('Can you generate a workout plan for 45 minutes?');
+      assert.ok(decision.relevantTools.includes('generateWorkoutPlan'));
+    });
+
+    it('should flag needsExerciseRag for exercise form & technique questions', async () => {
+      const decision = await agentService.routeUserIntent('What is the proper technique and form for barbell squats?');
+      assert.equal(decision.needsExerciseRag, true);
+    });
+
+    it('should handle null, empty or non-string input safely', async () => {
+      const decision = await agentService.routeUserIntent('');
+      assert.equal(decision.intent, 'greeting');
+      assert.deepEqual(decision.relevantTools, []);
+      assert.equal(decision.needsExerciseRag, false);
+      assert.equal(decision.needsWorkoutHistory, false);
     });
   });
 });

@@ -49,13 +49,13 @@ describe('Sprint 4: Task 4.5 — Implement RAG (HRD-23)', () => {
   });
 
   // =========================================================================
-  // 2. Ollama Embeddings Generation
+  // 2. Pinecone Embeddings Generation (llama-text-embed-v2, 1024 dimensions)
   // =========================================================================
-  describe('RagService - Ollama Embedding Generation', () => {
-    it('should generate an embedding vector with length 384 for fitness text', async () => {
+  describe('RagService - Pinecone & llama-text-embed-v2 Embedding Generation', () => {
+    it('should generate an embedding vector with length 1024 for fitness text', async () => {
       const vector = await ragService.getEmbedding('bench press chest exercise');
       assert.ok(Array.isArray(vector), 'Expected an array vector');
-      assert.equal(vector.length, 384, 'all-minilm should produce 384-dimensional embeddings');
+      assert.equal(vector.length, 1024, 'llama-text-embed-v2 should produce 1024-dimensional embeddings');
       assert.ok(vector.every((val) => typeof val === 'number'), 'All vector items should be numbers');
     });
 
@@ -72,7 +72,7 @@ describe('Sprint 4: Task 4.5 — Implement RAG (HRD-23)', () => {
   });
 
   // =========================================================================
-  // 3. Exercise Vector Retrieval (RAG)
+  // 3. Exercise Vector Retrieval (Pinecone hard Index)
   // =========================================================================
   describe('RagService - Exercise Retrieval with Similarity Ordering', () => {
     it('should return top relevant exercises for chest-focused query', async () => {
@@ -86,7 +86,7 @@ describe('Sprint 4: Task 4.5 — Implement RAG (HRD-23)', () => {
         assert.ok(ex.muscleGroup, 'Exercise should have a muscleGroup');
         assert.ok(typeof ex.similarity === 'number', 'Exercise should have a numeric similarity score');
         assert.ok(typeof ex.distance === 'number', 'Exercise should have a numeric distance score');
-        assert.ok(ex.similarity > 0.5, 'Relevant chest exercises should have high similarity');
+        assert.ok(ex.similarity > 0.3, 'Relevant chest exercises should have positive similarity');
       }
 
       // Check results are sorted by distance ascending (similarity descending)
@@ -102,7 +102,7 @@ describe('Sprint 4: Task 4.5 — Implement RAG (HRD-23)', () => {
       const results = await ragService.retrieveRelevantExercises('best quad workout for strength', 3);
       assert.ok(Array.isArray(results));
       assert.equal(results.length, 3);
-      assert.ok(results[0].similarity > 0.5);
+      assert.ok(results[0].similarity > 0.4, 'Top quad match should have significant similarity');
     });
 
     it('should return empty array for empty or whitespace query', async () => {

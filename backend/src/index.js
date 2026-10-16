@@ -1,39 +1,78 @@
 import 'dotenv/config';
 import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { sequelize, initModels } from './models/index.js';
 import authRouter from './routes/auth.js';
 import exerciseRouter from './routes/exercises.js';
 import workoutRouter from './routes/workouts.js';
 import achievementRouter from './routes/achievements.js';
 import xpRouter from './routes/xp.js';
-import leaderboardRouter from './routes/leaderboard.js';
-import friendRouter from './routes/friends.js';
-import challengeRouter from './routes/challenges.js';
 import conversationRouter from './routes/conversations.js';
 import agentRouter from './routes/agent.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const datasetDir = path.resolve(__dirname, '../exercises-dataset-main');
+const modelsDir = path.resolve(__dirname, '../public/models');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
+// CORS Middleware
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
 
+// Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// API Routes
-app.use('/auth', authRouter);
-app.use('/exercises', exerciseRouter);
-app.use('/workouts', workoutRouter);
-app.use('/achievements', achievementRouter);
-app.use('/users', xpRouter);
-app.use('/leaderboard', leaderboardRouter);
-app.use('/friends', friendRouter);
-app.use('/challenges', challengeRouter);
-app.use('/conversations', conversationRouter);
-app.use('/agent', agentRouter);
+// Static Media Serving for Exercise Images, Videos, and 3D Models
+const staticOptions = {
+  maxAge: '1d',
+  setHeaders: (res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+  },
+};
+
+app.use('/media/exercises', express.static(datasetDir, staticOptions));
+app.use('/media/images', express.static(path.join(datasetDir, 'images'), staticOptions));
+app.use('/media/videos', express.static(path.join(datasetDir, 'videos'), staticOptions));
+app.use('/images', express.static(path.join(datasetDir, 'images'), staticOptions));
+app.use('/videos', express.static(path.join(datasetDir, 'videos'), staticOptions));
+
+app.use('/media/models', express.static(modelsDir, staticOptions));
+app.use('/models', express.static(modelsDir, staticOptions));
+
+app.use('/api/media/exercises', express.static(datasetDir, staticOptions));
+app.use('/api/media/images', express.static(path.join(datasetDir, 'images'), staticOptions));
+app.use('/api/media/videos', express.static(path.join(datasetDir, 'videos'), staticOptions));
+app.use('/api/media/models', express.static(modelsDir, staticOptions));
+app.use('/api/models', express.static(modelsDir, staticOptions));
+
+// Register API Routes (supporting both / and /api prefixes)
+const mountRoutes = (prefix = '') => {
+  app.use(`${prefix}/auth`, authRouter);
+  app.use(`${prefix}/exercises`, exerciseRouter);
+  app.use(`${prefix}/workouts`, workoutRouter);
+  app.use(`${prefix}/achievements`, achievementRouter);
+  app.use(`${prefix}/users`, xpRouter);
+  app.use(`${prefix}/conversations`, conversationRouter);
+  app.use(`${prefix}/agent`, agentRouter);
+};
+
+mountRoutes();
+mountRoutes('/api');
 
 // Root & Health Check Endpoints
-app.get('/', (_req, res) => {
+app.get(['/', '/api'], (_req, res) => {
   res.json({
     app: 'Hard API',
     status: 'ok', 
@@ -42,7 +81,7 @@ app.get('/', (_req, res) => {
   });
 });
 
-app.get('/health', async (_req, res) => {
+app.get(['/health', '/api/health'], async (_req, res) => {
   try {
     await sequelize.authenticate();
     res.json({
@@ -60,16 +99,35 @@ app.get('/health', async (_req, res) => {
   }
 });
 
+const isTestEnv = process.env.NODE_ENV === 'test' || process.argv.some((arg) => arg.includes('test'));
+
 // Start Server & Connect to DB
 const startServer = async () => {
   try {
     await sequelize.authenticate();
     console.log('[Hard Backend] Connected to PostgreSQL database successfully.');
 
-    await initModels();
+    initModels();
+
+    if (isTestEnv) {
+      return {
+        close: (cb) => {
+          if (typeof cb === 'function') cb();
+        },
+        listening: false,
+      };
+    }
 
     const server = app.listen(PORT, () => {
       console.log(`[Hard Backend] Express server running on port ${PORT}`);
+    });
+
+    server.on('error', (err) => {
+      if (err.code === 'EADDRINUSE') {
+        console.warn(`[Hard Backend] Port ${PORT} already in use. Skipping server listen.`);
+      } else {
+        console.error('[Hard Backend] Server error:', err);
+      }
     });
 
     return server;

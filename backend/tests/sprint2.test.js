@@ -114,6 +114,35 @@ describe('Sprint 2: Core Features — Exercises, Workouts & Achievements (HRD-8,
       assert.equal(res.body.success, false);
       assert.match(res.body.error, /not found/i);
     });
+
+    it('GET /exercises should provide imageUrl and videoUrl for exercises', async () => {
+      const res = await request(app).get('/exercises?limit=5');
+
+      assert.equal(res.status, 200);
+      assert.equal(res.body.success, true);
+      assert.ok(res.body.data.exercises.length > 0);
+      const ex = res.body.data.exercises[0];
+      assert.ok(ex.imageUrl, 'Exercise should have imageUrl');
+      assert.ok(ex.videoUrl || ex.gifUrl, 'Exercise should have videoUrl or gifUrl');
+      assert.match(ex.imageUrl, /\.(jpg|jpeg|png)$/i);
+      assert.match(ex.videoUrl || ex.gifUrl, /\.(gif|mp4|webm)$/i);
+    });
+
+    it('GET static media should serve exercise image and video demonstration files', async () => {
+      const listRes = await request(app).get('/exercises?limit=1');
+      const ex = listRes.body.data.exercises[0];
+
+      // Test image serving
+      const imgRes = await request(app).get(ex.imageUrl);
+      assert.equal(imgRes.status, 200);
+      assert.match(imgRes.headers['content-type'], /^image\//);
+
+      // Test video/GIF serving
+      const vidUrl = ex.videoUrl || ex.gifUrl;
+      const vidRes = await request(app).get(vidUrl);
+      assert.equal(vidRes.status, 200);
+      assert.match(vidRes.headers['content-type'], /^(image\/gif|video\/)/);
+    });
   });
 
   // =========================================================================

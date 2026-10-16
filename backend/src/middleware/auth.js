@@ -14,7 +14,7 @@ export const authenticate = async (req, res, next) => {
         error: 'Access denied. No token provided.',
       });
     }
-
+    // ["Bearer", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNzg1MzM3NjgyLCJleHAiOjE3ODU5NDI0ODJ9.-s8v4st3HA5s7JmdiN1qsrwapFY6oQKP9LmV1V4T3OQ"][1]
     const token = authHeader.split(' ')[1];
 
     let decoded;
@@ -59,3 +59,7 @@ export const authenticate = async (req, res, next) => {
 };
 
 export default authenticate;
+
+
+
+

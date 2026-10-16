@@ -6,12 +6,7 @@ export default (sequelize, DataTypes) => {
       User.hasMany(models.Workout, { foreignKey: 'userId', as: 'workouts', onDelete: 'CASCADE' });
       User.hasMany(models.XpLog, { foreignKey: 'userId', as: 'xpLogs', onDelete: 'CASCADE' });
       User.hasMany(models.Achievement, { foreignKey: 'userId', as: 'achievements', onDelete: 'CASCADE' });
-      User.hasOne(models.Leaderboard, { foreignKey: 'userId', as: 'leaderboard', onDelete: 'CASCADE' });
-      User.hasMany(models.Friend, { foreignKey: 'userId', as: 'sentFriendRequests', onDelete: 'CASCADE' });
-      User.hasMany(models.Friend, { foreignKey: 'friendId', as: 'receivedFriendRequests', onDelete: 'CASCADE' });
       User.hasMany(models.Conversation, { foreignKey: 'userId', as: 'conversations', onDelete: 'CASCADE' });
-      User.hasMany(models.Challenge, { foreignKey: 'challengerId', as: 'createdChallenges', onDelete: 'CASCADE' });
-      User.hasMany(models.Challenge, { foreignKey: 'challengedId', as: 'receivedChallenges', onDelete: 'CASCADE' });
     }
   }
 

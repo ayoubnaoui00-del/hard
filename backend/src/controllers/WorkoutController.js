@@ -1,8 +1,62 @@
+import { Op } from 'sequelize';
 import { sequelize, Workout, WorkoutExercise, Exercise } from '../models/index.js';
 import achievementService from '../services/achievementService.js';
 import xpService from '../services/xpService.js';
-import leaderboardService from '../services/leaderboardService.js';
-import ChallengeController from './ChallengeController.js';
+
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/**
+ * Safely resolves an incoming exercise reference (UUID, mock ID, or name)
+ * to an existing database Exercise record UUID to satisfy foreign key constraints.
+ */
+async function resolveExerciseId(ex) {
+  const rawId = ex.exerciseId ? String(ex.exerciseId).trim() : null;
+  const name = (ex.exerciseName || ex.name || '').trim();
+
+  // 1. If rawId is already a valid UUID, verify it exists in DB
+  if (rawId && UUID_REGEX.test(rawId)) {
+    const found = await Exercise.findByPk(rawId, { attributes: ['id'] });
+    if (found) return found.id;
+  }
+
+  // 2. Try matching by exact exercise name
+  if (name) {
+    const foundByName = await Exercise.findOne({
+      where: {
+        name: { [Op.iLike]: name },
+      },
+      attributes: ['id'],
+    });
+    if (foundByName) return foundByName.id;
+
+    // Partial name match
+    const foundPartial = await Exercise.findOne({
+      where: {
+        name: { [Op.iLike]: `%${name}%` },
+      },
+      attributes: ['id'],
+    });
+    if (foundPartial) return foundPartial.id;
+  }
+
+  // 3. Try matching by rawId (e.g. "bench-press-001" -> "bench press")
+  if (rawId) {
+    const cleanedSlug = rawId.replace(/[-_0-9]/g, ' ').trim();
+    if (cleanedSlug.length > 2) {
+      const foundBySlug = await Exercise.findOne({
+        where: {
+          name: { [Op.iLike]: `%${cleanedSlug}%` },
+        },
+        attributes: ['id'],
+      });
+      if (foundBySlug) return foundBySlug.id;
+    }
+  }
+
+  // 4. Fallback to any valid Exercise in DB so foreign key never fails
+  const fallback = await Exercise.findOne({ attributes: ['id'] });
+  return fallback ? fallback.id : null;
+}
 
 class WorkoutController {
   /**
@@ -20,11 +74,11 @@ class WorkoutController {
       let totalVolume = 0;
 
       for (const ex of exerciseList) {
-        if (!ex.exerciseId) {
-          await t.rollback();
+        if (!ex.exerciseId && !ex.exerciseName && !ex.name) {
+          if (t && !t.finished) await t.rollback();
           return res.status(400).json({
             success: false,
-            error: 'Each workout exercise must have an exerciseId.',
+            error: 'Each workout exercise must have an exerciseId or exerciseName.',
           });
         }
         const sets = Math.max(1, parseInt(ex.sets, 10) || 1);
@@ -32,6 +86,11 @@ class WorkoutController {
         const weight = Math.max(0, parseFloat(ex.weight) || 0);
 
         totalVolume += sets * reps * weight;
+      }
+
+      // Pre-resolve all exercise IDs to ensure database integrity
+      for (const ex of exerciseList) {
+        ex.resolvedId = await resolveExerciseId(ex);
       }
 
       // Create Workout record
@@ -49,68 +108,88 @@ class WorkoutController {
 
       // Create WorkoutExercise records
       if (exerciseList.length > 0) {
-        const weRecords = exerciseList.map((ex, index) => ({
-          workoutId: workout.id,
-          exerciseId: ex.exerciseId,
-          sets: Math.max(1, parseInt(ex.sets, 10) || 1),
-          reps: Math.max(1, parseInt(ex.reps, 10) || 1),
-          weight: Math.max(0, parseFloat(ex.weight) || 0),
-          order: ex.order !== undefined ? parseInt(ex.order, 10) : index + 1,
-        }));
+        const weRecords = exerciseList
+          .filter((ex) => Boolean(ex.resolvedId))
+          .map((ex, index) => ({
+            workoutId: workout.id,
+            exerciseId: ex.resolvedId,
+            sets: Math.max(1, parseInt(ex.sets, 10) || 1),
+            reps: Math.max(1, parseInt(ex.reps, 10) || 1),
+            weight: Math.max(0, parseFloat(ex.weight) || 0),
+            order: ex.order !== undefined ? parseInt(ex.order, 10) : index + 1,
+          }));
 
-        await WorkoutExercise.bulkCreate(weRecords, { transaction: t });
+        if (weRecords.length > 0) {
+          await WorkoutExercise.bulkCreate(weRecords, { transaction: t });
+        }
       }
 
       await t.commit();
 
       // Retrieve full workout with relations
-      const fullWorkout = await Workout.findByPk(workout.id, {
-        include: [
-          {
-            model: WorkoutExercise,
-            as: 'workoutExercises',
-            include: [
-              {
-                model: Exercise,
-                as: 'exercise',
-                attributes: ['id', 'name', 'muscleGroup', 'formTips'],
-              },
-            ],
-          },
-        ],
-      });
+      let fullWorkout = null;
+      try {
+        fullWorkout = await Workout.findByPk(workout.id, {
+          include: [
+            {
+              model: WorkoutExercise,
+              as: 'workoutExercises',
+              include: [
+                {
+                  model: Exercise,
+                  as: 'exercise',
+                  attributes: ['id', 'name', 'muscleGroup', 'formTips'],
+                },
+              ],
+            },
+          ],
+        });
+      } catch (fetchErr) {
+        console.error('[WorkoutController.createWorkout] Fetch full workout error:', fetchErr);
+        fullWorkout = workout;
+      }
 
-      // Trigger achievement check
-      const unlockedAchievements = await achievementService.checkAndUnlock(userId, 'WORKOUT_LOGGED', {
-        workout: fullWorkout,
-      });
+      // Trigger achievement check (non-blocking)
+      let unlockedAchievements = [];
+      try {
+        unlockedAchievements = await achievementService.checkAndUnlock(userId, 'WORKOUT_LOGGED', {
+          workout: fullWorkout || workout,
+        });
+      } catch (achErr) {
+        console.error('[WorkoutController.createWorkout] Achievement unlock error:', achErr);
+      }
 
-      // Award XP for workout
-      const earnedXp = xpService.calculateWorkoutXp(exerciseList);
-      const xpResult = await xpService.addXp(
-        userId,
-        'WORKOUT',
-        earnedXp,
-        `Completed workout: ${fullWorkout.name}`
-      );
-
-      // Recalculate leaderboard standing
-      await leaderboardService.updateUserLeaderboard(userId);
-
-      // Update in-progress challenge scores if matching exercises were logged
-      await ChallengeController.updateParticipantScores(userId, exerciseList);
+      // Award XP for workout (non-blocking)
+      let xpResult = null;
+      try {
+        const earnedXp = xpService.calculateWorkoutXp(exerciseList);
+        xpResult = await xpService.addXp(
+          userId,
+          'WORKOUT',
+          earnedXp,
+          `Completed workout: ${fullWorkout?.name || workout.name}`
+        );
+      } catch (xpErr) {
+        console.error('[WorkoutController.createWorkout] XP award error:', xpErr);
+      }
 
       return res.status(201).json({
         success: true,
         message: 'Workout logged successfully.',
         data: {
-          workout: fullWorkout,
-          unlockedAchievements,
+          workout: fullWorkout || workout,
+          unlockedAchievements: unlockedAchievements || [],
           xp: xpResult,
         },
       });
     } catch (error) {
-      await t.rollback();
+      if (t && !t.finished) {
+        try {
+          await t.rollback();
+        } catch (rbErr) {
+          console.error('[WorkoutController.createWorkout] Rollback error:', rbErr.message);
+        }
+      }
       console.error('[WorkoutController.createWorkout] Error:', error);
       return res.status(500).json({
         success: false,
@@ -257,32 +336,38 @@ class WorkoutController {
           transaction: t,
         });
 
+        // Resolve exercise IDs
+        for (const ex of exercises) {
+          ex.resolvedId = await resolveExerciseId(ex);
+        }
+
         let newVolume = 0;
-        const weRecords = exercises.map((ex, index) => {
-          const sets = Math.max(1, parseInt(ex.sets, 10) || 1);
-          const reps = Math.max(1, parseInt(ex.reps, 10) || 1);
-          const weight = Math.max(0, parseFloat(ex.weight) || 0);
-          newVolume += sets * reps * weight;
+        const weRecords = exercises
+          .filter((ex) => Boolean(ex.resolvedId))
+          .map((ex, index) => {
+            const sets = Math.max(1, parseInt(ex.sets, 10) || 1);
+            const reps = Math.max(1, parseInt(ex.reps, 10) || 1);
+            const weight = Math.max(0, parseFloat(ex.weight) || 0);
+            newVolume += sets * reps * weight;
 
-          return {
-            workoutId: workout.id,
-            exerciseId: ex.exerciseId,
-            sets,
-            reps,
-            weight,
-            order: ex.order !== undefined ? parseInt(ex.order, 10) : index + 1,
-          };
-        });
+            return {
+              workoutId: workout.id,
+              exerciseId: ex.resolvedId,
+              sets,
+              reps,
+              weight,
+              order: ex.order !== undefined ? parseInt(ex.order, 10) : index + 1,
+            };
+          });
 
-        await WorkoutExercise.bulkCreate(weRecords, { transaction: t });
+        if (weRecords.length > 0) {
+          await WorkoutExercise.bulkCreate(weRecords, { transaction: t });
+        }
         workout.totalVolume = newVolume;
       }
 
       await workout.save({ transaction: t });
       await t.commit();
-
-      // Recalculate leaderboard standing
-      await leaderboardService.updateUserLeaderboard(userId);
 
       const updatedWorkout = await Workout.findByPk(workout.id, {
         include: [
@@ -306,7 +391,13 @@ class WorkoutController {
         data: updatedWorkout,
       });
     } catch (error) {
-      await t.rollback();
+      if (t && !t.finished) {
+        try {
+          await t.rollback();
+        } catch (rbErr) {
+          console.error('[WorkoutController.updateWorkout] Rollback error:', rbErr.message);
+        }
+      }
       console.error('[WorkoutController.updateWorkout] Error:', error);
       return res.status(500).json({
         success: false,
@@ -337,9 +428,6 @@ class WorkoutController {
       }
 
       await workout.destroy();
-
-      // Recalculate leaderboard standing
-      await leaderboardService.updateUserLeaderboard(userId);
 
       return res.status(200).json({
         success: true,

@@ -1,122 +1,107 @@
 import dotenv from 'dotenv';
-import { sequelize, Exercise, Embedding } from '../src/models/index.js';
+import { Pinecone } from '@pinecone-database/pinecone';
+import { sequelize, Exercise } from '../src/models/index.js';
 
 dotenv.config();
 
-const OLLAMA_BASE_URL = process.env.OLLAMA_BASE_URL || 'http://localhost:11434';
-const EMBED_MODEL = process.env.OLLAMA_EMBED_MODEL || 'all-minilm';
-const CONCURRENCY = 5;
+const PINECONE_API_KEY = process.env.PINECONE_API_KEY;
+const PINECONE_INDEX = process.env.PINECONE_INDEX || 'hard';
+const PINECONE_EMBED_MODEL = process.env.PINECONE_EMBED_MODEL || 'llama-text-embed-v2';
 const BATCH_SIZE = 50;
 
 /**
- * Fetch vector embedding from Ollama API
+ * Format exercise into Pinecone integrated inference record
  */
-async function getEmbedding(text) {
-  const url = `${OLLAMA_BASE_URL}/api/embeddings`;
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: EMBED_MODEL,
-      prompt: text,
-    }),
-  });
+function formatRecord(ex) {
+  const summaryText = [
+    `Exercise: ${ex.name}`,
+    `Target Muscle: ${ex.muscleGroup}`,
+    ex.instructions ? `Instructions: ${ex.instructions}` : '',
+    ex.formTips ? `Form Tips: ${ex.formTips}` : '',
+  ]
+    .filter(Boolean)
+    .join(' - ');
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`Ollama embedding error (${response.status}): ${errorText}`);
-  }
-
-  const data = await response.json();
-  if (!data.embedding || !Array.isArray(data.embedding)) {
-    throw new Error('Invalid embedding vector returned from Ollama');
-  }
-
-  return data.embedding;
+  return {
+    _id: `ex-${ex.id}`,
+    text: summaryText,
+    exerciseId: String(ex.id),
+    name: ex.name,
+    muscleGroup: ex.muscleGroup,
+    instructions: (ex.instructions || '').substring(0, 1500),
+    formTips: (ex.formTips || '').substring(0, 1500),
+    alternatives: Array.isArray(ex.alternatives) ? ex.alternatives : [],
+  };
 }
 
 export const seedEmbeddings = async () => {
-  console.log(`[Seed Embeddings] Starting exercise embeddings generation using model: "${EMBED_MODEL}" at ${OLLAMA_BASE_URL}`);
+  console.log(`[Seed Pinecone] Starting exercise embeddings migration to Pinecone index "${PINECONE_INDEX}" using model "${PINECONE_EMBED_MODEL}"`);
+
+  if (!PINECONE_API_KEY) {
+    throw new Error('PINECONE_API_KEY is not configured in .env');
+  }
+
+  const pc = new Pinecone({ apiKey: PINECONE_API_KEY });
+  const index = pc.index(PINECONE_INDEX);
 
   try {
     await sequelize.authenticate();
-    console.log('[Seed Embeddings] Database connected.');
+    console.log('[Seed Pinecone] PostgreSQL Database connected.');
 
-    // 1. Fetch already embedded exercise IDs to avoid duplicate processing
-    const existingEmbeddings = await Embedding.findAll({ attributes: ['exerciseId'] });
-    const existingSet = new Set(existingEmbeddings.map((e) => e.exerciseId));
-    console.log(`[Seed Embeddings] Found ${existingSet.size} existing embeddings in database.`);
-
-    // 2. Fetch all exercises
+    // 1. Fetch all exercises from DB
     const allExercises = await Exercise.findAll({
-      attributes: ['id', 'name', 'muscleGroup', 'instructions', 'formTips'],
-      order: [['name', 'ASC']],
+      attributes: ['id', 'name', 'muscleGroup', 'instructions', 'formTips', 'alternatives'],
+      order: [['id', 'ASC']],
     });
 
-    const pendingExercises = allExercises.filter((ex) => !existingSet.has(ex.id));
-    console.log(`[Seed Embeddings] Total exercises: ${allExercises.length} | Pending to embed: ${pendingExercises.length}`);
+    console.log(`[Seed Pinecone] Found ${allExercises.length} total exercises in database.`);
 
-    if (pendingExercises.length === 0) {
-      console.log('[Seed Embeddings] All exercises are already embedded! No work needed.');
+    if (allExercises.length === 0) {
+      console.log('[Seed Pinecone] No exercises found in database. Run seed:exercises first.');
       return;
     }
 
     let completed = 0;
-    const total = pendingExercises.length;
-    let createdCount = 0;
+    const total = allExercises.length;
+    let upsertedCount = 0;
 
-    // Process in batches with concurrency
-    for (let i = 0; i < pendingExercises.length; i += BATCH_SIZE) {
-      const batch = pendingExercises.slice(i, i + BATCH_SIZE);
-      const recordsToInsert = [];
+    // 2. Upsert in batches to Pinecone
+    for (let i = 0; i < allExercises.length; i += BATCH_SIZE) {
+      const batch = allExercises.slice(i, i + BATCH_SIZE);
+      const records = batch.map(formatRecord);
 
-      // Concurrency control within batch
-      for (let j = 0; j < batch.length; j += CONCURRENCY) {
-        const chunk = batch.slice(j, j + CONCURRENCY);
-
-        const chunkPromises = chunk.map(async (ex) => {
-          const summaryText = [
-            `Exercise: ${ex.name}`,
-            `Target Muscle: ${ex.muscleGroup}`,
-            ex.instructions ? `Instructions: ${ex.instructions}` : '',
-            ex.formTips ? `Form Tips: ${ex.formTips}` : '',
-          ]
-            .filter(Boolean)
-            .join(' - ');
-
+      try {
+        await index.upsertRecords({ records });
+        upsertedCount += records.length;
+      } catch (batchErr) {
+        console.error(`\n[Seed Pinecone] Error upserting batch at index ${i}:`, batchErr.message);
+        // Retry individually for resilient seeding
+        for (const rec of records) {
           try {
-            const vector = await getEmbedding(summaryText);
-            return {
-              exerciseId: ex.id,
-              vector,
-            };
-          } catch (err) {
-            console.error(`[Seed Embeddings] Error embedding exercise "${ex.name}" (${ex.id}):`, err.message);
-            return null;
+            await index.upsertRecords({ records: [rec] });
+            upsertedCount++;
+          } catch (singleErr) {
+            console.error(`[Seed Pinecone] Failed record ${rec._id}:`, singleErr.message);
           }
-        });
-
-        const chunkResults = await Promise.all(chunkPromises);
-        for (const res of chunkResults) {
-          if (res) recordsToInsert.push(res);
         }
-
-        completed += chunk.length;
-        const percent = ((completed / total) * 100).toFixed(1);
-        process.stdout.write(`\r[Seed Embeddings] Progress: ${completed}/${total} (${percent}%) completed...`);
       }
 
-      if (recordsToInsert.length > 0) {
-        await Embedding.bulkCreate(recordsToInsert, { ignoreDuplicates: true });
-        createdCount += recordsToInsert.length;
-      }
+      completed += batch.length;
+      const percent = ((completed / total) * 100).toFixed(1);
+      process.stdout.write(`\r[Seed Pinecone] Progress: ${completed}/${total} (${percent}%) exercises uploaded to Pinecone...`);
     }
 
-    console.log(`\n[Seed Embeddings] Successfully stored ${createdCount} new embeddings in database.`);
-    const totalInDb = await Embedding.count();
-    console.log(`[Seed Embeddings] Total embeddings now in database: ${totalInDb}/${allExercises.length}`);
+    console.log(`\n[Seed Pinecone] Successfully upserted ${upsertedCount}/${total} exercises into Pinecone index "${PINECONE_INDEX}"!`);
+
+    // Verify index stats
+    try {
+      const stats = await index.describeIndexStats();
+      console.log('[Seed Pinecone] Pinecone Index Stats:', JSON.stringify(stats, null, 2));
+    } catch (_) {
+      // describeIndexStats optional on some serverless plans
+    }
   } catch (error) {
-    console.error('\n[Seed Embeddings] Fatal error generating embeddings:', error);
+    console.error('\n[Seed Pinecone] Fatal error during Pinecone seeding:', error);
     throw error;
   }
 };
@@ -125,11 +110,11 @@ export const seedEmbeddings = async () => {
 if (process.argv[1] && process.argv[1].endsWith('seed-embeddings.js')) {
   seedEmbeddings()
     .then(() => {
-      console.log('[Seed Embeddings] Finished successfully.');
+      console.log('[Seed Pinecone] Finished successfully.');
       process.exit(0);
     })
     .catch((err) => {
-      console.error('[Seed Embeddings] Failed:', err);
+      console.error('[Seed Pinecone] Failed:', err);
       process.exit(1);
     });
 }

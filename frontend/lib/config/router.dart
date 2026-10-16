@@ -1,78 +1,231 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../screens/auth/login_screen.dart';
-import '../screens/auth/register_screen.dart';
-import '../screens/main_shell_screen.dart';
-import '../screens/home/home_screen.dart';
-import '../screens/workout/workout_screen.dart';
-import '../screens/exercise/exercise_screen.dart';
-import '../screens/coach/coach_screen.dart';
-import '../screens/social/social_screen.dart';
+import '../viewmodels/auth/auth_session_viewmodel.dart';
+import '../views/auth/welcome_view.dart';
+import '../views/auth/login_view.dart';
+import '../views/auth/register_view.dart';
+import '../views/main_shell_view.dart';
+import '../views/home/home_view.dart';
+import '../views/workout/workout_view.dart';
+import '../views/workout/log_workout_view.dart';
+import '../views/workout/muscle_picker_view.dart';
+import '../views/profile/profile_view.dart';
+import '../views/exercise/exercise_view.dart';
+import '../views/coach/coach_view.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
 
+class RouterNotifier extends ChangeNotifier {
+  final Ref _ref;
+
+  RouterNotifier(this._ref) {
+    _ref.listen<AuthSessionState>(
+      authSessionViewModelProvider,
+      (previous, next) => notifyListeners(),
+    );
+  }
+
+  String? redirect(BuildContext context, GoRouterState state) {
+    final authSession = _ref.read(authSessionViewModelProvider);
+    final isAuthenticated = authSession.isAuthenticated;
+    final isAuthRoute = state.matchedLocation == '/welcome' ||
+        state.matchedLocation == '/login' ||
+        state.matchedLocation == '/register';
+
+    // If unauthenticated and trying to access protected routes, redirect to login
+    if (!isAuthenticated && !isAuthRoute) {
+      return '/login';
+    }
+
+    // If authenticated and trying to access login or register screens, redirect to home
+    if (isAuthenticated &&
+        (state.matchedLocation == '/login' ||
+            state.matchedLocation == '/register')) {
+      return '/home';
+    }
+
+    return null;
+  }
+}
+
+final routerNotifierProvider = Provider<RouterNotifier>((ref) {
+  return RouterNotifier(ref);
+});
+
+CustomTransitionPage<void> _buildLeftToRightTransition({
+  required LocalKey key,
+  required Widget child,
+}) {
+  return CustomTransitionPage<void>(
+    key: key,
+    child: child,
+    transitionDuration: const Duration(milliseconds: 550),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      final curvedAnimation = CurvedAnimation(
+        parent: animation,
+        curve: Curves.easeOutCubic,
+      );
+
+      final slideAnimation = Tween<Offset>(
+        begin: const Offset(-1.0, 0.0), // Enters from left to right
+        end: Offset.zero,
+      ).animate(curvedAnimation);
+
+      final fadeAnimation = Tween<double>(
+        begin: 0.0,
+        end: 1.0,
+      ).animate(curvedAnimation);
+
+      return SlideTransition(
+        position: slideAnimation,
+        child: FadeTransition(
+          opacity: fadeAnimation,
+          child: child,
+        ),
+      );
+    },
+  );
+}
+
+final routerProvider = Provider<GoRouter>((ref) {
+  final notifier = ref.watch(routerNotifierProvider);
+
+  return GoRouter(
+    navigatorKey: _rootNavigatorKey,
+    initialLocation: '/welcome',
+    refreshListenable: notifier,
+    redirect: notifier.redirect,
+    routes: [
+      // First / Welcome Landing Screen
+      GoRoute(
+        path: '/welcome',
+        builder: (context, state) => const WelcomeView(),
+      ),
+
+      // Auth Routes
+      GoRoute(
+        path: '/login',
+        pageBuilder: (context, state) => _buildLeftToRightTransition(
+          key: state.pageKey,
+          child: const LoginView(),
+        ),
+      ),
+      GoRoute(
+        path: '/register',
+        builder: (context, state) => const RegisterView(),
+      ),
+
+      // Velocity App Shell with 5 Bottom Navigation Branches
+      StatefulShellRoute.indexedStack(
+        pageBuilder: (context, state, navigationShell) =>
+            _buildLeftToRightTransition(
+          key: state.pageKey,
+          child: MainShellView(navigationShell: navigationShell),
+        ),
+        branches: [
+          // 0. Home
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/home',
+                builder: (context, state) => const HomeView(),
+              ),
+            ],
+          ),
+          // 1. Explore (Exercise Library)
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/explore',
+                builder: (context, state) => const ExerciseView(),
+              ),
+              GoRoute(
+                path: '/exercises',
+                builder: (context, state) => const ExerciseView(),
+              ),
+            ],
+          ),
+          // 2. Activity (Workouts & Sessions)
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/workouts',
+                builder: (context, state) => const WorkoutView(),
+              ),
+              GoRoute(
+                path: '/activity',
+                builder: (context, state) => const WorkoutView(),
+              ),
+            ],
+          ),
+          // 3. Velo-AI (AI Coach)
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/coach',
+                builder: (context, state) => const CoachView(),
+              ),
+              GoRoute(
+                path: '/velo-ai',
+                builder: (context, state) => const CoachView(),
+              ),
+            ],
+          ),
+          // 4. More (Profile & Settings)
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/profile',
+                builder: (context, state) => const ProfileView(),
+              ),
+              GoRoute(
+                path: '/more',
+                builder: (context, state) => const ProfileView(),
+              ),
+            ],
+          ),
+        ],
+      ),
+
+      // Dedicated routes accessible from actions and deep links
+      GoRoute(
+        path: '/workouts/log',
+        builder: (context, state) => const LogWorkoutView(),
+      ),
+      GoRoute(
+        path: '/workouts/muscle-picker',
+        builder: (context, state) => const MusclePickerView(),
+      ),
+      GoRoute(
+        path: '/chat',
+        builder: (context, state) => const CoachView(),
+      ),
+    ],
+  );
+});
+
+// Fallback constant router if accessed without provider (backwards compatibility)
 final appRouter = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: '/login',
+  initialLocation: '/welcome',
   routes: [
-    // Auth Routes
+    GoRoute(
+      path: '/welcome',
+      builder: (context, state) => const WelcomeView(),
+    ),
     GoRoute(
       path: '/login',
-      builder: (context, state) => const LoginScreen(),
+      builder: (context, state) => const LoginView(),
     ),
     GoRoute(
       path: '/register',
-      builder: (context, state) => const RegisterScreen(),
+      builder: (context, state) => const RegisterView(),
     ),
-
-    // App Shell with Bottom Navigation
-    StatefulShellRoute.indexedStack(
-      builder: (context, state, navigationShell) {
-        return MainShellScreen(navigationShell: navigationShell);
-      },
-      branches: [
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: '/home',
-              builder: (context, state) => const HomeScreen(),
-            ),
-          ],
-        ),
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: '/workouts',
-              builder: (context, state) => const WorkoutScreen(),
-            ),
-          ],
-        ),
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: '/exercises',
-              builder: (context, state) => const ExerciseScreen(),
-            ),
-          ],
-        ),
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: '/coach',
-              builder: (context, state) => const CoachScreen(),
-            ),
-          ],
-        ),
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: '/social',
-              builder: (context, state) => const SocialScreen(),
-            ),
-          ],
-        ),
-      ],
+    GoRoute(
+      path: '/home',
+      builder: (context, state) => const HomeView(),
     ),
   ],
 );
